@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Week 6 · Risk Management Notes</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1f4d;--blue:#2563ff;--sky:#7cc7ff;--ice:#e8f3ff;--pale:#f4f9ff;--yel:#ffd94a;--mint:#5eead4;--pink:#ff8fb1;--w:#fff;--b:3px solid var(--ink);--sh:6px 6px 0 var(--ink)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--pale);line-height:1.7;font-size:17px;
+background-image:radial-gradient(#b9d8ff 1.6px,transparent 1.6px);background-size:26px 26px;animation:dots 12s linear infinite}
+@keyframes dots{to{background-position:26px 26px}}
+h1,h2,h3,h4,h5{font-family:'Bricolage Grotesque',sans-serif;line-height:1.15}
+#bar{position:fixed;top:0;left:0;height:8px;width:0;background:repeating-linear-gradient(45deg,var(--blue) 0 12px,var(--sky) 12px 24px);background-size:34px 34px;animation:stripe 1s linear infinite;z-index:99;border-bottom:2px solid var(--ink)}
+@keyframes stripe{to{background-position:34px 0}}
+#glow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(rgba(37,99,255,.18),transparent 65%);pointer-events:none;transform:translate(-50%,-50%);z-index:0}
+nav.pill{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:90;display:flex;gap:4px;background:var(--w);border:var(--b);border-radius:40px;padding:5px;box-shadow:4px 4px 0 var(--ink);max-width:96vw;overflow-x:auto}
+nav.pill a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:7px 14px;border-radius:30px;white-space:nowrap;transition:.3s}
+nav.pill a:hover{background:var(--ice)}nav.pill a.on{background:var(--blue);color:#fff;transform:scale(1.06)}
+.wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 18px 80px}
+
+/* hero */
+.hero{position:relative;margin-top:90px;border:var(--b);border-radius:34px;background:var(--blue);color:#fff;padding:60px 44px;box-shadow:10px 10px 0 var(--ink);overflow:hidden;animation:drop .9s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes drop{from{transform:translateY(-60px) rotate(-2deg);opacity:0}}
+#net{position:absolute;inset:0;width:100%;height:100%}
+.hero>*:not(canvas){position:relative}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;max-width:720px}
+.type::after{content:"|";animation:blink .8s steps(1) infinite}@keyframes blink{50%{opacity:0}}
+.hero p{margin-top:14px;max-width:560px;font-size:1.1rem}
+.sticker{position:absolute;font-size:46px;animation:wob 4s ease-in-out infinite;filter:drop-shadow(3px 3px 0 var(--ink));cursor:grab}
+@keyframes wob{50%{transform:translateY(-16px) rotate(12deg)}}
+.tag{display:inline-block;background:var(--yel);color:var(--ink);font-weight:700;border:var(--b);border-radius:30px;padding:3px 16px;margin-bottom:16px;transform:rotate(-3deg);animation:tilt 3s ease-in-out infinite}
+@keyframes tilt{50%{transform:rotate(3deg) scale(1.06)}}
+
+/* sections */
+section{margin:60px 0}
+.head{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.head .num{background:var(--yel);border:var(--b);box-shadow:4px 4px 0 var(--ink);width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:24px;font-family:'Bricolage Grotesque';font-weight:800;transition:.4s}
+.head:hover .num{transform:rotate(-12deg) scale(1.15)}
+.head h2{font-size:clamp(1.6rem,4vw,2.3rem)}
+.box{background:var(--w);border:var(--b);border-radius:24px;padding:26px;box-shadow:var(--sh);transition:.35s}
+.box+.box{margin-top:22px}
+.hid{opacity:0;transform:translateY(40px) scale(.97);transition:opacity .7s,transform .7s cubic-bezier(.2,1.3,.4,1)}.hid.in{opacity:1;transform:none}
+p{margin-bottom:13px}
+mark{background:linear-gradient(transparent 50%,var(--yel) 50%);padding:0 2px;color:inherit;background-size:0 100%;background-repeat:no-repeat;transition:background-size 1s .3s}
+.in mark,mark.in{background-size:100% 100%}
+mark.b{background-image:linear-gradient(transparent 50%,var(--sky) 50%)}mark.m{background-image:linear-gradient(transparent 50%,var(--mint) 50%)}
+mark.p{background-image:linear-gradient(transparent 50%,var(--pink) 50%)}
+.bd{display:inline-block;border:2px solid var(--ink);background:var(--sky);border-radius:30px;padding:0 12px;font-weight:700;font-size:.9em;box-shadow:2px 2px 0 var(--ink);animation:jig 3s ease-in-out infinite;white-space:nowrap}
+.bd.y{background:var(--yel)}.bd.m{background:var(--mint)}.bd.p{background:var(--pink)}.bd:nth-of-type(2n){animation-delay:-1.4s}
+@keyframes jig{0%,90%,100%{transform:none}93%{transform:rotate(-4deg) scale(1.08)}96%{transform:rotate(4deg) scale(1.08)}}
+
+.photo{float:right;width:260px;margin:0 0 14px 22px;border:var(--b);border-radius:18px;background:#fff;padding:8px 8px 4px;box-shadow:var(--sh);transform:rotate(3deg);transition:.5s;text-align:center;font-size:13px;font-weight:700}
+.photo:hover{transform:rotate(-2deg) scale(1.07)}.photo img{width:100%;height:170px;object-fit:cover;border-radius:10px;display:block;margin-bottom:4px}
+.photo.l{float:left;margin:0 22px 14px 0;transform:rotate(-3deg)}
+@media(max-width:640px){.photo,.photo.l{float:none;margin:0 auto 16px}.hero{padding:40px 22px}}
+.clear{clear:both}
+
+/* flip cards */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.flip{height:250px;perspective:900px;cursor:pointer}
+.fi{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.3,1.4,.5,1);transform-style:preserve-3d}
+.flip.on .fi{transform:rotateY(180deg)}.flip:hover .fi{translate:0 -6px}
+.ff,.fb{position:absolute;inset:0;backface-visibility:hidden;border:var(--b);border-radius:20px;box-shadow:5px 5px 0 var(--ink);padding:16px;overflow:auto}
+.ff{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;font-family:'Bricolage Grotesque';font-weight:800;font-size:1.45rem}
+.ff i{font-size:34px}.ff small{font-family:'DM Sans';font-weight:500;font-size:12px;opacity:.7}
+.fb{transform:rotateY(180deg);background:#fff;font-size:13.5px;line-height:1.45}.fb b{display:block;font-size:11.5px;color:var(--blue);margin-top:8px}
+.fb::-webkit-scrollbar{width:4px}
+
+/* tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab{font:700 15px 'DM Sans';border:var(--b);background:#fff;border-radius:30px;padding:8px 18px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:.2s}
+.tab:hover{transform:translate(-2px,-2px)}.tab.on{background:var(--blue);color:#fff;box-shadow:none;transform:translate(3px,3px)}
+.pane{display:none;animation:swap .5s cubic-bezier(.2,1.3,.4,1)}.pane.on{display:block}
+@keyframes swap{from{opacity:0;transform:translateX(30px) scale(.96)}}
+.pane .big{font-size:48px;float:left;margin:0 16px 0 0;animation:wob 3s infinite}
+
+/* accordion */
+.acc{border:var(--b);border-radius:18px;background:#fff;margin-bottom:12px;box-shadow:4px 4px 0 var(--ink);overflow:hidden}
+.acc button{width:100%;text-align:left;font:700 1.05rem 'Bricolage Grotesque';background:none;border:0;padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;color:var(--ink)}
+.acc button i.k{width:36px;height:36px;border-radius:10px;border:2px solid var(--ink);display:grid;place-items:center;background:var(--sky)}
+.acc button i.ch{margin-left:auto;transition:.4s}.acc.on .ch{transform:rotate(180deg)}
+.acc .in2{max-height:0;overflow:hidden;transition:max-height .5s ease;padding:0 18px}.acc.on .in2{padding-bottom:14px}
+.acc:hover{background:var(--ice)}
+
+/* pyramid */
+.pyr{display:flex;flex-direction:column;align-items:center;gap:7px;margin:12px 0}
+.pyr button{font:700 1rem 'Bricolage Grotesque';color:var(--ink);border:var(--b);border-radius:14px;padding:12px;cursor:pointer;transition:.35s;box-shadow:3px 3px 0 var(--ink)}
+.pyr button:nth-child(1){width:42%;background:var(--yel)}.pyr button:nth-child(2){width:58%;background:var(--mint)}.pyr button:nth-child(3){width:74%;background:var(--sky)}.pyr button:nth-child(4){width:90%;background:var(--pink)}
+.pyr button:hover{transform:scale(1.07) rotate(-1deg)}.pyr button.on{outline:4px dashed var(--blue);outline-offset:3px}
+#pdesc{min-height:80px;text-align:center;background:var(--ice);border:2px dashed var(--blue);border-radius:16px;padding:14px;margin-top:6px}
+@media(max-width:600px){.pyr button{width:100%!important}}
+
+/* SETA */
+.seta{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px}
+.seta div{border:var(--b);border-radius:20px;padding:20px;text-align:center;box-shadow:var(--sh);transition:.4s}
+.seta div:hover{transform:translateY(-10px) rotate(-2deg)}.seta i{font-size:34px;display:block;margin-bottom:8px;animation:wob 3.5s infinite}
+.seta div:nth-child(1){background:#ffe98a}.seta div:nth-child(2){background:#a6f5e8}.seta div:nth-child(3){background:#ffc1d4}
+
+/* crown jewel diagram */
+.svgbox{background:var(--ink);border-radius:20px;padding:10px;border:var(--b);position:relative}
+.svgbox svg{width:100%;height:auto;display:block}
+.path{stroke:#ff6b8b;stroke-width:3;stroke-dasharray:10 8;fill:none;animation:march 1s linear infinite;transition:opacity .6s}
+@keyframes march{to{stroke-dashoffset:-36}}
+.cut .path{opacity:0}.cut .pk{display:none}.cut .safe{opacity:1}
+.safe{opacity:0;transition:opacity .8s}
+.jewel{animation:pulse 1.6s ease-in-out infinite;transform-origin:500px 150px}@keyframes pulse{50%{transform:scale(1.15)}}
+.btn{font:700 16px 'DM Sans';border:var(--b);background:var(--yel);border-radius:30px;padding:10px 22px;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:.2s;color:var(--ink)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:18px 0}
+.stat{background:var(--blue);color:#fff;border:var(--b);border-radius:20px;padding:18px;text-align:center;box-shadow:var(--sh)}
+.stat b{display:block;font:800 2.6rem 'Bricolage Grotesque';color:var(--yel)}
+
+/* stepper */
+.steps{display:flex;gap:8px;margin:12px 0}
+.steps span{flex:1;height:14px;border:2px solid var(--ink);border-radius:10px;background:#fff;transition:.5s}.steps span.on{background:var(--blue)}
+#stepCard{border:var(--b);border-radius:20px;padding:22px;background:var(--ice);min-height:130px;animation:swap .5s}
+
+/* takeaways */
+.take{list-style:none;display:grid;gap:12px;margin-top:14px}
+.take li{display:flex;gap:14px;border:var(--b);border-radius:16px;padding:12px 16px;cursor:pointer;background:#fff;box-shadow:4px 4px 0 var(--ink);transition:.3s;user-select:none}
+.take li:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--ink)}
+.take .ck{flex:none;width:30px;height:30px;border:var(--b);border-radius:9px;display:grid;place-items:center;color:transparent;transition:.4s}
+.take li.d{background:var(--ice);text-decoration:line-through;text-decoration-color:var(--blue)}.take li.d .ck{background:var(--blue);color:#fff;transform:rotate(360deg)}
+.meter{height:20px;border:var(--b);border-radius:20px;overflow:hidden;background:#fff;margin:8px 0}.meter div{height:100%;width:0;background:repeating-linear-gradient(45deg,var(--blue) 0 12px,var(--sky) 12px 24px);transition:width .6s cubic-bezier(.2,1.5,.4,1)}
+.conf{position:fixed;width:10px;height:14px;z-index:120;pointer-events:none;animation:fall 2.2s ease-in forwards}
+@keyframes fall{to{transform:translate(var(--x),105vh) rotate(720deg);opacity:.8}}
+.fin{background:var(--blue);color:#fff}.fin mark{color:var(--ink)}
+footer{text-align:center;font-weight:700;padding:30px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.hid{opacity:1;transform:none}}
+
+.slid{display:grid;grid-template-columns:150px 1fr 70px;gap:10px;align-items:center;margin:8px 0;font-weight:700}
+input[type=range]{width:100%;accent-color:var(--blue);height:8px}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.res{background:var(--ink);color:#fff;border-radius:20px;padding:18px;border:var(--b)}
+.res .row{display:flex;justify-content:space-between;border-bottom:1px dashed #4b64a0;padding:5px 0}.res b{color:var(--yel)}
+.res .final{font:800 2.6rem 'Bricolage Grotesque';color:var(--mint);text-align:center;transition:.3s}
+.res .final.pop{transform:scale(1.25)}
+.fm{background:var(--ice);border:2px dashed var(--blue);border-radius:14px;padding:10px 14px;font-family:monospace;font-size:14px;margin:10px 0;overflow-x:auto}
+.phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;counter-reset:ph}
+.ph{border:var(--b);border-radius:22px;padding:22px 18px 16px;box-shadow:var(--sh);position:relative;transition:.4s;background:#fff}
+.ph::before{counter-increment:ph;content:counter(ph);position:absolute;top:-18px;left:16px;width:38px;height:38px;border-radius:50%;background:var(--yel);border:var(--b);display:grid;place-items:center;font:800 1.1rem 'Bricolage Grotesque'}
+.ph:not(:last-child)::after{content:"\f061";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;right:-20px;top:45%;font-size:20px;color:var(--blue);animation:nud 1.2s infinite;z-index:2}
+@keyframes nud{50%{transform:translateX(6px)}}.ph:hover{transform:translateY(-8px) rotate(-1.5deg)}
+.ph:nth-child(1){background:#ffe98a}.ph:nth-child(2){background:#a6f5e8}.ph:nth-child(3){background:#ffc1d4}
+@media(max-width:700px){.ph::after{display:none!important}}
+.mx{display:grid;grid-template-columns:110px repeat(4,1fr);gap:6px;font-size:13px;font-weight:700;min-width:560px}
+.mx div{padding:10px 6px;text-align:center;border:2px solid var(--ink);border-radius:10px;background:#fff}
+.mx .h{background:var(--blue);color:#fff}.mx .c{cursor:pointer;transition:.3s;font-size:20px}.mx .c:hover{transform:scale(1.18) rotate(-4deg)}
+.mx .c[data-l="1"]{background:#c9f7ee}.mx .c[data-l="2"]{background:#ffe98a}.mx .c[data-l="3"]{background:#ffb3b3}
+.tl{position:relative;margin:10px 0 0 18px;border-left:5px dotted var(--blue);padding-left:26px}
+.tl .ev{position:relative;margin-bottom:20px;background:#fff;border:var(--b);border-radius:16px;padding:12px 16px;box-shadow:4px 4px 0 var(--ink);transition:.3s}
+.tl .ev:hover{transform:translateX(10px)}.tl .ev::before{content:attr(data-e);position:absolute;left:-52px;top:8px;width:40px;height:40px;border-radius:50%;background:var(--yel);border:var(--b);display:grid;place-items:center;font-size:18px;animation:jig 3s infinite}
+.pc{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.pc>div{border:var(--b);border-radius:20px;padding:18px;box-shadow:var(--sh)}.pc ul{list-style:none}.pc li{padding:7px 0 7px 30px;position:relative}
+.pc .pro{background:#c9f7ee}.pc .con{background:#ffd3de}.pc .pro li::before{content:"✅";position:absolute;left:0}.pc .con li::before{content:"⚠️";position:absolute;left:0}
+.pc li{transition:.3s}.pc li:hover{transform:translateX(8px)}
+.path3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.path3 .card{border:var(--b);border-radius:18px;padding:16px;background:#fff;box-shadow:4px 4px 0 var(--ink);text-align:center;transition:.4s}.path3 .card:hover{transform:translateY(-8px) rotate(2deg)}.path3 i{font-size:30px;display:block;margin-bottom:6px;color:var(--blue)}
+.scroll-x{overflow-x:auto;padding-bottom:6px}
+</style></head><body>
+<div id="bar"></div><div id="glow"></div>
+<nav class="pill"><a href="#intro">Intro</a><a href="#core">Concepts</a><a href="#p1">Principles</a><a href="#p2">Calculator</a><a href="#p3">Cheese Case</a><a href="#take">Takeaways</a></nav>
+<div class="wrap">
+<header class="hero"><canvas id="net"></canvas>
+<span class="sticker" style="right:70px;top:40px">🧀</span><span class="sticker" style="right:190px;bottom:36px;animation-delay:-1s">🎯</span><span class="sticker" style="right:30px;bottom:100px;animation-delay:-2s">📊</span>
+<span class="tag"><i class="fa-solid fa-bolt"></i> Week 6 notes</span>
+<h1><span class="type" id="typed"></span></h1>
+<p>Know the enemy, know yourself, then do the maths. Risk assessment, residual risk, and a ransomware attack on a cheese factory. Click and play with everything! 👆</p></header>
+
+<section id="intro" class="hid"><div class="head"><div class="num">📖</div><h2>Introduction</h2></div><div class="box">
+<figure class="photo"><img src="https://loremflickr.com/520/340/cybersecurity,hacker?lock=61" alt="" onerror="this.parentElement.remove()">🕵️ Threats never sleep</figure>
+<p>In an increasingly interconnected world, organizations face a constant barrage of cyber threats that can jeopardize their operations, reputation, and financial stability. This week, we delve into the critical discipline of cybersecurity management, emphasizing that effective planning is not merely a reactive measure but a <mark class="b">proactive strategy to safeguard an organization's most valuable digital assets</mark>. Historically, cybersecurity planning has been viewed through two lenses: <span class="bd p">contingency planning</span>, which focuses on responding to incidents after they occur, and <span class="bd m">preventive planning</span>, which aims to avert incidents altogether. While contingency planning is vital for business continuity post-incident, it is <span class="bd y">risk management</span>, a core component of preventive planning, that shifts the focus to protecting assets before they are compromised.</p>
+<p>The essence of robust cybersecurity lies in understanding and managing the inherent risks. This involves a systematic process of identifying potential threats, assessing an organization's vulnerabilities, and subsequently reducing the overall risk exposure. We will explore the foundational philosophies, practical methodologies, and quantitative approaches to risk assessment, culminating in a real-world case study that highlights the complex interplay between technological advancement, operational efficiency, and the ever-present specter of cyber threats. By grasping these concepts, we can appreciate how organizations move beyond simply reacting to breaches and instead build resilient defenses that protect their critical assets in a dynamic digital landscape.</p><div class="clear"></div></div></section>
+
+<section id="core" class="hid"><div class="head"><div class="num">🃏</div><h2>Core Concepts</h2></div>
+<p style="font-weight:700">Tap a card to flip it: definition and significance are on the back.</p><div class="fgrid" id="fgrid"></div></section>
+
+<section id="p1" class="hid"><div class="head"><div class="num">1</div><h2>Foundational Principles of Risk Management</h2></div>
+<div class="box"><p>The philosophy underpinning effective risk management in cybersecurity draws inspiration from <mark>Sun Tzu's timeless wisdom: "know the enemy" and "know yourself."</mark> In this context, "knowing the enemy" involves understanding the diverse range of external and internal threats that could target an organization. Conversely, "knowing yourself" necessitates a deep comprehension of an organization's own assets, its current security posture, and existing protective mechanisms.</p>
+<div class="tabs" data-t="a"><button class="tab on">😈 Know the enemy</button><button class="tab">🪞 Know yourself</button></div>
+<div data-p="a"><div class="pane on"><div class="big">😈</div>Understand the diverse range of <b>external and internal threats</b> that could target the organization.</div><div class="pane"><div class="big">🪞</div>Deeply understand your own <b>assets, current security posture, and existing protective mechanisms</b>.</div></div>
+<p style="margin-top:14px">Risk management, therefore, is a continuous, systematic process of identifying potential threats, assessing vulnerabilities, and ultimately reducing the overall risk. It acknowledges that <mark class="p">complete risk elimination is often an unattainable ideal</mark> in the digital realm.</p></div>
+<div class="box"><p>Risk, in cybersecurity, is an overall assessment of the probability that a threat will become a successful attack and the potential impact of such an event. An attack materializes when a <span class="bd">threat exploits a vulnerability</span>, leading to an incident. To visualize this, the concept of an <span class="bd y">"attack surface"</span> or "attack vector" is used, mapping threats against specific organizational assets. This multi-dimensional construct helps managers understand the various points where an unauthorized user might attempt to gain access or extract data. For example, the <mark>Equifax breach</mark> demonstrated how unpatched vulnerabilities and misconfigurations could be exploited across various assets like storage and routers. <em>(Tap a cell to see a risk level.)</em></p>
+<div class="scroll-x"><div class="mx" id="mx"></div></div></div>
+<div class="box"><p>Even with existing safeguards, some level of risk will always persist. This unavoidable remainder is termed <span class="bd p">"residual risk."</span> The primary objective of the risk management process is to systematically evaluate this residual risk, guiding decisions on how to manage it. The process is structured into <b>three interconnected phases</b>:</p>
+<div class="phases">
+<div class="ph"><h4>🔍 Risk Identification</h4><p style="font-size:15px;margin-top:8px">This initial phase focuses on understanding "what you have" (assets) and "what can harm it" (threats and vulnerabilities). It involves a detailed inventory of all assets requiring protection. Cyber assets are broadly categorized into <mark class="b">people, procedures, data, software, hardware, and networking</mark> components. Data classification, for instance, is crucial as it dictates the level of protection required, aligning with security clearance levels for individuals.</p></div>
+<div class="ph"><h4>⚖️ Risk Assessment</h4><p style="font-size:15px;margin-top:8px">Once identified, risks are evaluated. This phase quantifies the potential impact and likelihood of identified risks. Asset valuation is key here, considering not just purchase price but the asset's business impact (e.g., revenue generation, profitability, liability). This is often done through expert input and scored questionnaires.</p></div>
+<div class="ph"><h4>🎛️ Risk Control</h4><p style="font-size:15px;margin-top:8px">The final phase involves making strategic decisions on how to manage assessed risks, selecting appropriate mitigation options, justifying these choices, and continuously monitoring their effectiveness. This ensures resources are allocated effectively and the process remains dynamic.</p></div></div></div></section>
+
+<section id="p2" class="hid"><div class="head"><div class="num">2</div><h2>Threat Assessment &amp; Quantitative Risk</h2></div>
+<div class="box"><p>Building upon the identification phase, the assessment of cyber threats requires specialized knowledge. Unlike internal assets, threats are dynamic and largely external. Organizations rely on <span class="bd m">"threat intelligence,"</span> often from professional bodies or subscription services, to gain insights into current threats, their criticality, frequency, and potential impact. This intelligence is vital because organizations typically cannot generate such comprehensive data internally. To manage the vast number of threats, they are classified into broader categories:</p>
+<div class="path3"><div class="card"><i class="fa-solid fa-user-xmark"></i>Acts of human error</div><div class="card"><i class="fa-solid fa-copyright"></i>Compromises to intellectual property</div><div class="card"><i class="fa-solid fa-user-secret"></i>Deliberate acts of espionage or trespass</div><div class="card"><i class="fa-solid fa-money-bill-wave"></i>Information extortion</div><div class="card"><i class="fa-solid fa-hourglass-end"></i>Technological obsolescence</div></div>
+<p style="margin-top:14px">The latter, referring to outdated or unsupported hardware and software, is a <mark>significant, often overlooked, threat category</mark>. Quantitative threat assessment involves assigning scores or ranks based on occurrence frequency and potential impact, allowing organizations to prioritize their focus.</p>
+<p>Once assets and threats are understood, identifying vulnerabilities becomes the next critical step. A vulnerability is not an isolated concept; it exists specifically at the intersection of a particular asset and a particular threat. It describes the weakness an asset possesses against a specific threat, requiring expert judgment for assessment. To systematically map these, organizations use a <span class="bd y">Threat-Vulnerability-Asset (TVA) Worksheet</span>. This spreadsheet-based tool lists assets on one axis and threat categories on the other. Each cell documents the vulnerability of a specific asset to a specific threat, allowing for the identification of critical weaknesses and prioritized mitigation efforts.</p></div>
+<div class="box"><p>The culmination of identification and assessment is the quantitative calculation of risk, which involves two primary components. <b>Play with the sliders below</b> 🎚️</p>
+<div class="fm"><b>LF</b> = (Likelihood of Attack) × (Probability of Success)<br><b>LM</b> = (Asset Value) × (Percentage of Asset Lost)<br><b>Residual Risk</b> = (LF × LM) − (% of Risk Mitigated by Current Controls) + (Measurement Uncertainty)<br><b>Measurement Uncertainty</b> = (1 − Accuracy %) × (LF × LM)</div>
+<div class="calc"><div>
+<div class="slid"><span>Likelihood of attack</span><input type="range" id="s1" min="0" max="100" value="10"><span id="o1"></span></div>
+<div class="slid"><span>Probability of success</span><input type="range" id="s2" min="0" max="100" value="50"><span id="o2"></span></div>
+<div class="slid"><span>Asset value</span><input type="range" id="s3" min="0" max="200" value="50"><span id="o3"></span></div>
+<div class="slid"><span>% of asset lost</span><input type="range" id="s4" min="0" max="100" value="80"><span id="o4"></span></div>
+<div class="slid"><span>Accuracy of estimates</span><input type="range" id="s5" min="0" max="100" value="75"><span id="o5"></span></div>
+<div class="slid"><span>% risk mitigated</span><input type="range" id="s6" min="0" max="100" value="0"><span id="o6"></span></div></div>
+<div class="res"><div class="row"><span>Loss Frequency (LF)</span><b id="rLF"></b></div><div class="row"><span>Loss Magnitude (LM)</span><b id="rLM"></b></div><div class="row"><span>LF × LM</span><b id="rB"></b></div><div class="row"><span>Measurement uncertainty</span><b id="rU"></b></div><div class="row"><span>Mitigated</span><b id="rM"></b></div><p style="margin:10px 0 0;text-align:center">Residual Risk</p><div class="final" id="rR"></div></div></div>
+<p style="margin-top:14px"><b>Loss Frequency (LF)</b> quantifies how often a successful attack is expected to occur. It combines the likelihood of an attack materializing with the probability of its success against existing defenses. For example, if there's a 10% chance of an attack and a 50% chance of success, LF = 0.10 × 0.50 = 0.05. <b>Loss Magnitude (LM)</b>, also known as <mark class="b">"asset exposure,"</mark> quantifies the financial impact of a successful attack. It considers the asset's value and the percentage of that asset that would be compromised or lost. For example, if an asset is valued at 50 units and 80% would be compromised, LM = 50 × 0.80 = 40 units.</p>
+<p>The ultimate goal is to calculate <b>Residual Risk</b>, which is the risk remaining after considering existing controls and inherent uncertainties. <b>Measurement Uncertainty</b> is a crucial component, acknowledging that LF and LM are often estimates. It is typically added as a percentage of the initial estimated risk (LF × LM) to account for potential errors or underestimation, ensuring a more conservative and realistic assessment. For instance, if estimates are 75% accurate, there's a 25% uncertainty. An example calculation for an e-commerce database with a 10% attack chance, 50% success probability, asset value 50, 80% compromise, and 75% accuracy yields a residual risk of <mark class="m">2.5</mark> (the default slider position). While quantitative assessment is ideal, practical challenges in data acquisition often lead organizations to use qualitative approaches.</p></div></section>
+
+<section id="p3" class="hid"><div class="head"><div class="num">3</div><h2>The Newhouse Cheese Company Case Study</h2></div>
+<div class="box"><figure class="photo l"><img src="https://loremflickr.com/520/340/cheese,factory?lock=62" alt="" onerror="this.parentElement.remove()">🧀 Centuries of tradition</figure>
+<p>The <b>Risk Management - Part 03</b> lesson brings these concepts to life through the compelling case of the <span class="bd y">Newhouse Cheese Company</span>. This venerable institution, after centuries of traditional operations, embraced extensive digitalization, integrating precision control monitors and devices into its cheese-making processes. While boosting efficiency, this transformation inadvertently exposed the company to sophisticated cyber threats, culminating in a crippling <mark class="p">ransomware attack</mark>. The company was forced to pay <span class="bd p">$49,999</span> to regain control of its systems after hackers demonstrated control by shutting down a critical temperature control device and claiming access to sensitive recipe files.</p><div class="clear"></div>
+<div class="tl"><div class="ev" data-e="🧀"><b>Digitalization</b><br>Precision monitors and devices integrated into cheese-making.</div><div class="ev" data-e="💀"><b>Ransomware attack</b><br>Temperature control device shut down; recipe files claimed.</div><div class="ev" data-e="💸"><b>$49,999 paid</b><br>To regain control of the systems.</div><div class="ev" data-e="🗣️"><b>Internal debate</b><br>CISO vs. Deputy CEO.</div><div class="ev" data-e="🕵️"><b>Consultant Jack Parem</b><br>Comprehensive risk assessment.</div></div></div>
+<div class="box"><p>The incident sparked an internal debate, with the <b>CISO</b> suggesting increased budget for intrusion monitoring, while the <b>Deputy CEO</b> questioned the necessity of having critical systems and family recipes online, advocating for reduced digitalization and reintroducing human oversight. A cybersecurity consultant, Jack Parem, was brought in to conduct a comprehensive risk assessment, following a four-step plan:</p>
+<div class="steps" id="steps"><span class="on"></span><span></span><span></span><span></span></div><div id="stepCard"></div>
+<p style="margin-top:12px"><button class="btn" id="prev">◀ Back</button> <button class="btn" id="next">Next step ▶</button></p></div>
+<div class="box"><p>Parem's assessment revealed <mark>four pathways into the network</mark>, evidence of hacker access to <span class="bd">industrial control systems (ICS)</span>, and a compromised bot. His recommendations included taking the thermization process completely offline, removing network temperature controls or backstopping them with manual human controls, and addressing access control vulnerabilities. The consultant's ability to gain control of industrial systems and access sensitive recipes during penetration testing was a significant <mark class="b">"eye-opener"</mark> for the CEO.</p>
+<p>The debate within Newhouse Cheese highlighted the tension between the benefits of digitalization (cost savings, efficiency) and the severe security risks. While ransomware was a concern, the consultant emphasized that the potential for <mark class="p">physical harm, such as listeria contamination</mark> from compromised ICS in food production, was a far greater threat, potentially leading to loss of life and catastrophic reputational damage. This underscored the critical importance of <span class="bd m">Cyber-Informed Engineering (CIE)</span>, which integrates cybersecurity considerations into system design from the outset.</p></div>
+<div class="box"><p>The discussion also explored the pros and cons of a <b>hybrid (manual/digital) approach</b>:</p>
+<div class="pc"><div class="pro"><h4>👍 Pros</h4><ul><li>Isolation of critical systems</li><li>Production continuity through manual backups</li><li>Enhanced security for sensitive offline data</li><li>Reduced unauthorized access by limiting digital pathways</li></ul></div>
+<div class="con"><h4>👎 Cons</h4><ul><li>The <b>sunk cost</b> of prior digital investments</li><li>Potential negative impact on reputation and investor trust</li><li>Increased operational costs due to hiring and training for manual controls</li><li>Initial operational hindrance</li><li>The reintroduction of human error</li></ul></div></div>
+<p style="margin-top:16px">The Newhouse Cheese case vividly illustrates the complex challenge of balancing <mark>Industry 4.0</mark> benefits with severe risks, especially when ICS are targeted. It emphasizes that reducing digital pathways and strategically isolating critical systems can significantly decrease an organization's attack surface, even if it means re-evaluating the extent of digitalization for certain functions.</p></div></section>
+
+<section id="take" class="hid"><div class="head"><div class="num">✅</div><h2>Key Takeaways</h2></div><div class="box"><b id="mt">0 / 10 mastered</b><div class="meter"><div id="mb"></div></div><ul class="take" id="tl"></ul></div></section>
+
+<section class="hid"><div class="head"><div class="num">🏁</div><h2>Conclusion</h2></div><div class="box fin">
+<p>The journey through Week 6 has illuminated the multifaceted nature of cyber risk management, transitioning from philosophical underpinnings to practical quantitative assessments and culminating in a compelling real-world case study. We've learned that effective cybersecurity is not merely about reacting to breaches but about a proactive, continuous process of understanding, evaluating, and mitigating risks to an organization's critical assets. The distinction between contingency planning and risk management underscores a fundamental shift in focus: from merely recovering business processes to actively protecting the assets that underpin them.</p>
+<p>The Newhouse Cheese Company's experience serves as a powerful reminder that the allure of digitalization, while offering immense efficiency gains, comes with inherent vulnerabilities, particularly for industrial control systems. The debate between maintaining operational efficiency and ensuring robust security highlights the complex decisions leaders face. Ultimately, the lessons from this week emphasize the critical need for <mark>Cyber-Informed Engineering</mark>, strategic reduction of digital pathways, and a flexible, hybrid approach that balances technological advancement with an unwavering commitment to security and safety. As the digital landscape continues to evolve, mastering these risk management principles will be paramount for organizations seeking to build resilience and ensure long-term stability and success.</p></div></section>
+<footer>💙 Week 6 · you've got this</footer></div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+addEventListener('scroll',()=>{const h=document.documentElement;$('#bar').style.width=h.scrollTop/(h.scrollHeight-h.clientHeight)*100+'%'},{passive:true});
+addEventListener('pointermove',e=>{const g=$('#glow');g.style.left=e.clientX+'px';g.style.top=e.clientY+'px'});
+const T='Risk Management: know the enemy, know yourself';let ti=0;(function t(){$('#typed').textContent=T.slice(0,ti++);if(ti<=T.length)setTimeout(t,45)})();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});$$('.hid').forEach(e=>io.observe(e));
+const links=$$('#pill a,nav.pill a'),spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-40% 0px -55% 0px'});$$('section[id]').forEach(s=>spy.observe(s));
+const cv=$('#net'),cx=cv.getContext('2d');let W,H,P=[];function rs(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight}rs();addEventListener('resize',rs);
+for(let i=0;i<45;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.7,vy:(Math.random()-.5)*.7});
+(function d(){cx.clearRect(0,0,W,H);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;cx.fillStyle='rgba(255,255,255,.7)';cx.beginPath();cx.arc(p.x,p.y,2.5,0,7);cx.fill()});for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){const a=P[i],b=P[j],D=Math.hypot(a.x-b.x,a.y-b.y);if(D<120){cx.strokeStyle=`rgba(255,255,255,${.35-D/400})`;cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke()}}requestAnimationFrame(d)})();
+const C=[['Risk Management','fa-chart-line','#ffe98a',"The systematic process of identifying, assessing, and reducing potential risks that an organization faces, particularly concerning its cyber assets.","It provides a structured approach to protect an organization from cyber threats, aiming to reduce, not eliminate, potential harm."],
+['Contingency Planning','fa-truck-medical','#a6f5e8',"A reactive planning approach focused on developing procedures and structures to respond to cybersecurity incidents after they have occurred.","Essential for minimizing damage and ensuring business continuity post-incident, but does not prevent the incident itself."],
+['Attack Surface','fa-bullseye','#b9dcff',"A visualization or conceptualization of the various points where an unauthorized user can try to enter or extract data from an environment.","Helps managers understand the multi-dimensional nature of threats by mapping them against specific organizational assets."],
+['Residual Risk','fa-hourglass-half','#ffc1d4',"The level of risk that remains after all reasonable security measures, safeguards, and vulnerability reductions have been implemented.","It is the primary focus of risk management assessment, as organizations must decide how to manage this unavoidable leftover risk."],
+['Loss Frequency (LF)','fa-rotate','#ffe98a',"An estimate of the probability or likelihood that a specific threat will materialize and cause a loss event within a given timeframe.","Crucial for quantitatively assessing risk by determining how often an organization might experience a particular type of loss."],
+['Loss Magnitude (LM)','fa-sack-dollar','#a6f5e8',"An estimate of the financial or operational impact (cost) if a specific threat materializes and causes a loss event.","Essential for quantitatively assessing risk by understanding the potential severity of damage from a successful attack."],
+['Threat Intelligence','fa-satellite-dish','#b9dcff',"Dynamic, informed information about current cyber threats, including their criticality, likelihood, frequency, and potential impact.","Essential for understanding the external threat landscape, as this data is too dynamic and specialized for internal generation."],
+['Vulnerability Assessment','fa-magnifying-glass','#ffc1d4',"The process of identifying weaknesses in an asset's protection against specific threats, typically requiring expert judgment.","Crucial for understanding specific points of failure, as vulnerabilities are always relative to a particular asset and threat."],
+['TVA Worksheet','fa-table-cells','#ffe98a',"(Threat-Vulnerability-Asset Worksheet) A spreadsheet-based tool used to systematically chart and assess vulnerabilities for each combination of assets and threats.","Provides a structured, detailed overview of an organization's vulnerability posture, enabling prioritized mitigation efforts."],
+['Industrial Control Systems (ICS)','fa-industry','#a6f5e8',"Computerized systems that monitor and control industrial processes, such as those found in manufacturing, energy, and food production.","Critical infrastructure components that, if compromised, can lead to severe operational disruptions, financial losses, and even public safety hazards."]];
+$('#fgrid').innerHTML=C.map(c=>`<div class="flip"><div class="fi"><div class="ff" style="background:${c[2]}"><i class="fa-solid ${c[1]}"></i><span style="font-size:1.2rem">${c[0]}</span><small>tap to flip</small></div><div class="fb"><b style="margin:0">DEFINITION</b>${c[3]}<b>SIGNIFICANCE</b>${c[4]}</div></div></div>`).join('');
+$$('.flip').forEach(f=>f.onclick=()=>f.classList.toggle('on'));
+$$('.tabs').forEach(tb=>{const ps=$$('.pane',$(`[data-p="${tb.dataset.t}"]`));$$('.tab',tb).forEach((b,i)=>b.onclick=()=>{$$('.tab',tb).forEach(x=>x.classList.remove('on'));b.classList.add('on');ps.forEach(p=>p.classList.remove('on'));ps[i].classList.add('on')})});
+// attack surface matrix
+const as=['Storage','Router','Database','Staff'],th=['Malware','Unpatched flaw','Misconfig.','Human error'],lv=[[2,3,3,1],[1,3,3,1],[3,2,2,1],[2,1,1,3]],em=['','🟢','🟡','🔴'];
+$('#mx').innerHTML='<div class="h">Asset ↓ / Threat →</div>'+th.map(t=>`<div class="h">${t}</div>`).join('')+as.map((a,i)=>`<div class="h">${a}</div>`+lv[i].map(l=>`<div class="c" data-l="${l}">${em[l]}</div>`).join('')).join('');
+$$('#mx .c').forEach(c=>c.onclick=()=>{let l=+c.dataset.l%3+1;c.dataset.l=l;c.textContent=em[l]});
+// calculator
+const g=i=>+$('#s'+i).value;function calc(){const lf=g(1)/100*g(2)/100,lm=g(3)*g(4)/100,b=lf*lm,u=(1-g(5)/100)*b,m=b*g(6)/100,r=b-m+u;
+[['o1',g(1)+'%'],['o2',g(2)+'%'],['o3',g(3)],['o4',g(4)+'%'],['o5',g(5)+'%'],['o6',g(6)+'%'],['rLF',lf.toFixed(3)],['rLM',lm.toFixed(1)],['rB',b.toFixed(2)],['rU','+'+u.toFixed(2)],['rM','−'+m.toFixed(2)]].forEach(([k,v])=>$('#'+k).textContent=v);
+const f=$('#rR');f.textContent=r.toFixed(2);f.classList.add('pop');setTimeout(()=>f.classList.remove('pop'),150)}
+$$('input[type=range]').forEach(s=>s.oninput=calc);calc();
+// stepper
+const S=[['Identifying Critical Information and Processes','Find what truly matters most to the business.','🎯'],['Mapping the Digital Terrain','Hardware, software, network, human interaction, supply chain.','🗺️'],['Identifying Critical Attack Points','Where could attackers realistically get in?','📍'],['Generating Options for Attack Mitigation','Decide which defenses and fallbacks to apply.','🛡️']];let si=0;
+function st(){const c=$('#stepCard');c.style.animation='none';c.offsetHeight;c.style.animation='';c.innerHTML=`<h3 style="margin-bottom:8px">${S[si][2]} Step ${si+1}: ${S[si][0]}</h3><p>${S[si][1]}</p>`;$$('#steps span').forEach((s,i)=>s.classList.toggle('on',i<=si))}
+$('#next').onclick=()=>{si=(si+1)%4;st()};$('#prev').onclick=()=>{si=(si+3)%4;st()};st();
+const K=["Cybersecurity management prioritizes proactive planning to prevent incidents over reactive responses.","Risk management focuses on protecting organizational assets, distinct from contingency planning which focuses on business processes.","Understanding both internal assets (\"know yourself\") and external/internal threats (\"know the enemy\") is fundamental to effective risk management.","Risk management involves three core phases: identification, assessment, and control, aiming to reduce, not eliminate, risk.","\"Residual risk\" is the unavoidable risk that remains after all protective measures have been implemented and is the primary focus of assessment.","Quantitative risk assessment relies on estimating \"loss frequency\" (probability of successful attack) and \"loss magnitude\" (financial impact).","The Threat-Vulnerability-Asset (TVA) worksheet is a vital tool for systematically mapping and assessing vulnerabilities across an organization.","Digitalization, while offering efficiency, introduces significant cybersecurity vulnerabilities, especially in industrial control systems (ICS).","The potential for physical harm (e.g., food contamination) from compromised ICS can be far more severe than financial losses from ransomware.","A hybrid approach, combining strategic offline operations for critical assets with continued digitalization for non-critical functions, can offer a balanced solution."];
+$('#tl').innerHTML=K.map(k=>`<li><span class="ck"><i class="fa-solid fa-check"></i></span><span>${k}</span></li>`).join('');
+function boom(){for(let i=0;i<70;i++){const c=document.createElement('i');c.className='conf';c.style.cssText=`left:${Math.random()*100}vw;top:-20px;background:${['#2563ff','#ffd94a','#5eead4','#ff8fb1','#7cc7ff'][i%5]};--x:${(Math.random()-.5)*200}px;animation-delay:${Math.random()*.5}s`;document.body.appendChild(c);setTimeout(()=>c.remove(),3000)}}
+$$('#tl li').forEach(li=>li.onclick=()=>{li.classList.toggle('d');const n=$$('#tl li.d').length;$('#mb').style.width=n*10+'%';$('#mt').textContent=n+' / 10 mastered';if(n==10){$('#mt').textContent='🎉 10 / 10, exam ready!';boom()}});
+</script></body></html>
