@@ -632,8 +632,9 @@
 
     /* Chapter Section in Continuous Feed */
     .lecture-section {
-      margin-bottom: 56px;
+      margin-bottom: 36px;
       scroll-margin-top: 90px;
+      transition: margin-bottom var(--transition-fast);
     }
 
     .lecture-section-header {
@@ -646,6 +647,18 @@
       justify-content: space-between;
       gap: 16px;
       border-bottom: 2px solid var(--accent-primary);
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--transition-fast), border-radius var(--transition-fast);
+    }
+
+    .lecture-section-header:hover {
+      background: var(--bg-surface-elevated);
+    }
+
+    .lecture-section.collapsed .lecture-section-header {
+      border-radius: var(--radius-md);
+      border-bottom: 1px solid var(--border-subtle);
     }
 
     .lecture-section-title-group {
@@ -684,12 +697,75 @@
       position: relative;
     }
 
+    .lecture-section.collapsed .lecture-section-frame-box {
+      display: none;
+    }
+
     .lecture-section-frame-box iframe {
       width: 100%;
       border: none;
       display: block;
       min-height: 750px;
       transition: height 0.3s ease;
+    }
+
+    /* Dropdown Toggle Button */
+    .toggle-section-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent-primary);
+      border: 1px solid var(--border-strong);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .toggle-section-btn:hover {
+      background: var(--accent-primary);
+      color: #04101e;
+    }
+
+    .toggle-icon {
+      transition: transform 0.25s ease;
+    }
+
+    .lecture-section.collapsed .toggle-icon {
+      transform: rotate(-90deg);
+    }
+
+    /* Feed Toolbar (Expand All / Collapse All) */
+    .feed-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding: 14px 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .feed-counter {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feed-counter-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
     }
 
     /* Quick Table of Contents Floating Widget for Continuous Mode */
@@ -937,6 +1013,21 @@
             <div class="stat-pill"><i class="fa-solid fa-scale-balanced"></i> GRC Frameworks</div>
             <div class="stat-pill"><i class="fa-solid fa-truck-ramp-box"></i> Third-Party Vendor Risk</div>
             <div class="stat-pill"><i class="fa-solid fa-life-ring"></i> Contingency &amp; BIA</div>
+        </div>
+
+        <!-- Toolbar with Expand All / Collapse All -->
+        <div class="feed-toolbar">
+          <div class="feed-counter">
+            <span class="feed-counter-dot"></span>
+            <span id="feed-visible-count">All 14 Modules Visible</span>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="pill-action-btn" id="btn-expand-all" onclick="expandAllSections()" title="Expand all lecture pages">
+              <i class="fa-solid fa-angles-down"></i> Expand All
+            </button>
+            <button class="pill-action-btn" id="btn-collapse-all" onclick="collapseAllSections()" title="Collapse all lecture pages">
+              <i class="fa-solid fa-angles-up"></i> Collapse All
+            </button>
           </div>
         </div>
 
@@ -1206,7 +1297,7 @@
         section.className = 'lecture-section';
         section.id = `sec-${lec.id}`;
         section.innerHTML = `
-          <div class="lecture-section-header">
+          <div class="lecture-section-header" onclick="toggleLectureSection('${lec.id}', event)">
             <div class="lecture-section-title-group">
               <div class="lecture-order-badge">${index + 1}</div>
               <div>
@@ -1217,7 +1308,11 @@
                 <h3>${lec.title}</h3>
               </div>
             </div>
-            <div style="display:flex; gap:8px;">
+            <div style="display:flex; gap:8px; align-items:center;" onclick="event.stopPropagation();">
+              <button class="toggle-section-btn" onclick="toggleLectureSection('${lec.id}', event)" title="Toggle page visibility">
+                <i class="fa-solid fa-chevron-down toggle-icon" id="icon-${lec.id}"></i>
+                <span id="text-${lec.id}">Hide</span>
+              </button>
               <button class="pill-action-btn" onclick="selectLecture(${index}); setViewMode('focus');" title="Open in focus mode">
                 <i class="fa-solid fa-expand"></i> Focus
               </button>
@@ -1226,7 +1321,7 @@
               </a>
             </div>
           </div>
-          <div class="lecture-section-frame-box">
+          <div class="lecture-section-frame-box" id="framebox-${lec.id}">
             <iframe id="frame-${lec.id}" src="${encodeURI(lec.file)}" loading="${index < 2 ? 'eager' : 'lazy'}" title="${lec.title}"></iframe>
           </div>
         `;
@@ -1251,6 +1346,60 @@
         tocLi.innerHTML = `<a href="#sec-${lec.id}" class="toc-link" title="${lec.title}">${index + 1}. ${lec.title}</a>`;
         floatingTocListEl.appendChild(tocLi);
       });
+
+      updateVisibleCount();
+    }
+
+    // Toggle Single Lecture Section Dropdown
+    function toggleLectureSection(id, event) {
+      if (event) event.stopPropagation();
+      const section = document.getElementById(`sec-${id}`);
+      if (!section) return;
+      const isCollapsed = section.classList.toggle('collapsed');
+      const textEl = document.getElementById(`text-${id}`);
+      if (textEl) {
+        textEl.textContent = isCollapsed ? 'Show' : 'Hide';
+      }
+      updateVisibleCount();
+    }
+
+    // Expand All Sections
+    function expandAllSections() {
+      document.querySelectorAll('.lecture-section').forEach(sec => {
+        sec.classList.remove('collapsed');
+        const id = sec.id.replace('sec-', '');
+        const textEl = document.getElementById(`text-${id}`);
+        if (textEl) textEl.textContent = 'Hide';
+      });
+      updateVisibleCount();
+    }
+
+    // Collapse All Sections
+    function collapseAllSections() {
+      document.querySelectorAll('.lecture-section').forEach(sec => {
+        sec.classList.add('collapsed');
+        const id = sec.id.replace('sec-', '');
+        const textEl = document.getElementById(`text-${id}`);
+        if (textEl) textEl.textContent = 'Show';
+      });
+      updateVisibleCount();
+    }
+
+    // Update Counter in Feed Toolbar
+    function updateVisibleCount() {
+      const total = lectures.length;
+      const collapsed = document.querySelectorAll('.lecture-section.collapsed').length;
+      const visible = total - collapsed;
+      const counterEl = document.getElementById('feed-visible-count');
+      if (counterEl) {
+        if (visible === total) {
+          counterEl.textContent = `All ${total} Modules Visible`;
+        } else if (visible === 0) {
+          counterEl.textContent = `All ${total} Modules Hidden`;
+        } else {
+          counterEl.textContent = `${visible} of ${total} Modules Visible`;
+        }
+      }
     }
 
     // Select Active Lecture
@@ -1276,10 +1425,16 @@
 
       focusFrameEl.src = encodeURI(lec.file);
 
-      // If in continuous mode, scroll to the section
+      // If in continuous mode, auto-expand if collapsed and scroll to the section
       if (currentViewMode === 'continuous') {
         const sec = document.getElementById(`sec-${lec.id}`);
         if (sec) {
+          if (sec.classList.contains('collapsed')) {
+            sec.classList.remove('collapsed');
+            const textEl = document.getElementById(`text-${lec.id}`);
+            if (textEl) textEl.textContent = 'Hide';
+            updateVisibleCount();
+          }
           sec.scrollIntoView({ behavior: 'smooth' });
         }
       }
