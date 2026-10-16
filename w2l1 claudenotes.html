@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧊 Foundation Notes — CIA Triangle &amp; the McCumber Cube</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --pink:#ff6fa5; --pink-light:#ffe3ef;
+    --purple:#8c6bff; --purple-light:#ece6ff;
+    --blue:#3aa0ff; --blue-light:#dff1ff;
+    --yellow:#ffd23f; --yellow-light:#fff6d9;
+    --green:#33c98f; --green-light:#dcfbf0;
+    --orange:#ff8c42; --orange-light:#ffe9d6;
+    --red:#ff5566; --red-light:#ffe1e4;
+    --ink:#3a2e4d; --paper:#fffdf9;
+  }
+
+  information states
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Poppins', sans-serif; color:var(--ink);
+    background:
+      radial-gradient(circle at 10% 10%, #ffe9f3 0%, transparent 45%),
+      radial-gradient(circle at 90% 20%, #e3ecff 0%, transparent 45%),
+      radial-gradient(circle at 20% 90%, #fff3d6 0%, transparent 45%),
+      radial-gradient(circle at 85% 85%, #e0fff2 0%, transparent 45%),
+      #fffdf9;
+    background-attachment: fixed;
+    line-height:1.65; padding-bottom:60px; overflow-x:hidden;
+  }
+  h1,h2,h3,h4{ font-family:'Caveat', cursive; margin:0 0 .3em; }
+  .hero{
+    position:relative; padding:50px 24px 70px; text-align:center;
+    background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 50%, var(--purple) 100%);
+    color:#fff; overflow:hidden; border-radius:0 0 40px 40px;
+    box-shadow: 0 10px 30px rgba(255,140,66,0.25);
+  }
+  .hero::before{
+    content:"🧊 🔐 📊 🗂️ 🔑 🛰️ 📡 ✅";
+    position:absolute; inset:0; font-size:34px;
+    display:flex; align-items:center; justify-content:space-around;
+    opacity:0.18; padding:0 10px; pointer-events:none;
+  }
+  .hero h1{ font-size:56px; margin:0; text-shadow: 3px 3px 0 rgba(0,0,0,0.15); position:relative; }
+  .hero .sub{ font-family:'Patrick Hand', cursive; font-size:21px; margin-top:10px; position:relative; opacity:.95; }
+  .tape{
+    display:inline-block; background:rgba(255,255,255,0.25); border:2px dashed rgba(255,255,255,0.6);
+    padding:6px 18px; border-radius:30px; font-family:'Patrick Hand',cursive; font-size:16px; margin-top:16px; position:relative;
+  }
+  .wrap{ max-width:880px; margin:0 auto; padding:0 20px; }
+
+  .toc{
+    background:var(--paper); border:3px dashed var(--purple); border-radius:24px;
+    margin:-40px auto 40px; padding:24px 26px; max-width:820px;
+    box-shadow: 8px 8px 0 var(--purple-light); position:relative; z-index:5;
+  }
+  .toc h2{ color:var(--purple); font-size:32px; display:flex; align-items:center; gap:10px; }
+  .toc-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px; margin-top:14px; }
+  .toc-grid a{
+    text-decoration:none; color:var(--ink); background:var(--purple-light); border-radius:14px;
+    padding:12px 14px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14.5px;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease; border:2px solid transparent;
+  }
+  .toc-grid a i{ width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:#fff; color:var(--purple); font-size:14px; flex:none; }
+  .toc-grid a:hover{ transform:translateY(-3px) rotate(-1deg); background:#fff; border-color:var(--purple); box-shadow:4px 4px 0 var(--purple); }
+
+  section.card{
+    background:var(--paper); border-radius:26px; padding:30px 30px 34px; margin:34px 0;
+    position:relative; box-shadow: 0 6px 0 rgba(0,0,0,0.05), 0 10px 25px rgba(140,107,255,0.08);
+    border:1px solid rgba(0,0,0,0.04);
+  }
+  section.card::before{
+    content:''; position:absolute; top:-14px; left:36px; width:70px; height:26px;
+    background:repeating-linear-gradient(45deg, rgba(255,210,63,.6), rgba(255,210,63,.6) 6px, rgba(255,210,63,.35) 6px, rgba(255,210,63,.35) 12px);
+    border-radius:4px; transform:rotate(-3deg); box-shadow:0 2px 4px rgba(0,0,0,0.08);
+  }
+  .sec-head{ display:flex; align-items:center; gap:14px; margin-bottom:6px; }
+  .sec-icon{ width:54px; height:54px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff; flex:none; box-shadow:3px 3px 0 rgba(0,0,0,0.08); }
+  section.card h2{ font-size:34px; margin:0; }
+  .eyebrow{ font-family:'Patrick Hand',cursive; font-size:14px; letter-spacing:1px; text-transform:uppercase; color:var(--pink); font-weight:700; margin-bottom:2px; }
+  section.card img{ width:100%; border-radius:18px; margin:16px 0; box-shadow:0 10px 22px rgba(0,0,0,0.15); border:5px solid #fff; outline:2px solid rgba(0,0,0,0.05); }
+  section.card img.cube-reference{ display:block; width:min(100%, 520px); margin:16px auto; }
+  section.card img.cia-reference{ display:block; width:min(100%, 520px); margin:16px auto; }
+  section.card img.dimension-image{ display:block; width:min(100%, 560px); max-height:300px; object-fit:contain; margin:16px auto; }
+  section.card img.cia-detail-image{ display:block; width:min(100%, 420px); height:auto; margin:16px auto; }
+  .caption{ text-align:center; font-family:'Patrick Hand',cursive; font-size:14px; color:#8a7fa3; margin-top:-8px; margin-bottom:10px; }
+
+  mark{ padding:1px 6px; border-radius:6px; font-weight:600; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+  mark.y{ background:linear-gradient(180deg, transparent 55%, var(--yellow) 55%); }
+  mark.p{ background:linear-gradient(180deg, transparent 55%, var(--pink-light) 55%); color:var(--pink); }
+  mark.g{ background:linear-gradient(180deg, transparent 55%, var(--green-light) 55%); color:#0d8a5f; }
+  mark.b{ background:linear-gradient(180deg, transparent 55%, var(--blue-light) 55%); color:#1465b3; }
+  mark.o{ background:linear-gradient(180deg, transparent 55%, var(--orange-light) 55%); color:#c9600e; }
+
+  .callout{ display:flex; gap:14px; align-items:flex-start; border-radius:16px; padding:16px 18px; margin:18px 0; font-size:15px; }
+  .callout i{ font-size:20px; margin-top:2px; }
+  .callout.warn{ background:var(--red-light); color:#a3253a; }
+  .callout.tip{ background:var(--green-light); color:#0d8a5f; }
+  .callout.fact{ background:var(--blue-light); color:#1465b3; }
+
+  /* ===== Original table (kept close to source) ===== */
+  .orig-table-wrap{ overflow-x:auto; margin:18px 0; border-radius:16px; border:2px solid var(--purple-light); }
+  table.orig{ width:100%; border-collapse:collapse; font-size:13.5px; background:#fff; }
+  table.orig th{
+    background:var(--purple); color:#fff; font-family:'Patrick Hand',cursive; font-size:16px;
+    text-align:left; padding:10px 14px;
+  }
+  table.orig td{ padding:10px 14px; vertical-align:top; border-top:1px solid var(--purple-light); }
+  table.orig tr:nth-child(even) td{ background:var(--purple-light); background:#faf8ff; }
+  table.orig td strong code{ background:var(--pink-light); color:var(--pink); padding:2px 6px; border-radius:6px; font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px; }
+
+  /* ===== glossary badges (my own version) ===== */
+  .glossary{ display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:16px; margin-top:18px; }
+  .term-card{ border-radius:18px; padding:16px 18px; position:relative; overflow:hidden; color:var(--ink); border:2px solid rgba(0,0,0,0.05); }
+  .term-card .badge{
+    display:inline-flex; align-items:center; gap:6px; font-family:'Patrick Hand',cursive; font-weight:700; font-size:16px;
+    padding:5px 14px; border-radius:30px; color:#fff; margin-bottom:8px;
+  }
+  .term-card p{ margin:0; font-size:13.5px; color:#5b4f74; }
+  .term-card .sig{ margin-top:8px; font-size:12.5px; font-style:italic; color:#8a7fa3; }
+
+  /* CIA triangle */
+  .cia-wrap{ display:flex; justify-content:center; margin:26px 0; overflow:hidden; }
+  .cia{ position:relative; width:min(320px, 100%); height:250px; }
+  .cia-node{ position:absolute; width:150px; text-align:center; border-radius:16px; padding:12px 10px; font-family:'Patrick Hand',cursive; font-size:15px; font-weight:700; color:#fff; box-shadow:3px 3px 0 rgba(0,0,0,0.1); }
+  .cia-node small{ display:block; font-family:'Poppins',sans-serif; font-weight:400; font-size:11px; margin-top:4px; opacity:.9; }
+  .cia-c{ top:0; left:50%; transform:translateX(-50%); background:var(--blue); }
+  .cia-i{ bottom:0; left:0; background:var(--pink); }
+  .cia-a{ bottom:0; right:0; background:var(--green); }
+  .cia-center{ position:absolute; top:52%; left:50%; transform:translate(-50%,-50%); font-family:'Caveat',cursive; font-size:26px; color:var(--purple); font-weight:700; }
+
+  /* Concentric circles - infosec dimensions */
+  .rings-wrap{ display:flex; justify-content:center; margin:24px 0; }
+  .rings{ position:relative; width:300px; height:300px; }
+  .ring{ position:absolute; border-radius:50%; display:flex; align-items:flex-start; justify-content:center; text-align:center; font-family:'Patrick Hand',cursive; }
+  .ring1{ inset:0; background:var(--blue-light); }
+  .ring2{ inset:40px; background:var(--pink-light); }
+  .ring3{ inset:80px; background:var(--green-light); }
+  .ring-label{ position:absolute; z-index:5; width:100%; font-size:12px; font-weight:700; padding:10px 8px 0; line-height:1.2; }
+  .ring1 .ring-label{ color:#1465b3; top:6px; }
+  .ring2 .ring-label{ color:var(--pink); top:6px; }
+  .ring-center{
+    position:absolute; z-index:6; inset:110px 110px; border-radius:50%; background:var(--purple);
+    color:#fff; display:flex; align-items:center; justify-content:center; text-align:center;
+    font-family:'Patrick Hand',cursive; font-size:13px; font-weight:700; padding:6px;
+  }
+
+  /* McCumber cube (illustrative CSS cube) */
+  .cube-wrap{ display:flex; justify-content:center; align-items:center; width:100%; min-width:0; min-height:320px; padding:46px 0 40px; margin:34px 0 24px; perspective:900px; overflow:hidden; }
+  .cube{ position:relative; width:180px; height:180px; transform-style:preserve-3d; transform:rotateX(-32deg) rotateY(35deg); }
+  .face{
+    position:absolute; width:180px; height:180px; border:2px solid rgba(255,255,255,0.6);
+    display:flex; align-items:center; justify-content:center; font-family:'Patrick Hand',cursive;
+    font-size:14px; color:#fff; text-align:center; padding:8px; font-weight:700;
+  }
+  .face-front{ background:var(--blue); transform: translateZ(90px); }
+  .face-back{ background:var(--blue); transform: rotateY(180deg) translateZ(90px); }
+  .face-right{ background:var(--pink); transform: rotateY(90deg) translateZ(90px); }
+  .face-left{ background:var(--pink); transform: rotateY(-90deg) translateZ(90px); }
+  .face-top{ background:var(--green); transform: rotateX(90deg) translateZ(90px); font-size:17px; line-height:1.15; text-shadow:1px 1px 0 rgba(0,0,0,0.18); }
+  .face-bottom{ background:var(--green); transform: rotateX(-90deg) translateZ(90px); }
+  .cube-legend{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:10px; font-family:'Patrick Hand',cursive; font-size:14px; }
+  .cube-legend span{ display:flex; align-items:center; gap:6px; }
+  .dot{ width:14px; height:14px; border-radius:4px; display:inline-block; }
+
+  .takeaways{ list-style:none; padding:0; margin:18px 0 0; display:grid; gap:14px; }
+  .takeaways li{ display:flex; gap:12px; align-items:flex-start; background:var(--yellow-light); border-radius:14px; padding:15px 16px; font-size:14.5px; line-height:1.7; border-left:5px solid var(--yellow); }
+  .takeaways li i{ color:#e0a800; margin-top:2px; }
+  .takeaways li span{ flex:1; min-width:0; }
+
+  footer{ text-align:center; margin-top:40px; font-family:'Patrick Hand',cursive; color:#8a7fa3; font-size:16px; }
+  ::selection{ background:var(--pink); color:#fff; }
+
+  @media (max-width:600px){
+    .hero h1{ font-size:38px; }
+    section.card{ padding:22px 18px 26px; }
+    section.card h2{ font-size:26px; }
+    table.orig{ font-size:12px; }
+    .cia{ height:236px; }
+    .cia-node{ width:46%; font-size:14px; }
+    .cia-node small{ font-size:10px; }
+    .cia-center{ font-size:23px; }
+    .rings{ width:min(300px, 100%); height:auto; aspect-ratio:1; }
+    .ring-center{ inset:36.7%; }
+    .cube-wrap{ min-height:340px; padding:54px 0 48px; margin-left:-6px; margin-right:-6px; }
+    .cube{ transform:rotateX(-32deg) rotateY(35deg) scale(.88); }
+    .face{ font-size:13px; line-height:1.25; }
+    .takeaways{ gap:12px; }
+    .takeaways li{ padding:14px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🧊 Foundation — Part 1</h1>
+  <div class="sub">✨ CIA triangle, the McCumber cube &amp; why cybersecurity is a management game ✨</div>
+  <div class="tape"><i class="fa-solid fa-graduation-cap"></i>&nbsp; class notes • made pretty • made memorable</div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc">
+    <h2><i class="fa-solid fa-map-signs"></i> table of contents</h2>
+    <div class="toc-grid">
+      <a href="#intro"><i class="fa-solid fa-house-signal"></i> introduction</a>
+      <a href="#concepts"><i class="fa-solid fa-table-list"></i> core concepts</a>
+      <a href="#admin"><i class="fa-solid fa-briefcase"></i> 1. admin &amp; managerial</a>
+      <a href="#rings"><i class="fa-solid fa-circle-nodes"></i> 2. interconnected dimensions</a>
+      <a href="#cia"><i class="fa-solid fa-shapes"></i> 3. the CIA triangle</a>
+      <a href="#cube"><i class="fa-solid fa-cube"></i> 4. the McCumber cube</a>
+      <a href="#takeaways"><i class="fa-solid fa-star"></i> key takeaways</a>
+      <a href="#conclusion"><i class="fa-solid fa-flag-checkered"></i> conclusion</a>
+    </div>
+  </nav>
+
+  <section class="card" id="intro">
+    <div class="eyebrow">💭 warm up</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--orange);"><i class="fa-solid fa-house-signal"></i></div>
+      <h2>introduction</h2>
+    </div>
+    <p>Welcome to the foundational session 🎉! Today we build a <mark class="p">robust understanding</mark> of cybersecurity fundamentals — from an <mark class="y">administrative &amp; managerial</mark> lens, not just a technical one. Privacy joins the story later; for now it's all cybersecurity 🔐.</p>
+    <p>Cybersecurity here means governing &amp; managing an organization's whole toolkit: <mark class="b">human, technological, tangible and intangible</mark> resources — all at once.</p>
+    <div class="callout fact">
+      <i class="fa-solid fa-cube"></i>
+      <div>Technology gets a <strong>three-dimensional</strong> read in this course: threat 🔥, asset 💾, and firewall/tool 🛡️.</div>
+    </div>
+  </section>
+
+  <section class="card" id="concepts">
+    <div class="eyebrow">📖 vocab check — straight from the source</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-table-list"></i></div>
+      <h2>core concepts</h2>
+    </div>
+    <p>Here's the original glossary table, kept close to the source text 📋:</p>
+    <div class="orig-table-wrap">
+      <table class="orig">
+        <thead>
+          <tr><th>Term</th><th>Definition</th><th>Significance</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong><code>Cybersecurity</code></strong></td><td>The practice of protecting systems, networks, and programs from digital attacks, focusing on administrative and managerial aspects beyond just technology.</td><td>Defines the broad scope of the course, emphasizing governance and management frameworks for organizational protection.</td></tr>
+          <tr><td><strong><code>Information Security</code></strong></td><td>A subset of cybersecurity specifically concerned with protecting information and information systems from unauthorized access, use, disclosure, disruption, modification, or destruction.</td><td>Represents the most critical part of cybersecurity, focusing on the protection of data throughout its lifecycle.</td></tr>
+          <tr><td><strong><code>CIA Triangle</code></strong></td><td>An acronym representing the three core objectives of information security: Confidentiality, Integrity, and Availability.</td><td>Serves as the fundamental purpose and guiding principle for all cybersecurity efforts, ensuring secure information handling.</td></tr>
+          <tr><td><strong><code>Confidentiality</code></strong></td><td>Ensuring that information is accessible only to those authorized to have access, preventing unauthorized disclosure.</td><td>Crucial for protecting sensitive data from being read or accessed by unintended parties, maintaining privacy and competitive advantage.</td></tr>
+          <tr><td><strong><code>Integrity</code></strong></td><td>Maintaining the accuracy, completeness, and trustworthiness of information throughout its lifecycle, preventing unauthorized modification or destruction.</td><td>Guarantees that data remains unaltered and reliable, essential for accurate decision-making and operational consistency.</td></tr>
+          <tr><td><strong><code>Availability</code></strong></td><td>Ensuring that authorized users have timely and uninterrupted access to information and resources when needed.</td><td>Vital for business continuity and user experience, as systems and data must be accessible to function effectively.</td></tr>
+          <tr><td><strong><code>McCumber Cube</code></strong></td><td>A comprehensive security model that provides a holistic view of information security by considering three dimensions: information states, security goals (CIA), and security countermeasures.</td><td>Offers a structured framework for practitioners to ensure no aspect of cybersecurity is overlooked, promoting integrated security efforts.</td></tr>
+          <tr><td><strong><code>Network Security</code></strong></td><td>Measures taken to protect the underlying network infrastructure and data transmitted across it from unauthorized access, misuse, malfunction, modification, or destruction.</td><td>Addresses the security of data during transmission, a critical aspect of overall information security.</td></tr>
+          <tr><td><strong><code>Computer &amp; Data Security</code></strong></td><td>Protection of data stored in databases, applications that process data, and the computing elements involved in data storage and processing.</td><td>Focuses on securing data at rest and during processing, complementing network security.</td></tr>
+          <tr><td><strong><code>Management of Information Security</code></strong></td><td>The administrative practices, policies, human resources, and decisions required to implement and maintain information security.</td><td>Highlights the organizational and strategic aspects of cybersecurity, including investment decisions and policy enforcement.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="margin-top:22px;">✨ ...and here's my colorful cheat-sheet version of the same terms, for faster revision:</p>
+    <div class="glossary">
+      <div class="term-card" style="background:var(--blue-light);">
+        <span class="badge" style="background:var(--blue);"><i class="fa-solid fa-shield-halved"></i> cybersecurity</span>
+        <p>protecting systems/networks/programs — administrative + managerial, not just tech.</p>
+      </div>
+      <div class="term-card" style="background:var(--pink-light);">
+        <span class="badge" style="background:var(--pink); animation-delay:.2s;"><i class="fa-solid fa-database"></i> information security</span>
+        <p>a subset of cybersecurity — protects info + info systems specifically.</p>
+      </div>
+      <div class="term-card" style="background:var(--purple-light);">
+        <span class="badge" style="background:var(--purple); animation-delay:.4s;"><i class="fa-solid fa-shapes"></i> CIA triangle</span>
+        <p>confidentiality + integrity + availability = the 3 core objectives.</p>
+      </div>
+      <div class="term-card" style="background:var(--green-light);">
+        <span class="badge" style="background:var(--green); animation-delay:.6s;"><i class="fa-solid fa-eye-slash"></i> confidentiality</span>
+        <p>only authorized eyes get access — no unauthorized disclosure.</p>
+      </div>
+      <div class="term-card" style="background:var(--orange-light);">
+        <span class="badge" style="background:var(--orange); animation-delay:.8s;"><i class="fa-solid fa-check-double"></i> integrity</span>
+        <p>data stays accurate, complete &amp; untouched — start to finish.</p>
+      </div>
+      <div class="term-card" style="background:var(--yellow-light);">
+        <span class="badge" style="background:#e0a800; animation-delay:1s;"><i class="fa-solid fa-clock"></i> availability</span>
+        <p>authorized users get in, on time, every time.</p>
+      </div>
+      <div class="term-card" style="background:var(--red-light);">
+        <span class="badge" style="background:var(--red); animation-delay:1.2s;"><i class="fa-solid fa-cube"></i> McCumber cube</span>
+        <p>a 3D model — info states × CIA goals × countermeasures.</p>
+      </div>
+      <div class="term-card" style="background:var(--blue-light);">
+        <span class="badge" style="background:var(--blue); animation-delay:1.4s;"><i class="fa-solid fa-network-wired"></i> network security</span>
+        <p>protects data while it's moving across the network.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="admin">
+    <div class="eyebrow">01 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--pink);"><i class="fa-solid fa-briefcase"></i></div>
+      <h2>cybersecurity as an admin &amp; managerial challenge</h2>
+    </div>
+    <p>Managers oversee human, tech, tangible &amp; intangible resources — cybersecurity threads through <em>all</em> of it 🧵. The focus: which frameworks &amp; standards actually work in practice.</p>
+    <p>Tech's <mark class="p">three-dimensional role</mark> again, explained fully:</p>
+    <div class="glossary">
+      <div class="term-card" style="background:var(--red-light);">
+        <span class="badge" style="background:var(--red);"><i class="fa-solid fa-fire"></i> source of threat</span>
+        <p>introduces vulnerabilities &amp; new attack vectors.</p>
+      </div>
+      <div class="term-card" style="background:var(--green-light);">
+        <span class="badge" style="background:var(--green); animation-delay:.3s;"><i class="fa-solid fa-vault"></i> asset to protect</span>
+        <p>info systems, data &amp; infrastructure — valuable, needing safeguarding.</p>
+      </div>
+      <div class="term-card" style="background:var(--blue-light);">
+        <span class="badge" style="background:var(--blue); animation-delay:.6s;"><i class="fa-solid fa-shield"></i> tool / firewall</span>
+        <p>the means (firewalls, encryption) that actually protect cyber assets.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="rings">
+    <div class="eyebrow">02 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--blue);"><i class="fa-solid fa-circle-nodes"></i></div>
+      <h2>the interconnected dimensions of information security</h2>
+    </div>
+    <img class="dimension-image" src="https://commons.wikimedia.org/wiki/Special:FilePath/Datacenter%20Server%20Racks%20(22370909788).jpg?width=900" alt="Data center server racks with cabling">
+    <div class="caption">📸 server racks — where "computer &amp; data security" and "network security" quite literally live</div>
+    <p>Picture information security as the center, wrapped in <mark class="b">three concentric circles</mark> 🎯:</p>
+    <div class="rings-wrap">
+      <div class="rings">
+        <div class="ring ring1"><div class="ring-label">network security</div></div>
+        <div class="ring ring2"><div class="ring-label" style="top:36px;">computer &amp; data security</div></div>
+        <div class="ring ring3"></div>
+        <div class="ring-center">management of info security</div>
+      </div>
+    </div>
+    <p>🌐 <strong>network security</strong> — data in transit between nodes. 💾 <strong>computer &amp; data security</strong> — data at rest &amp; during processing (databases, apps). 🧑‍💼 <strong>management</strong> — the admin practices, policy &amp; people tying it together.</p>
+      <img class="cia-reference dimension-image" src="./Screenshot 2026-09-04 232419.png" alt="Information security dimensions reference diagram">
+    <div class="callout fact">
+      <i class="fa-solid fa-key"></i>
+      <div>Where all three meet? <mark class="p">Policy</mark> — it drives investment &amp; decisions, and varies by how critical the assets are.</div>
+    </div>
+  </section>
+
+  <section class="card" id="cia">
+    <div class="eyebrow">03 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--green);"><i class="fa-solid fa-shapes"></i></div>
+      <h2>the CIA triangle</h2>
+    </div>
+    <p>The <mark class="g">core objectives</mark> of cybersecurity, full stop. Secure storage, secure processing, secure transmission — all trace back here 🔺:</p>
+    <div class="cia-wrap">
+      <div class="cia">
+        <div class="cia-node cia-c">🔒 confidentiality<small>only B reads it, not Eve 👀</small></div>
+        <div class="cia-node cia-i">✅ integrity<small>arrives exactly as it left</small></div>
+        <div class="cia-node cia-a">⏱️ availability<small>up &amp; running, on demand</small></div>
+        <div class="cia-center">CIA</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px;">🔒 confidentiality</h3>
+    <p>Only the intended reader gets in. Classic scenario: <mark class="p">Alice sends Bob a message — Eve tries to intercept it</mark> 🕵️‍♀️. Used for private info, academic records, salary data, biometric data (Aadhaar) — protected via classification, secure storage, policy, training, and <mark class="y">encryption</mark>. In privacy terms, this ties to <mark class="b">consent</mark> — data used only as permitted.</p>
+    <img class="cia-detail-image" src="https://commons.wikimedia.org/wiki/Special:FilePath/Cliche%20Hacker%20and%20Binary%20Code%20(26614834084).jpg?width=900" alt="A hooded figure at a keyboard in front of binary code, representing an interceptor">
+    <div class="caption">📸 the "Eve" of the story — trying to read what wasn't meant for her</div>
+
+    <h3 style="margin-top:22px;">✅ integrity</h3>
+    <p>Data must arrive exactly as it left — no sneaky edits ✍️. Think: someone altering a CV's work experience, or a wrong date-of-birth in a database. Many regulations now give people the <mark class="g">right to access &amp; correct</mark> their own data. Broken integrity = wrong promotions, financial errors, bad decisions from corrupted data 😬.</p>
+
+    <h3 style="margin-top:22px;">⏱️ availability</h3>
+    <p>Authorized users get in, no interruptions. Hugely critical for things like <mark class="o">airline/train booking systems</mark> — downtime = lost customers.</p>
+    <img class="cia-detail-image" src="https://commons.wikimedia.org/wiki/Special:FilePath/HongKong%20Airlines%20check-in%20counter%20area%20at%20the%20Hong%20Kong%20International%20Airport%20(Hong%20Kong).jpg?width=900" alt="An airline check-in counter area at an airport">
+    <div class="caption">📸 an airport check-in counter — availability failing here means real chaos, fast</div>
+    <p>Availability leans on <mark class="b">reliability</mark> and <mark class="g">redundancy</mark> — backup systems keeping access alive if the primary fails. SLAs often quote "five nines" (99.999% uptime) 📈 — and yes, higher uptime = higher investment.</p>
+    <img class="cia-detail-image" src="https://commons.wikimedia.org/wiki/Special:FilePath/Wikimedia%20Foundation%20Servers-8055%2001.jpg?width=900" alt="Rows of servers in a data center">
+    <div class="caption">📸 redundant server infrastructure — the quiet hero behind "five nines" uptime</div>
+  </section>
+
+  <section class="card" id="cube">
+    <div class="eyebrow">04 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-cube"></i></div>
+      <h2>the McCumber cube — a holistic framework</h2>
+    </div>
+    <p>Proposed by <mark class="p">John McCumber</mark>, this model makes sure nothing gets overlooked — three dimensions, all interlocking 🧊:</p>
+
+    <div class="cube-wrap">
+      <div class="cube">
+        <div class="face face-front">information states<br>(storage / processing / transmission)</div>
+        <div class="face face-back">information states</div>
+        <div class="face face-right">CIA goals<br>(confidentiality / integrity / availability)</div>
+        <div class="face face-left">CIA goals</div>
+        <div class="face face-top">countermeasures<br>policy / education / technology</div>
+        <div class="face face-bottom">countermeasures</div>
+      </div>
+    </div>
+    <div class="cube-legend">
+      <span><i class="dot" style="background:var(--blue);"></i> information states</span>
+      <span><i class="dot" style="background:var(--pink);"></i> security goals (CIA)</span>
+      <span><i class="dot" style="background:var(--green);"></i> countermeasures</span>
+    </div>
+    <img class="cube-reference" src="./Screenshot 2026-09-04 225747.png" alt="McCumber cube diagram from the video lecture">
+
+
+    <p style="margin-top:20px;">🧩 <strong>dimension 1 — information states/ the computing dimension:</strong> <mark class="b">storage</mark> (data at rest), <mark class="b">processing</mark> (data being used), <mark class="b">transmission</mark> (data on the move).</p>
+    <p>🎯 <strong>dimension 2 — security goals:</strong> the familiar <mark class="p">CIA</mark> — confidentiality, integrity, availability, applied to each state. This is the dimension that defines the objective or purpose of cyber security</p>
+    <p>🛠️ <strong>dimension 3 — countermeasures:</strong> <mark class="g">policy</mark>, <mark class="g">education</mark>, <mark class="g">technology</mark> — the actual means of achieving each goal.</p>
+    <div class="callout tip">
+      <i class="fa-solid fa-circle-check"></i>
+      <div>Together, it's a <strong>3×3×3 = 27-cell matrix</strong>. Example: ensuring <em>integrity</em> of data during <em>processing</em> via <em>technology</em> is just one cell — the cube pushes you to check them all. 🔍</div>
+    </div>
+  </section>
+
+  <section class="card" id="takeaways">
+    <div class="eyebrow">🌟 revision time</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:#e0a800;"><i class="fa-solid fa-star"></i></div>
+      <h2>key takeaways</h2>
+    </div>
+    <ul class="takeaways">
+      <li><i class="fa-solid fa-check"></i><span>cybersecurity is fundamentally <mark class="p">administrative &amp; managerial</mark>, not just technical.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>tech plays a <mark class="b">triple role</mark>: threat, asset, protective tool.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>information security = network security + computer/data security + management, with <mark class="y">policy</mark> at the center.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>the <mark class="g">CIA triangle</mark> defines the core objectives of every cybersecurity effort.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>confidentiality → classification + encryption. integrity → accuracy + no unauthorized edits. availability → reliability + redundancy.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>the <mark class="p">McCumber cube</mark> = info states × CIA goals × countermeasures, in one 27-cell model.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>effective security = an <mark class="o">integrated</mark> approach across every cube dimension, not cherry-picking one.</span></li>
+    </ul>
+  </section>
+
+  <section class="card" id="conclusion">
+    <div class="eyebrow">🏁 wrap up</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--green);"><i class="fa-solid fa-flag-checkered"></i></div>
+      <h2>conclusion</h2>
+    </div>
+    <p>The <mark class="b">CIA triangle</mark> and the <mark class="p">McCumber cube</mark> are the two frameworks to lock into memory 🔒. They move the conversation beyond "just install a firewall" — toward admin policy, human education, and strategic decisions working together.</p>
+    <p>Tech is both the vulnerability <em>and</em> the fix 🔁. Systematically covering confidentiality, integrity &amp; availability — across every information state, through every countermeasure — is how organizations actually build resilience. 💪</p>
+  </section>
+
+</div>
+
+<footer>
+  made with 💗, highlighters &amp; way too many emojis — happy studying! 📚✨
+</footer>
+
+</body>
+</html>

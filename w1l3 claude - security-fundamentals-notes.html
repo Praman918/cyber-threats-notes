@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🛡️ Security Fundamentals Notes — CIA, Cyber &amp; Governance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --pink:#ff6fa5;
+    --pink-light:#ffe3ef;
+    --purple:#8c6bff;
+    --purple-light:#ece6ff;
+    --blue:#3aa0ff;
+    --blue-light:#dff1ff;
+    --yellow:#ffd23f;
+    --yellow-light:#fff6d9;
+    --green:#33c98f;
+    --green-light:#dcfbf0;
+    --orange:#ff8c42;
+    --orange-light:#ffe9d6;
+    --red:#ff5566;
+    --red-light:#ffe1e4;
+    --ink:#3a2e4d;
+    --paper:#fffdf9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Poppins', sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 10% 10%, #ffe9f3 0%, transparent 45%),
+      radial-gradient(circle at 90% 20%, #e3ecff 0%, transparent 45%),
+      radial-gradient(circle at 20% 90%, #fff3d6 0%, transparent 45%),
+      radial-gradient(circle at 85% 85%, #e0fff2 0%, transparent 45%),
+      #fffdf9;
+    background-attachment: fixed;
+    line-height:1.65;
+    padding-bottom:60px;
+  }
+  h1,h2,h3,h4{ font-family:'Caveat', cursive; margin:0 0 .3em; }
+  .hero{
+    position:relative;
+    padding:50px 24px 70px;
+    text-align:center;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 55%, var(--pink) 100%);
+    color:#fff;
+    overflow:hidden;
+    border-radius:0 0 40px 40px;
+    box-shadow: 0 10px 30px rgba(58,160,255,0.25);
+  }
+  .hero::before{
+    content:"🛡️ 🔑 📜 🧩 🏛️ 🔍 🔐 ⚖️";
+    position:absolute; inset:0;
+    font-size:34px;
+    display:flex; align-items:center; justify-content:space-around;
+    opacity:0.18; padding:0 10px; pointer-events:none;
+  }
+  .hero h1{
+    font-size:60px;
+    margin:0;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+    position:relative;
+  }
+  .hero .sub{
+    font-family:'Patrick Hand', cursive;
+    font-size:22px;
+    margin-top:10px;
+    position:relative;
+    opacity:.95;
+  }
+  .tape{
+    display:inline-block;
+    background:rgba(255,255,255,0.25);
+    border:2px dashed rgba(255,255,255,0.6);
+    padding:6px 18px;
+    border-radius:30px;
+    font-family:'Patrick Hand',cursive;
+    font-size:16px;
+    margin-top:16px;
+    position:relative;
+  }
+  .wrap{ max-width:880px; margin:0 auto; padding:0 20px; }
+ 
+  .toc{
+    background:var(--paper);
+    border:3px dashed var(--purple);
+    border-radius:24px;
+    margin:-40px auto 40px;
+    padding:24px 26px;
+    max-width:820px;
+    box-shadow: 8px 8px 0 var(--purple-light);
+    position:relative;
+    z-index:5;
+  }
+  .toc h2{
+    color:var(--purple);
+    font-size:32px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .toc-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:12px;
+    margin-top:14px;
+  }
+  .toc-grid a{
+    text-decoration:none;
+    color:var(--ink);
+    background:var(--purple-light);
+    border-radius:14px;
+    padding:12px 14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:600;
+    font-size:14.5px;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    border:2px solid transparent;
+  }
+  .toc-grid a i{
+    width:30px; height:30px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:#fff;
+    color:var(--purple);
+    font-size:14px;
+    flex:none;
+  }
+  .toc-grid a:hover{
+    transform:translateY(-3px) rotate(-1deg);
+    background:#fff;
+    border-color:var(--purple);
+    box-shadow:4px 4px 0 var(--purple);
+  }
+ 
+  section.card{
+    background:var(--paper);
+    border-radius:26px;
+    padding:30px 30px 34px;
+    margin:34px 0;
+    position:relative;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.05), 0 10px 25px rgba(140,107,255,0.08);
+    border:1px solid rgba(0,0,0,0.04);
+  }
+  section.card::before{
+    content:'';
+    position:absolute; top:-14px; left:36px;
+    width:70px; height:26px;
+    background:repeating-linear-gradient(45deg, rgba(255,210,63,.6), rgba(255,210,63,.6) 6px, rgba(255,210,63,.35) 6px, rgba(255,210,63,.35) 12px);
+    border-radius:4px;
+    transform:rotate(-3deg);
+    box-shadow:0 2px 4px rgba(0,0,0,0.08);
+  }
+  .sec-head{ display:flex; align-items:center; gap:14px; margin-bottom:6px; }
+  .sec-icon{
+    width:54px; height:54px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px; color:#fff; flex:none;
+    box-shadow:3px 3px 0 rgba(0,0,0,0.08);
+  }
+  section.card h2{ font-size:34px; margin:0; }
+  .eyebrow{
+    font-family:'Patrick Hand',cursive;
+    font-size:14px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--pink);
+    font-weight:700;
+    margin-bottom:2px;
+  }
+  section.card img{
+    width:100%;
+    border-radius:18px;
+    margin:16px 0;
+    box-shadow:0 10px 22px rgba(0,0,0,0.15);
+    border:5px solid #fff;
+    outline:2px solid rgba(0,0,0,0.05);
+  }
+  .caption{
+    text-align:center;
+    font-family:'Patrick Hand',cursive;
+    font-size:14px;
+    color:#8a7fa3;
+    margin-top:-8px;
+    margin-bottom:10px;
+  }
+ 
+  mark{ padding:1px 6px; border-radius:6px; font-weight:600; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+  mark.y{ background:linear-gradient(180deg, transparent 55%, var(--yellow) 55%); }
+  mark.p{ background:linear-gradient(180deg, transparent 55%, var(--pink-light) 55%); color:var(--pink); }
+  mark.g{ background:linear-gradient(180deg, transparent 55%, var(--green-light) 55%); color:#0d8a5f; }
+  mark.b{ background:linear-gradient(180deg, transparent 55%, var(--blue-light) 55%); color:#1465b3; }
+  mark.o{ background:linear-gradient(180deg, transparent 55%, var(--orange-light) 55%); color:#c9600e; }
+ 
+  .callout{ display:flex; gap:14px; align-items:flex-start; border-radius:16px; padding:16px 18px; margin:18px 0; font-size:15px; }
+  .callout i{ font-size:20px; margin-top:2px; }
+  .callout.warn{ background:var(--red-light); color:#a3253a; }
+  .callout.tip{ background:var(--green-light); color:#0d8a5f; }
+  .callout.fact{ background:var(--blue-light); color:#1465b3; }
+ 
+  .glossary{ display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:16px; margin-top:18px; }
+  .term-card{ border-radius:18px; padding:16px 18px; position:relative; overflow:hidden; color:var(--ink); border:2px solid rgba(0,0,0,0.05); }
+  .term-card .badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Patrick Hand',cursive; font-weight:700; font-size:16px;
+    padding:5px 14px; border-radius:30px; color:#fff; margin-bottom:8px;
+   
+  }
+  .term-card p{ margin:0; font-size:13.5px; color:#5b4f74; }
+  .term-card .sig{ margin-top:8px; font-size:12.5px; font-style:italic; color:#8a7fa3; }
+ 
+  /* CIA triangle */
+  .cia-wrap{ display:flex; justify-content:center; margin:26px 0; }
+  .cia{
+    position:relative; width:350px; height:250px;
+  }
+  .cia-node{
+    position:absolute; width:150px; text-align:center;
+    border-radius:16px; padding:12px 10px;
+    font-family:'Patrick Hand',cursive; font-size:15px; font-weight:700;
+    color:#fff; box-shadow:3px 3px 0 rgba(0,0,0,0.1);
+  }
+  .cia-node small{ display:block; font-family:'Poppins',sans-serif; font-weight:400; font-size:11px; margin-top:4px; opacity:.9; }
+  .cia-c{ top:0; left:50%; transform:translateX(-50%); background:var(--blue); }
+  .cia-i{ bottom:0; left:10px; transform:translateX(-10px); background:var(--pink); }
+  .cia-a{ bottom:0; right:10px; transform:translateX(10px); background:var(--green); }
+  .cia-center{
+    position:absolute; top:52%; left:50%; transform:translate(-50%,-50%);
+    font-family:'Caveat',cursive; font-size:26px; color:var(--purple); font-weight:700;
+  }
+ 
+  .conventions{ display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+  .conventions span{
+    background:var(--purple-light); color:#4a3c94; font-family:'Patrick Hand',cursive;
+    font-size:16px; padding:8px 16px; border-radius:30px; border:2px dashed var(--purple);
+  }
+ 
+  .takeaways{ list-style:none; padding:0; margin:16px 0 0; display:grid; gap:10px; }
+  .takeaways li{
+    display:flex; gap:12px; align-items:flex-start;
+    background:var(--yellow-light); border-radius:14px; padding:12px 16px;
+    font-size:14.5px; border-left:5px solid var(--yellow);
+  }
+  .takeaways li i{ color:#e0a800; margin-top:2px; }
+ 
+  footer{ text-align:center; margin-top:40px; font-family:'Patrick Hand',cursive; color:#8a7fa3; font-size:16px; }
+  ::selection{ background:var(--pink); color:#fff; }
+ 
+  @media (max-width:600px){
+    .hero h1{ font-size:40px; }
+    section.card{ padding:22px 18px 26px; }
+    section.card h2{ font-size:26px; }
+  }
+</style>
+</head>
+<body>
+ 
+<div class="hero">
+  <h1>🛡️ Security Fundamentals</h1>
+  <div class="sub">✨ from "feeling safe" to CIA triangles &amp; GDPR — decoded ✨</div>
+  <div class="tape"><i class="fa-solid fa-graduation-cap"></i>&nbsp; class notes • made pretty • made memorable</div>
+</div>
+ 
+<div class="wrap">
+ 
+  <nav class="toc">
+    <h2><i class="fa-solid fa-map-signs"></i> table of contents</h2>
+    <div class="toc-grid">
+      <a href="#intro"><i class="fa-solid fa-heart-pulse"></i> introduction</a>
+      <a href="#concepts"><i class="fa-solid fa-spell-check"></i> core concepts</a>
+      <a href="#defining"><i class="fa-solid fa-user-shield"></i> 1. defining security</a>
+      <a href="#infosec-vs-cyber"><i class="fa-solid fa-code-compare"></i> 2. infosec vs cyber</a>
+      <a href="#terminology"><i class="fa-solid fa-comment-dots"></i> 3. terminology debate</a>
+      <a href="#cia"><i class="fa-solid fa-shapes"></i> 4. the CIA triangle</a>
+      <a href="#course-focus"><i class="fa-solid fa-chalkboard-user"></i> 5. management &amp; governance</a>
+      <a href="#complex"><i class="fa-solid fa-gavel"></i> 6. beyond technology</a>
+      <a href="#frameworks"><i class="fa-solid fa-diagram-project"></i> 7. management frameworks</a>
+      <a href="#objectives"><i class="fa-solid fa-flag"></i> 8. course structure</a>
+      <a href="#takeaways"><i class="fa-solid fa-star"></i> key takeaways</a>
+      <a href="#conclusion"><i class="fa-solid fa-flag-checkered"></i> conclusion</a>
+    </div>
+  </nav>
+ 
+  <section class="card" id="intro">
+    <div class="eyebrow">💭 warm up</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--blue);"><i class="fa-solid fa-heart-pulse"></i></div>
+      <h2>introduction</h2>
+    </div>
+    <p>At its core, security is a <mark class="p">psychological feeling</mark> 💗 — the sense of being safe and protected from threats. It starts with individuals and scales up to organizations, covering everything valuable: your <mark class="y">well-being</mark>, your <mark class="y">information</mark>, physical assets, even intellectual property.</p>
+    <p>The digital age blew this scope wide open 🚀. Security isn't just locks and guards anymore — it now demands understanding that goes way beyond pure tech.</p>
+    <div class="callout fact">
+      <i class="fa-solid fa-lightbulb"></i>
+      <div>This course looks at security through a <mark class="b">managerial &amp; governance lens</mark> — not just a computer-science one.</div>
+    </div>
+  </section>
+ 
+  <section class="card" id="concepts">
+    <div class="eyebrow">📖 vocab check</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-spell-check"></i></div>
+      <h2>core concepts</h2>
+    </div>
+    <p>Glossary time 🏃‍♀️ — color-coded so they actually stick!</p>
+    <div class="glossary">
+      <div class="term-card" style="background:var(--pink-light);">
+        <span class="badge" style="background:var(--pink);"><i class="fa-solid fa-heart"></i> security (general)</span>
+        <p>a state of being safe — free from threats, intrusion, or damage.</p>
+        <div class="sig">💗 the human need behind it all</div>
+      </div>
+      <div class="term-card" style="background:var(--blue-light);">
+        <span class="badge" style="background:var(--blue);"><i class="fa-solid fa-database"></i> information security</span>
+        <p>protecting information &amp; the systems/hardware that use, store, transmit it.</p>
+        <div class="sig">📁 the classic, data-centric focus</div>
+      </div>
+      <div class="term-card" style="background:var(--purple-light);">
+        <span class="badge" style="background:var(--purple);"><i class="fa-solid fa-globe"></i> cyber security</span>
+        <p>protecting the entire networked world — info, systems, users, environment.</p>
+        <div class="sig">🌐 broader: includes people, not just data</div>
+      </div>
+      <div class="term-card" style="background:var(--green-light);">
+        <span class="badge" style="background:var(--green);"><i class="fa-solid fa-gear"></i> cybernetics</span>
+        <p>greek for "steersman"/"control" — study of control &amp; communication in systems.</p>
+        <div class="sig">🏛️ the word "cyber" comes from here</div>
+      </div>
+      <div class="term-card" style="background:var(--orange-light);">
+        <span class="badge" style="background:var(--orange);"><i class="fa-solid fa-shapes"></i> CIA triangle</span>
+        <p>confidentiality + integrity + availability — the 3 pillars of infosec.</p>
+        <div class="sig">🔺 the framework you must memorize</div>
+      </div>
+      <div class="term-card" style="background:var(--yellow-light);">
+        <span class="badge" style="background:#e0a800;"><i class="fa-solid fa-fire-extinguisher"></i> contingency planning</span>
+        <p>a reactive plan for responding to &amp; recovering from incidents.</p>
+        <div class="sig">🚒 damage control after the fact</div>
+      </div>
+      <div class="term-card" style="background:var(--red-light);">
+        <span class="badge" style="background:var(--red);"><i class="fa-solid fa-magnifying-glass"></i> risk management</span>
+        <p>proactively finding &amp; mitigating threats before an incident occurs.</p>
+        <div class="sig">🔎 prevention over cure</div>
+      </div>
+      <div class="term-card" style="background:var(--pink-light);">
+        <span class="badge" style="background:var(--pink);"><i class="fa-solid fa-scale-balanced"></i> GDPR</span>
+        <p>EU's General Data Protection Regulation — a landmark privacy law.</p>
+        <div class="sig">⚖️ the global benchmark for data law</div>
+      </div>
+    </div>
+  </section>
+ 
+  <section class="card" id="defining">
+    <div class="eyebrow">01 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--pink);"><i class="fa-solid fa-user-shield"></i></div>
+      <h2>defining security: personal safety → org assets</h2>
+    </div>
+    <p>Security starts as a <mark class="p">psychological state</mark> 🧠 — feeling safe from anyone or anything trying to damage what's yours. It's basically about survival.</p>
+    <p>Scale it up to an organization and the "assets" multiply: physical infrastructure 🏢, informational assets (data + IP) 💾, and — increasingly — the <mark class="y">people</mark> inside the org too. Info security started narrow (protecting data/computers/networks); cyber security is where the scope exploded.</p>
+  </section>
+ 
+  <section class="card" id="infosec-vs-cyber">
+    <div class="eyebrow">02 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--blue);"><i class="fa-solid fa-code-compare"></i></div>
+      <h2>information security vs. cyber security</h2>
+    </div>
+    <p><mark class="b">Information security</mark> = protecting data as an asset. Think: locking down a database, blocking unauthorized server access, keeping data intact. A database breach? That's squarely infosec territory. 🗄️</p>
+    <p><mark class="p">Cyber security</mark> goes further. The <mark class="g">ITU's 2008 definition</mark> covers tools, policies, safeguards, guidelines, risk management, training, best practices, and tech — basically everything in the computing sphere 🌍. It even covers <mark class="o">cyberbullying</mark> and cybercrimes that cause physical harm, even without a data breach in sight.</p>
+    <div class="callout fact">
+      <i class="fa-solid fa-equals"></i>
+      <div><strong>formula to remember:</strong> cyber security = information security + security of individuals + the whole networked ecosystem.</div>
+    </div>
+  </section>
+ 
+  <section class="card" id="terminology">
+    <div class="eyebrow">03 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-comment-dots"></i></div>
+      <h2>terminology &amp; conventions</h2>
+    </div>
+    <p>"Cyber" latched onto computers &amp; the internet from the <mark class="y">1990s</mark> onward — rooted in <mark class="p">cybernetics</mark> (Greek for "steersman/control"). So "cyber security" literally means securing the internet-connected world. 🧭</p>
+    <p>How do you even spell it? All three are correct — just be consistent within one document ✍️:</p>
+    <div class="conventions">
+      <span>🇪🇺 cyber security</span>
+      <span>🤝 cyber-security</span>
+      <span>🇺🇸 cybersecurity</span>
+    </div>
+  </section>
+ 
+  <section class="card" id="cia">
+    <div class="eyebrow">04 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--green);"><i class="fa-solid fa-shapes"></i></div>
+      <h2>the CIA triangle</h2>
+    </div>
+    <p>The 3 pillars of information security 🔺 — memorize this, it comes up everywhere:</p>
+    <div class="cia-wrap">
+      <div class="cia">
+        <div class="cia-node cia-c">🔒 confidentiality<small>only authorized eyes see it</small></div>
+        <div class="cia-node cia-i">✅ integrity<small>data stays accurate &amp; unaltered</small></div>
+        <div class="cia-node cia-a">⏱️ availability<small>ready when authorized users need it</small></div>
+        <div class="cia-center">CIA</div>
+      </div>
+    </div>
+    <p><mark class="b">Confidentiality</mark> — only authorized people get access; <mark class="g">cryptography</mark> is the classic tool, scrambling info so it's useless without the key 🔑. <mark class="p">Integrity</mark> — data hasn't been secretly altered or destroyed. <mark class="g">Availability</mark> — authorized users can reliably get to it when they need it, no downtime drama.</p>
+  </section>
+ 
+  <section class="card" id="course-focus">
+    <div class="eyebrow">05 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--orange);"><i class="fa-solid fa-chalkboard-user"></i></div>
+      <h2>management &amp; governance over pure tech</h2>
+    </div>
+    <p>Sure, infosec <em>can</em> be taught as pure computer science 💻. This course zooms out instead: technology is a tool for protection, a source of threats, <em>and</em> an asset — but the focus stays on what <mark class="o">managers</mark> need to know.</p>
+    <p>Example: rather than the algorithmic guts of cryptography, you'll learn how it's <mark class="y">applied</mark> to achieve confidentiality — the "what" and "why," not just the "how." 🎯</p>
+  </section>
+ 
+  <section class="card" id="complex">
+    <div class="eyebrow">06 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--red);"><i class="fa-solid fa-gavel"></i></div>
+      <h2>cyber security is a complex problem — not just tech</h2>
+    </div>
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Target%20Store.jpg?width=900" alt="A Target department store">
+    <div class="caption">📸 Target Corporation — whose major breach exposed way more than a "just fix the firewall" problem</div>
+    <p>Big breaches (Target, Sony 👀) show it's never <em>just</em> a tech issue:</p>
+    <p>🧑‍💼 <strong>administrative issues</strong> — internal processes, human factors, "zero trust" vs. human-centric debates.</p>
+    <p>⚖️ <strong>regulatory implications</strong> — laws like <mark class="p">GDPR</mark> in Europe or India's proposed data protection bills push companies to actually invest in security.</p>
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/European%20Union%20Flag%20(4768764591).jpg?width=900" alt="The flag of the European Union">
+    <div class="caption">📸 the EU flag — home turf of the GDPR, the world's most-cited privacy law</div>
+    <p>📋 <strong>policy &amp; standards</strong> — org policies, ISO frameworks, national regulation. Firewalls matter, but they're one piece of a much bigger <mark class="g">administrative + governmental ecosystem</mark>.</p>
+  </section>
+ 
+  <section class="card" id="frameworks">
+    <div class="eyebrow">07 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--blue);"><i class="fa-solid fa-diagram-project"></i></div>
+      <h2>management frameworks: proactive + reactive</h2>
+    </div>
+    <div class="glossary">
+      <div class="term-card" style="background:var(--red-light);">
+        <span class="badge" style="background:var(--red);"><i class="fa-solid fa-fire-extinguisher"></i> contingency planning</span>
+        <p>reactive. assumes things WILL go wrong despite prevention — firefighting, damage control, restoring normal ops.</p>
+      </div>
+      <div class="term-card" style="background:var(--green-light);">
+        <span class="badge" style="background:var(--green);"><i class="fa-solid fa-magnifying-glass"></i> risk management</span>
+        <p>proactive. find threats &amp; vulnerabilities, assess risk, mitigate before an incident even happens.</p>
+      </div>
+    </div>
+    <div class="callout tip">
+      <i class="fa-solid fa-circle-check"></i>
+      <div>Both together = the backbone of effective cyber security management. Prevent <strong>and</strong> prepare. 🛠️</div>
+    </div>
+  </section>
+ 
+  <section class="card" id="objectives">
+    <div class="eyebrow">08 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-flag"></i></div>
+      <h2>course learning objectives</h2>
+    </div>
+    <ul class="takeaways">
+      <li><i class="fa-solid fa-1"></i> recognize cyber security from <mark class="p">both</mark> tech &amp; administrative angles.</li>
+      <li><i class="fa-solid fa-2"></i> understand fundamentals like the <mark class="b">CIA triangle</mark>.</li>
+      <li><i class="fa-solid fa-3"></i> analyze real cases — e.g. the <mark class="o">Target</mark> breach.</li>
+      <li><i class="fa-solid fa-4"></i> explore <mark class="g">GRC</mark> frameworks (governance, risk, compliance) &amp; ISO standards.</li>
+    </ul>
+    <p style="margin-top:14px;">Also on the syllabus: cyber policy 📜, global privacy regs (India, North America, Europe), passive vs. active defense, and guest lectures from industry pros. 🎤</p>
+  </section>
+ 
+  <section class="card" id="takeaways">
+    <div class="eyebrow">🌟 revision time</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:#e0a800;"><i class="fa-solid fa-star"></i></div>
+      <h2>key takeaways</h2>
+    </div>
+    <ul class="takeaways">
+      <li><i class="fa-solid fa-check"></i> security is a <mark class="p">human need</mark> that scales from individuals to organizations.</li>
+      <li><i class="fa-solid fa-check"></i> infosec = data-focused; cyber security = infosec <strong>+</strong> people <strong>+</strong> the networked world.</li>
+      <li><i class="fa-solid fa-check"></i> "cyber" traces back to <mark class="g">cybernetics</mark> — control &amp; communication.</li>
+      <li><i class="fa-solid fa-check"></i> spelling varies by region — just stay <mark class="y">consistent</mark>.</li>
+      <li><i class="fa-solid fa-check"></i> the <mark class="b">CIA triangle</mark>: confidentiality, integrity, availability.</li>
+      <li><i class="fa-solid fa-check"></i> this course = <mark class="p">managerial &amp; governance</mark> lens, not pure CS.</li>
+      <li><i class="fa-solid fa-check"></i> big breaches reveal admin, regulatory <strong>and</strong> policy failures — not just tech ones.</li>
+      <li><i class="fa-solid fa-check"></i> good management = <mark class="g">risk management</mark> (proactive) + <mark class="o">contingency planning</mark> (reactive).</li>
+    </ul>
+  </section>
+ 
+  <section class="card" id="conclusion">
+    <div class="eyebrow">🏁 wrap up</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--green);"><i class="fa-solid fa-flag-checkered"></i></div>
+      <h2>conclusion</h2>
+    </div>
+    <p>Security has shifted from <mark class="y">"just put up a firewall"</mark> 🧱 to a layered, multi-dimensional discipline — blending admin oversight, regulatory compliance, and deep human understanding 🧠.</p>
+    <p>Modern cyber security isn't about digital walls alone — it's about building a <mark class="g">resilient ecosystem</mark> where information, systems, and people are protected from an ever-growing menu of threats. Technical skill matters, but so does <mark class="p">strategic thinking</mark>, <mark class="b">governance</mark>, and an adaptive mindset. 💡</p>
+  </section>
+ 
+</div>
+ 
+<footer>
+  made with 💗, highlighters &amp; way too many emojis — happy studying! 📚✨
+</footer>
+ 
+</body>
+</html>

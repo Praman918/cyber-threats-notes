@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔑 Foundation Notes Part 2 — IAAA &amp; the Target Breach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --pink:#ff6fa5; --pink-light:#ffe3ef;
+    --purple:#8c6bff; --purple-light:#ece6ff;
+    --blue:#3aa0ff; --blue-light:#dff1ff;
+    --yellow:#ffd23f; --yellow-light:#fff6d9;
+    --green:#33c98f; --green-light:#dcfbf0;
+    --orange:#ff8c42; --orange-light:#ffe9d6;
+    --red:#ff5566; --red-light:#ffe1e4;
+    --ink:#3a2e4d; --paper:#fffdf9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Poppins', sans-serif; color:var(--ink);
+    background:
+      radial-gradient(circle at 10% 10%, #ffe9f3 0%, transparent 45%),
+      radial-gradient(circle at 90% 20%, #e3ecff 0%, transparent 45%),
+      radial-gradient(circle at 20% 90%, #fff3d6 0%, transparent 45%),
+      radial-gradient(circle at 85% 85%, #e0fff2 0%, transparent 45%),
+      #fffdf9;
+    background-attachment: fixed;
+    line-height:1.65; padding-bottom:60px;
+  }
+  h1,h2,h3,h4{ font-family:'Caveat', cursive; margin:0 0 .3em; }
+  .hero{
+    position:relative; padding:50px 24px 70px; text-align:center;
+    background: linear-gradient(135deg, var(--green) 0%, var(--blue) 55%, var(--purple) 100%);
+    color:#fff; overflow:hidden; border-radius:0 0 40px 40px;
+    box-shadow: 0 10px 30px rgba(51,201,143,0.25);
+  }
+  .hero::before{
+    content:"🔑 🪪 👆 🚦 📋 🎯 🛒 🕵️";
+    position:absolute; inset:0; font-size:34px;
+    display:flex; align-items:center; justify-content:space-around;
+    opacity:0.18; padding:0 10px; pointer-events:none;
+  }
+  .hero h1{ font-size:52px; margin:0; text-shadow: 3px 3px 0 rgba(0,0,0,0.15); position:relative; }
+  .hero .sub{ font-family:'Patrick Hand', cursive; font-size:20px; margin-top:10px; position:relative; opacity:.95; }
+  .tape{
+    display:inline-block; background:rgba(255,255,255,0.25); border:2px dashed rgba(255,255,255,0.6);
+    padding:6px 18px; border-radius:30px; font-family:'Patrick Hand',cursive; font-size:16px; margin-top:16px; position:relative;
+  }
+  .wrap{ max-width:880px; margin:0 auto; padding:0 20px; }
+
+  .toc{
+    background:var(--paper); border:3px dashed var(--purple); border-radius:24px;
+    margin:-40px auto 40px; padding:24px 26px; max-width:820px;
+    box-shadow: 8px 8px 0 var(--purple-light); position:relative; z-index:5;
+  }
+  .toc h2{ color:var(--purple); font-size:32px; display:flex; align-items:center; gap:10px; }
+  .toc-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px; margin-top:14px; }
+  .toc-grid a{
+    text-decoration:none; color:var(--ink); background:var(--purple-light); border-radius:14px;
+    padding:12px 14px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14.5px;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease; border:2px solid transparent;
+  }
+  .toc-grid a i{ width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:#fff; color:var(--purple); font-size:14px; flex:none; }
+  .toc-grid a:hover{ transform:translateY(-3px) rotate(-1deg); background:#fff; border-color:var(--purple); box-shadow:4px 4px 0 var(--purple); }
+
+  section.card{
+    background:var(--paper); border-radius:26px; padding:30px 30px 34px; margin:34px 0;
+    position:relative; box-shadow: 0 6px 0 rgba(0,0,0,0.05), 0 10px 25px rgba(140,107,255,0.08);
+    border:1px solid rgba(0,0,0,0.04);
+  }
+  section.card::before{
+    content:''; position:absolute; top:-14px; left:36px; width:70px; height:26px;
+    background:repeating-linear-gradient(45deg, rgba(255,210,63,.6), rgba(255,210,63,.6) 6px, rgba(255,210,63,.35) 6px, rgba(255,210,63,.35) 12px);
+    border-radius:4px; transform:rotate(-3deg); box-shadow:0 2px 4px rgba(0,0,0,0.08);
+  }
+  .sec-head{ display:flex; align-items:center; gap:14px; margin-bottom:6px; }
+  .sec-icon{ width:54px; height:54px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff; flex:none; box-shadow:3px 3px 0 rgba(0,0,0,0.08); }
+  section.card h2{ font-size:34px; margin:0; }
+  .eyebrow{ font-family:'Patrick Hand',cursive; font-size:14px; letter-spacing:1px; text-transform:uppercase; color:var(--pink); font-weight:700; margin-bottom:2px; }
+  section.card img{ width:100%; border-radius:18px; margin:16px 0; box-shadow:0 10px 22px rgba(0,0,0,0.15); border:5px solid #fff; outline:2px solid rgba(0,0,0,0.05); }
+  .caption{ text-align:center; font-family:'Patrick Hand',cursive; font-size:14px; color:#8a7fa3; margin-top:-8px; margin-bottom:10px; }
+
+  mark{ padding:1px 6px; border-radius:6px; font-weight:600; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+  mark.y{ background:linear-gradient(180deg, transparent 55%, var(--yellow) 55%); }
+  mark.p{ background:linear-gradient(180deg, transparent 55%, var(--pink-light) 55%); color:var(--pink); }
+  mark.g{ background:linear-gradient(180deg, transparent 55%, var(--green-light) 55%); color:#0d8a5f; }
+  mark.b{ background:linear-gradient(180deg, transparent 55%, var(--blue-light) 55%); color:#1465b3; }
+  mark.o{ background:linear-gradient(180deg, transparent 55%, var(--orange-light) 55%); color:#c9600e; }
+
+  .callout{ display:flex; gap:14px; align-items:flex-start; border-radius:16px; padding:16px 18px; margin:18px 0; font-size:15px; }
+  .callout i{ font-size:20px; margin-top:2px; }
+  .callout.warn{ background:var(--red-light); color:#a3253a; }
+  .callout.tip{ background:var(--green-light); color:#0d8a5f; }
+  .callout.fact{ background:var(--blue-light); color:#1465b3; }
+
+  .orig-table-wrap{ overflow-x:auto; margin:18px 0; border-radius:16px; border:2px solid var(--purple-light); }
+  table.orig{ width:100%; border-collapse:collapse; font-size:13.5px; background:#fff; }
+  table.orig th{ background:var(--purple); color:#fff; font-family:'Patrick Hand',cursive; font-size:16px; text-align:left; padding:10px 14px; }
+  table.orig td{ padding:10px 14px; vertical-align:top; border-top:1px solid var(--purple-light); }
+  table.orig tr:nth-child(even) td{ background:#faf8ff; }
+  table.orig td strong code{ background:var(--pink-light); color:var(--pink); padding:2px 6px; border-radius:6px; font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px; }
+
+  .glossary{ display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:16px; margin-top:18px; }
+  .term-card{ border-radius:18px; padding:16px 18px; position:relative; overflow:hidden; color:var(--ink); border:2px solid rgba(0,0,0,0.05); }
+  .term-card .badge{
+    display:inline-flex; align-items:center; gap:6px; font-family:'Patrick Hand',cursive; font-weight:700; font-size:16px;
+    padding:5px 14px; border-radius:30px; color:#fff; margin-bottom:8px;
+  }
+  .term-card p{ margin:0; font-size:13.5px; color:#5b4f74; }
+  .term-card .sig{ margin-top:8px; font-size:12.5px; font-style:italic; color:#8a7fa3; }
+
+  .flow{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px; margin:24px 0; }
+  .flow-step{ background:#fff; border-radius:16px; padding:14px 16px; width:150px; text-align:center; border:2px solid #eee; box-shadow:3px 3px 0 rgba(0,0,0,0.05); }
+  .flow-step .emoji{ font-size:26px; }
+  .flow-step .label{ font-family:'Patrick Hand',cursive; font-weight:700; font-size:16px; margin-top:4px; }
+  .flow-step .desc{ font-size:11.5px; color:#8a7fa3; margin-top:4px; }
+  .flow-arrow{ font-size:22px; color:var(--purple); }
+
+  .timeline{ position:relative; margin:24px 0; padding-left:28px; border-left:3px dashed var(--red); }
+  .t-item{ position:relative; margin-bottom:20px; }
+  .t-item::before{
+    content:''; position:absolute; left:-35px; top:2px; width:14px; height:14px; border-radius:50%;
+    background:var(--red); border:3px solid #fff; box-shadow:0 0 0 2px var(--red);
+  }
+  .t-item h4{ font-size:19px; margin:0 0 2px; color:var(--red); }
+  .t-item p{ margin:0; font-size:14px; }
+
+  .takeaways{ list-style:none; padding:0; margin:16px 0 0; display:grid; gap:10px; }
+  .takeaways li{ display:flex; gap:12px; align-items:flex-start; background:var(--yellow-light); border-radius:14px; padding:12px 16px; font-size:14.5px; border-left:5px solid var(--yellow); }
+  .takeaways li i{ color:#e0a800; margin-top:2px; }
+
+  footer{ text-align:center; margin-top:40px; font-family:'Patrick Hand',cursive; color:#8a7fa3; font-size:16px; }
+  ::selection{ background:var(--pink); color:#fff; }
+
+  @media (max-width:600px){
+    .hero h1{ font-size:34px; }
+    section.card{ padding:22px 18px 26px; }
+    section.card h2{ font-size:26px; }
+    table.orig{ font-size:12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🔑 Foundation — Part 2</h1>
+  <div class="sub">✨ identification → authentication → authorization → accountability, plus THE Target breach ✨</div>
+  <div class="tape"><i class="fa-solid fa-graduation-cap"></i>&nbsp; class notes • made pretty • made memorable</div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc">
+    <h2><i class="fa-solid fa-map-signs"></i> table of contents</h2>
+    <div class="toc-grid">
+      <a href="#intro"><i class="fa-solid fa-globe"></i> introduction</a>
+      <a href="#concepts"><i class="fa-solid fa-table-list"></i> core concepts</a>
+      <a href="#iaaa"><i class="fa-solid fa-key"></i> 1. identification, auth, authz</a>
+      <a href="#accountability"><i class="fa-solid fa-clipboard-check"></i> 2. accountability</a>
+      <a href="#target"><i class="fa-solid fa-cart-shopping"></i> 3. case study: target breach</a>
+      <a href="#vuln"><i class="fa-solid fa-bug"></i> 4. vulnerabilities &amp; exploits</a>
+      <a href="#takeaways"><i class="fa-solid fa-star"></i> key takeaways</a>
+      <a href="#conclusion"><i class="fa-solid fa-flag-checkered"></i> conclusion</a>
+    </div>
+  </nav>
+
+  <section class="card" id="intro">
+    <div class="eyebrow">💭 warm up</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--green);"><i class="fa-solid fa-globe"></i></div>
+      <h2>introduction</h2>
+    </div>
+    <p>In a hyper-connected world 🌐, securing information isn't optional anymore — from your phone's data to national infrastructure. This session covers <mark class="p">confidentiality's engine room</mark>: how people and systems get identified, authenticated, and authorized — and what happens when it all goes wrong 💥.</p>
+    <p>We'll wrap up with a real, very expensive lesson: the <mark class="o">Target data breach</mark> 🛒.</p>
+  </section>
+
+  <section class="card" id="concepts">
+    <div class="eyebrow">📖 vocab check — straight from the source</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-table-list"></i></div>
+      <h2>core concepts</h2>
+    </div>
+    <p>Original glossary table, text kept close to source 📋:</p>
+    <div class="orig-table-wrap">
+      <table class="orig">
+        <thead><tr><th>Term</th><th>Definition</th><th>Significance</th></tr></thead>
+        <tbody>
+          <tr><td><strong><code>Confidentiality</code></strong></td><td>The principle that information should only be accessible to authorized individuals or systems, preventing unauthorized disclosure.</td><td>It is a primary goal of cybersecurity, ensuring sensitive data remains private and protected from prying eyes.</td></tr>
+          <tr><td><strong><code>Identification</code></strong></td><td>The process of establishing a credible and unique identity for an individual or entity within a system.</td><td>This is the foundational first step in securing any system, determining "who is who" before granting any access.</td></tr>
+          <tr><td><strong><code>Authentication</code></strong></td><td>The act of verifying a claimed identity, confirming that an individual or entity is indeed who they say they are.</td><td>It acts as the gateway to a system, ensuring only legitimate users can proceed after their identity has been established.</td></tr>
+          <tr><td><strong><code>Authorization</code></strong></td><td>The process of defining and enforcing the specific access rights and privileges an authenticated individual or entity has within a system.</td><td>This controls "what you can do" once inside a system, preventing authorized users from accessing unauthorized resources.</td></tr>
+          <tr><td><strong><code>Accountability</code></strong></td><td>The ability to trace actions within a system back to the responsible individual or entity, especially in the event of an incident.</td><td>It ensures responsibility for security breaches can be assigned, facilitating incident response and preventing recurrence.</td></tr>
+          <tr><td><strong><code>Vulnerability</code></strong></td><td>A weakness or flaw in a system, design, or implementation that could be exploited to compromise security.</td><td>These are the entry points for attackers, and identifying and mitigating them is crucial for proactive security.</td></tr>
+          <tr><td><strong><code>Exploit</code></strong></td><td>A piece of software, data, or sequence of commands that takes advantage of a vulnerability to cause unintended behavior.</td><td>This is the active mechanism used by attackers to leverage weaknesses and gain unauthorized access or control.</td></tr>
+          <tr><td><strong><code>False Positive</code></strong></td><td>An incorrect detection by a security system, where legitimate activity or data is mistakenly flagged as malicious.</td><td>While not as dangerous as false negatives, frequent false positives can lead to security fatigue and systems being disabled.</td></tr>
+          <tr><td><strong><code>Trade-off</code></strong></td><td>The inherent conflict between achieving high levels of security and maintaining operational efficiency or user convenience.</td><td>Balancing security measures with practical operational needs is a constant challenge in cybersecurity management.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="margin-top:22px;">✨ ...and my colorful cheat-sheet version for faster revision:</p>
+    <div class="glossary">
+      <div class="term-card" style="background:var(--pink-light);">
+        <span class="badge" style="background:var(--pink);"><i class="fa-solid fa-lock"></i> confidentiality</span>
+        <p>info reaches only the authorized — no leaks, no snooping.</p>
+      </div>
+      <div class="term-card" style="background:var(--blue-light);">
+        <span class="badge" style="background:var(--blue);"><i class="fa-solid fa-id-badge"></i> identification</span>
+        <p>establishing "who is who" — step one, before anything else.</p>
+      </div>
+      <div class="term-card" style="background:var(--green-light);">
+        <span class="badge" style="background:var(--green);"><i class="fa-solid fa-fingerprint"></i> authentication</span>
+        <p>proving you really are who you claim — the gateway in.</p>
+      </div>
+      <div class="term-card" style="background:var(--purple-light);">
+        <span class="badge" style="background:var(--purple);"><i class="fa-solid fa-user-lock"></i> authorization</span>
+        <p>defining exactly what an authenticated user can touch.</p>
+      </div>
+      <div class="term-card" style="background:var(--orange-light);">
+        <span class="badge" style="background:var(--orange);"><i class="fa-solid fa-magnifying-glass"></i> accountability</span>
+        <p>tracing every action back to whoever's responsible.</p>
+      </div>
+      <div class="term-card" style="background:var(--red-light);">
+        <span class="badge" style="background:var(--red);"><i class="fa-solid fa-triangle-exclamation"></i> vulnerability</span>
+        <p>a weakness just waiting to be found — and used.</p>
+      </div>
+      <div class="term-card" style="background:var(--yellow-light);">
+        <span class="badge" style="background:#e0a800;"><i class="fa-solid fa-bolt"></i> exploit</span>
+        <p>the actual move that takes advantage of that weakness.</p>
+      </div>
+      <div class="term-card" style="background:var(--blue-light);">
+        <span class="badge" style="background:var(--blue);"><i class="fa-solid fa-scale-unbalanced"></i> trade-off</span>
+        <p>security vs. convenience — pick your battles wisely.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="iaaa">
+    <div class="eyebrow">01 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--pink);"><i class="fa-solid fa-key"></i></div>
+      <h2>the foundational trio: identification → authentication → authorization</h2>
+    </div>
+    <p>This is a <mark class="p">sequential, interdependent</mark> chain 🔗 — and the whole basis of confidentiality:</p>
+
+    <div class="flow">
+      <div class="flow-step" style="border-color:var(--blue);">
+        <div class="emoji">🪪</div>
+        <div class="label">identification</div>
+        <div class="desc">"who is who?" e.g. Aadhaar, an IIT enrollment</div>
+      </div>
+      <div class="flow-arrow">➡️</div>
+      <div class="flow-step" style="border-color:var(--green);">
+        <div class="emoji">👆</div>
+        <div class="label">authentication</div>
+        <div class="desc">prove it! ID card at the gate, fingerprint match</div>
+      </div>
+      <div class="flow-arrow">➡️</div>
+      <div class="flow-step" style="border-color:var(--purple);">
+        <div class="emoji">🚦</div>
+        <div class="label">authorization</div>
+        <div class="desc">what can you actually do now?</div>
+      </div>
+    </div>
+
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Biometric%20Fingerprint%20Scanner.jpg?width=900" alt="A biometric fingerprint scanner device">
+    <div class="caption">📸 a fingerprint scanner — the classic "something you have/are" authentication method</div>
+
+    <p>🪪 <strong>identification</strong> answers <mark class="b">"who is who?"</mark> — think Aadhaar's biometric enrollment, or getting your student ID at IIT Madras. No identity = no way to grant (or deny) access.</p>
+    <p>👆 <strong>authentication</strong> proves the claim is real — flashing your ID card at the gate, or matching a fingerprint against stored Aadhaar data. Two flavors: <mark class="g">something you have</mark> (ID card, biometric) and <mark class="g">something you know</mark> (password, PIN). Logging into Gmail = user ID (identification) + password (authentication). Highly sensitive systems add <mark class="y">multi-factor authentication (MFA)</mark> 🔐.</p>
+    <p>🚦 <strong>authorization</strong> decides what you're allowed to do <em>after</em> you're in. A student can enter their hostel room, not a faculty office 🚪. On Moodle, student and faculty logins get totally different privilege levels. Good authorization needs clear <mark class="p">classification of info + roles</mark>, then precise access mapping.</p>
+  </section>
+
+  <section class="card" id="accountability">
+    <div class="eyebrow">02 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--orange);"><i class="fa-solid fa-clipboard-check"></i></div>
+      <h2>accountability: responsibility &amp; learning from incidents</h2>
+    </div>
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Surveillance%20camera%20(22513635181).jpg?width=900" alt="A surveillance security camera">
+    <div class="caption">📸 the quiet enforcer of accountability — logs and cameras that answer "who did this?"</div>
+    <p>Accountability answers: <mark class="o">"who is responsible?"</mark> when things break. Unauthorized entry into a secure campus area? Time to review security personnel and their actions 🕵️.</p>
+    <p>In cyber terms, it means tracing exactly <mark class="g">who accessed what, and how</mark> — via comprehensive logs: sign-in/out times, access attempts, resource usage. No logs = no forensic trail = no way to actually fix the root cause. 📋</p>
+    <div class="callout warn">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <div>Skip logging, and you lose the ability to learn from a breach — <em>and</em> to prove who's responsible.</div>
+    </div>
+  </section>
+
+  <section class="card" id="target">
+    <div class="eyebrow">03 · case study</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--red);"><i class="fa-solid fa-cart-shopping"></i></div>
+      <h2>the Target data breach (2013)</h2>
+    </div>
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Target%20Store.jpg?width=900" alt="A Target retail store">
+    <div class="caption">📸 Target — hit during the peak 2013 holiday season, in one of retail's most-studied breaches</div>
+    <p>A textbook case of <mark class="p">tech failure + management failure</mark> combining into disaster 💥 — right during Thanksgiving/Christmas shopping season.</p>
+
+    <div class="timeline">
+      <div class="t-item">
+        <h4>🚪 the entry point</h4>
+        <p>Attackers got in through <mark class="o">Faisal Mechanical Services</mark>, a third-party HVAC/climate-control vendor with network access to Target's systems.</p>
+      </div>
+      <div class="t-item">
+        <h4>💳 unencrypted POS data</h4>
+        <p>Card info sat <mark class="y">unencrypted in POS terminal RAM</mark> — transmission to central servers was encrypted, but the capture point wasn't.</p>
+      </div>
+      <div class="t-item">
+        <h4>🔕 malware detection: off</h4>
+        <p>Target's malware detection software had been <mark class="o">switched off</mark> — the system meant to catch exactly this kind of attack.</p>
+      </div>
+      <div class="t-item">
+        <h4>🔓 authorization failure</h4>
+        <p>A vendor limited to climate control was granted access to <mark class="p">payment systems</mark> — privileges far beyond their actual job.</p>
+      </div>
+      <div class="t-item">
+        <h4>🚨 too many false positives</h4>
+        <p>Detection got disabled partly due to <mark class="g">alarm fatigue</mark> from frequent false positives — efficiency won over security.</p>
+      </div>
+      <div class="t-item">
+        <h4>📉 incomplete logging</h4>
+        <p>Logging gaps made <mark class="b">accountability</mark> and incident response even harder after the fact.</p>
+      </div>
+    </div>
+
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Adyen%20card%20payment%20terminal%20(9607998259).jpg?width=900" alt="A card payment terminal at a point of sale">
+    <div class="caption">📸 a POS card terminal — the exact device type at the center of the breach</div>
+
+    <div class="callout warn">
+      <i class="fa-solid fa-fire"></i>
+      <div>Result: <strong>millions</strong> of stolen credit card &amp; personal records, major financial loss, reputational damage, and legal fallout for Target.</div>
+    </div>
+
+    <div class="callout fact" style="margin-top:26px;">
+      <i class="fa-solid fa-circle-info"></i>
+      <div>
+        <strong>Want the Target breach explained in more detail?</strong><br>
+        <a href="https://chatgpt.com/share/6aa973da-ebcc-83e8-9ab5-fc5931246845" target="_blank" rel="noopener noreferrer" style="color:var(--blue); font-weight:700; text-decoration:underline;">Open the detailed case breakdown here</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="vuln">
+    <div class="eyebrow">04 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-bug"></i></div>
+      <h2>vulnerabilities &amp; exploits: the attacker's advantage</h2>
+    </div>
+    <div class="glossary">
+      <div class="term-card" style="background:var(--red-light);">
+        <span class="badge" style="background:var(--red);"><i class="fa-solid fa-door-open"></i> vulnerability</span>
+        <p>a weakness ready to be leveraged — like an unlocked classroom door.</p>
+      </div>
+      <div class="term-card" style="background:var(--orange-light);">
+        <span class="badge" style="background:var(--orange);"><i class="fa-solid fa-bolt"></i> exploit</span>
+        <p>knowing the door's unlocked <em>and</em> walking through it to cause trouble.</p>
+      </div>
+    </div>
+    <p style="margin-top:16px;">Not every vulnerability gets exploited — but Target's <mark class="o">unencrypted data + disabled detection + excessive vendor access</mark> was a perfect storm that did. ⛈️</p>
+    <p><mark class="y">False positives</mark> (legit activity flagged as malicious) are annoying but far less dangerous than <mark class="p">false negatives</mark> (a real threat slipping through unnoticed) — the real danger is when too many false positives push teams to switch detection off entirely. 🔕</p>
+  </section>
+
+  <section class="card" id="takeaways">
+    <div class="eyebrow">🌟 revision time</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:#e0a800;"><i class="fa-solid fa-star"></i></div>
+      <h2>key takeaways</h2>
+    </div>
+    <ul class="takeaways">
+      <li><i class="fa-solid fa-check"></i> <mark class="b">identification</mark> is step one — establishing who someone is.</li>
+      <li><i class="fa-solid fa-check"></i> <mark class="g">authentication</mark> verifies that claim — "something you know" or "something you have".</li>
+      <li><i class="fa-solid fa-check"></i> <mark class="p">authorization</mark> sets access rights — stopping authenticated users from going where they shouldn't.</li>
+      <li><i class="fa-solid fa-check"></i> IAA are <mark class="y">sequential &amp; interdependent</mark> — together they form confidentiality's backbone.</li>
+      <li><i class="fa-solid fa-check"></i> <mark class="o">accountability</mark> = assigning responsibility, learning from incidents.</li>
+      <li><i class="fa-solid fa-check"></i> <mark class="b">logging</mark> is essential for forensic analysis &amp; accountability.</li>
+      <li><i class="fa-solid fa-check"></i> breaches = tech flaws <strong>+</strong> managerial oversight, almost always together.</li>
+      <li><i class="fa-solid fa-check"></i> the <mark class="g">security vs. efficiency trade-off</mark> is a constant management tension.</li>
+      <li><i class="fa-solid fa-check"></i> disabling protections over <mark class="p">false positives</mark> = a critical, avoidable vulnerability.</li>
+      <li><i class="fa-solid fa-check"></i> third-party vendor access needs to be <mark class="o">tightly scoped</mark>, always.</li>
+    </ul>
+  </section>
+
+  <section class="card" id="conclusion">
+    <div class="eyebrow">🏁 wrap up</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--green);"><i class="fa-solid fa-flag-checkered"></i></div>
+      <h2>conclusion</h2>
+    </div>
+    <p>Cybersecurity is never <em>just</em> technical — it's a mix of <mark class="p">technical safeguards</mark>, <mark class="b">human behavior</mark>, and <mark class="g">organizational policy</mark>. Identification, authentication and authorization give systems their structural integrity 🏗️.</p>
+    <p>But as Target proved, even solid tech defenses crumble under bad management calls — disabling detection, over-granting vendor access. The tension between <mark class="y">efficiency</mark> and <mark class="o">security</mark> never fully goes away. Real cybersecurity needs a culture of accountability, constant vigilance, and a sharp eye for exploitable gaps. 👁️</p>
+  </section>
+
+</div>
+
+<footer>
+  made with 💗, highlighters &amp; way too many emojis — happy studying! 📚✨
+</footer>
+
+</body>
+</html>

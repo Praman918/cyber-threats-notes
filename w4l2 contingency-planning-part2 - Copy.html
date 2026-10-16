@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧯 Contingency Planning — Part 2</title>
+<link rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%8F%B1%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --pink:#ff6fa5; --pink-light:#ffe3ef;
+    --purple:#8c6bff; --purple-light:#ece6ff;
+    --blue:#3aa0ff; --blue-light:#dff1ff;
+    --yellow:#ffd23f; --yellow-light:#fff6d9;
+    --green:#33c98f; --green-light:#dcfbf0;
+    --orange:#ff8c42; --orange-light:#ffe9d6;
+    --red:#ff5566; --red-light:#ffe1e4;
+    --ink:#3a2e4d; --paper:#fffdf9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Poppins', sans-serif; color:var(--ink);
+    background:
+      radial-gradient(circle at 10% 10%, #ffe9f3 0%, transparent 45%),
+      radial-gradient(circle at 90% 20%, #e3ecff 0%, transparent 45%),
+      radial-gradient(circle at 20% 90%, #fff3d6 0%, transparent 45%),
+      radial-gradient(circle at 85% 85%, #e0fff2 0%, transparent 45%),
+      #fffdf9;
+    background-attachment: fixed;
+    line-height:1.65; padding-bottom:60px;
+  }
+  h1,h2,h3,h4{ font-family:'Caveat', cursive; margin:0 0 .3em; }
+  .hero{
+    position:relative; padding:50px 24px 70px; text-align:center;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 55%, var(--orange) 100%);
+    color:#fff; overflow:hidden; border-radius:0 0 40px 40px;
+    box-shadow: 0 10px 30px rgba(140,107,255,0.25);
+  }
+  .hero::before{
+    content:"⏱️ 🧑‍💼 📊 🔥 🧊 🔴 🔵 📋";
+    position:absolute; inset:0; font-size:34px;
+    display:flex; align-items:center; justify-content:space-around;
+    opacity:0.18; padding:0 10px; pointer-events:none;
+  }
+  .hero h1{ font-size:44px; margin:0; text-shadow: 3px 3px 0 rgba(0,0,0,0.15); position:relative; }
+  .hero .sub{ font-family:'Patrick Hand', cursive; font-size:20px; margin-top:10px; position:relative; opacity:.95; }
+  .tape{
+    display:inline-block; background:rgba(255,255,255,0.25); border:2px dashed rgba(255,255,255,0.6);
+    padding:6px 18px; border-radius:30px; font-family:'Patrick Hand',cursive; font-size:16px; margin-top:16px; position:relative;
+  }
+  .wrap{ max-width:880px; margin:0 auto; padding:0 20px; }
+
+  .toc{
+    background:var(--paper); border:3px dashed var(--purple); border-radius:24px;
+    margin:-40px auto 40px; padding:24px 26px; max-width:820px;
+    box-shadow: 8px 8px 0 var(--purple-light); position:relative; z-index:5;
+  }
+  .toc h2{ color:var(--purple); font-size:32px; display:flex; align-items:center; gap:10px; }
+  .toc-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px; margin-top:14px; }
+  .toc-grid a{
+    text-decoration:none; color:var(--ink); background:var(--purple-light); border-radius:14px;
+    padding:12px 14px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14.5px;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease; border:2px solid transparent;
+  }
+  .toc-grid a i{ width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:#fff; color:var(--purple); font-size:14px; flex:none; }
+  .toc-grid a:hover{ transform:translateY(-3px) rotate(-1deg); background:#fff; border-color:var(--purple); box-shadow:4px 4px 0 var(--purple); }
+
+  section.card{
+    background:var(--paper); border-radius:26px; padding:30px 30px 34px; margin:34px 0;
+    position:relative; box-shadow: 0 6px 0 rgba(0,0,0,0.05), 0 10px 25px rgba(140,107,255,0.08);
+    border:1px solid rgba(0,0,0,0.04);
+  }
+  section.card::before{
+    content:''; position:absolute; top:-14px; left:36px; width:70px; height:26px;
+    background:repeating-linear-gradient(45deg, rgba(255,210,63,.6), rgba(255,210,63,.6) 6px, rgba(255,210,63,.35) 6px, rgba(255,210,63,.35) 12px);
+    border-radius:4px; transform:rotate(-3deg); box-shadow:0 2px 4px rgba(0,0,0,0.08);
+  }
+  .sec-head{ display:flex; align-items:center; gap:14px; margin-bottom:6px; }
+  .sec-icon{ width:54px; height:54px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff; flex:none; box-shadow:3px 3px 0 rgba(0,0,0,0.08); }
+  section.card h2{ font-size:34px; margin:0; }
+  .eyebrow{ font-family:'Patrick Hand',cursive; font-size:14px; letter-spacing:1px; text-transform:uppercase; color:var(--pink); font-weight:700; margin-bottom:2px; }
+
+  .pic{
+    display:block; margin:18px auto; max-width:320px; width:100%;
+    border-radius:16px; box-shadow:0 8px 18px rgba(0,0,0,0.15);
+    border:5px solid #fff; outline:2px solid rgba(0,0,0,0.05);
+  }
+  .caption{ text-align:center; font-family:'Patrick Hand',cursive; font-size:13.5px; color:#8a7fa3; margin-top:-10px; margin-bottom:14px; }
+
+  mark{ padding:1px 6px; border-radius:6px; font-weight:600; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+  mark.y{ background:linear-gradient(180deg, transparent 55%, var(--yellow) 55%); }
+  mark.p{ background:linear-gradient(180deg, transparent 55%, var(--pink-light) 55%); color:var(--pink); }
+  mark.g{ background:linear-gradient(180deg, transparent 55%, var(--green-light) 55%); color:#0d8a5f; }
+  mark.b{ background:linear-gradient(180deg, transparent 55%, var(--blue-light) 55%); color:#1465b3; }
+  mark.o{ background:linear-gradient(180deg, transparent 55%, var(--orange-light) 55%); color:#c9600e; }
+
+  .callout{ display:flex; gap:14px; align-items:flex-start; border-radius:16px; padding:16px 18px; margin:18px 0; font-size:15px; }
+  .callout i{ font-size:20px; margin-top:2px; flex:none; }
+  .callout.warn{ background:var(--red-light); color:#a3253a; }
+  .callout.tip{ background:var(--green-light); color:#0d8a5f; }
+  .callout.fact{ background:var(--blue-light); color:#1465b3; }
+
+  .orig-table-wrap{ overflow-x:auto; margin:18px 0; border-radius:16px; border:2px solid var(--purple-light); }
+  table.orig{ width:100%; border-collapse:collapse; font-size:13.5px; background:#fff; }
+  table.orig th{ background:var(--purple); color:#fff; font-family:'Patrick Hand',cursive; font-size:16px; text-align:left; padding:10px 14px; }
+  table.orig td{ padding:10px 14px; vertical-align:top; border-top:1px solid var(--purple-light); }
+  table.orig tr:nth-child(even) td{ background:#faf8ff; }
+  table.orig td strong code{ background:var(--pink-light); color:var(--pink); padding:2px 6px; border-radius:6px; font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px; }
+
+  .glossary{ display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:16px; margin-top:18px; }
+  .term-card{ border-radius:18px; padding:16px 18px; position:relative; overflow:hidden; color:var(--ink); border:2px solid rgba(0,0,0,0.05); }
+  .term-card .badge{
+    display:inline-flex; align-items:center; gap:6px; font-family:'Patrick Hand',cursive; font-weight:700; font-size:16px;
+    padding:5px 14px; border-radius:30px; color:#fff; margin-bottom:8px;
+  }
+  .term-card p{ margin:0; font-size:13.5px; color:#5b4f74; }
+  .term-card .sig{ margin-top:8px; font-size:12.5px; font-style:italic; color:#8a7fa3; }
+
+  /* org chart */
+  .orgchart{ display:flex; flex-direction:column; align-items:center; gap:6px; margin:24px 0; }
+  .org-node{ border-radius:14px; padding:10px 20px; font-family:'Patrick Hand',cursive; font-weight:700; color:#fff; text-align:center; }
+  .org-line{ width:2px; height:18px; background:var(--purple-light); }
+
+  /* MTD = RTO + WRT bar */
+  .mtd-bar{ display:flex; height:46px; border-radius:12px; overflow:hidden; margin:18px 0 8px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+  .mtd-seg{ display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Patrick Hand',cursive; font-size:13px; font-weight:700; flex:1; }
+  .mtd-label{ text-align:center; font-family:'Patrick Hand',cursive; font-size:13px; color:#8a7fa3; margin-bottom:14px; }
+
+  /* cost balancing chart */
+  .cost-chart{ display:flex; justify-content:center; margin:22px 0; }
+  .cost-chart svg{ max-width:100%; height:auto; }
+
+  /* IRP before/during/after */
+  .flow{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px; margin:24px 0; }
+  .flow-step{ background:#fff; border-radius:16px; padding:14px 16px; width:150px; text-align:center; border:2px solid #eee; box-shadow:3px 3px 0 rgba(0,0,0,0.05); }
+  .flow-step .emoji{ font-size:26px; }
+  .flow-step .label{ font-family:'Patrick Hand',cursive; font-weight:700; font-size:15px; margin-top:4px; }
+  .flow-step .desc{ font-size:11px; color:#8a7fa3; margin-top:4px; }
+  .flow-arrow{ font-size:22px; color:var(--purple); }
+
+  /* site comparison */
+  .site-row{ display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:14px; margin:18px 0; }
+  .site-card{ border-radius:16px; padding:16px; text-align:center; border:2px solid; }
+  .site-card .emoji{ font-size:30px; }
+  .site-card h4{ font-size:19px; margin:6px 0 4px; }
+  .site-card p{ font-size:12px; margin:0; }
+
+  /* red blue purple team */
+  .team-row{ display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:14px; margin:18px 0; }
+  .team-card{ border-radius:16px; padding:16px; text-align:center; }
+  .team-card .emoji{ font-size:28px; }
+  .team-card h4{ font-size:18px; margin:6px 0 4px; }
+  .team-card p{ font-size:12px; margin:0; }
+
+  .takeaways{ list-style:none; padding:0; margin:16px 0 0; display:grid; gap:6px; }
+  .takeaways li{ display:flex; gap:10px; align-items:flex-start; background:var(--yellow-light); border-radius:12px; padding:8px 14px; font-size:14.5px; line-height:1.4; border-left:5px solid var(--yellow); }
+  .takeaways li i{ color:#e0a800; margin-top:3px; flex:none; }
+  .takeaways li span{ flex:1; }
+
+  footer{ text-align:center; margin-top:40px; font-family:'Patrick Hand',cursive; color:#8a7fa3; font-size:16px; }
+  ::selection{ background:var(--pink); color:#fff; }
+
+  @media (max-width:600px){
+    .hero h1{ font-size:32px; }
+    section.card{ padding:22px 18px 26px; }
+    section.card h2{ font-size:26px; }
+    table.orig{ font-size:12px; }
+    .pic{ max-width:240px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>⏱️ Contingency Planning — Part 2</h1>
+  <div class="sub">✨ CISOs, BIA timelines, cost curves &amp; red-vs-blue team drills ✨</div>
+  <div class="tape"><i class="fa-solid fa-graduation-cap"></i>&nbsp; class notes • made pretty • made memorable</div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc">
+    <h2><i class="fa-solid fa-map-signs"></i> table of contents</h2>
+    <div class="toc-grid">
+      <a href="#intro"><i class="fa-solid fa-shield"></i> introduction</a>
+      <a href="#concepts"><i class="fa-solid fa-table-list"></i> core concepts</a>
+      <a href="#leadership"><i class="fa-solid fa-user-tie"></i> 1. cybersecurity leadership</a>
+      <a href="#goals"><i class="fa-solid fa-bullseye"></i> 2. planning goals &amp; the CPMT</a>
+      <a href="#bia"><i class="fa-solid fa-magnifying-glass-chart"></i> 3. business impact analysis</a>
+      <a href="#timelines"><i class="fa-solid fa-hourglass-half"></i> 4. key BIA timelines</a>
+      <a href="#costs"><i class="fa-solid fa-scale-balanced"></i> 5. cost balancing</a>
+      <a href="#phases"><i class="fa-solid fa-layer-group"></i> 6–7. IRP, DRP, BCP in action</a>
+      <a href="#sites"><i class="fa-solid fa-server"></i> 8. hot, warm &amp; cold sites</a>
+      <a href="#testing"><i class="fa-solid fa-flask"></i> 9. testing the plan</a>
+      <a href="#takeaways"><i class="fa-solid fa-star"></i> key takeaways</a>
+      <a href="#conclusion"><i class="fa-solid fa-flag-checkered"></i> conclusion</a>
+    </div>
+  </nav>
+
+  <section class="card" id="intro">
+    <div class="eyebrow">💭 warm up</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-shield"></i></div>
+      <h2>introduction</h2>
+    </div>
+    <p>Even the most robust defenses can be breached 🛡️💥. Contingency planning isn't just reacting to crisis — it's <mark class="p">strategically preparing</mark> for the unexpected, so operations bounce back with minimal damage.</p>
+    <p>This part goes deep: from <mark class="y">strategic leadership (CISO)</mark> down to the fine print of recovery timelines, cost trade-offs, and how you actually <mark class="b">test</mark> whether your plan works. 🧪</p>
+  </section>
+
+  <section class="card" id="concepts">
+    <div class="eyebrow">📖 vocab check — straight from the source</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-table-list"></i></div>
+      <h2>core concepts</h2>
+    </div>
+    <p>Original glossary table, kept close to the source 📋:</p>
+    <div class="orig-table-wrap">
+      <table class="orig">
+        <thead><tr><th>Term</th><th>Definition</th><th>Significance</th></tr></thead>
+        <tbody>
+          <tr><td><strong><code>CISO</code></strong></td><td>Chief Information Security Officer, a senior executive responsible for an organization's information and cybersecurity.</td><td>Crucial for leading strategic cybersecurity planning, policy development, and incident response at a high level.</td></tr>
+          <tr><td><strong><code>CPMT</code></strong></td><td>Contingency Plan Management Committee, a dedicated team responsible for overseeing and developing contingency plans.</td><td>Ensures a structured approach to preparing for and managing unexpected incidents, often in large organizations.</td></tr>
+          <tr><td><strong><code>BIA</code></strong></td><td>Business Impact Analysis, a process that identifies critical business processes and assesses the impact of disruptions.</td><td>The foundational step in contingency planning, determining recovery priorities and timelines based on business criticality.</td></tr>
+          <tr><td><strong><code>MTD</code></strong></td><td>Maximum Tolerable Downtime, the absolute maximum length of time a business process can be inoperative without causing unacceptable damage.</td><td>A key metric set by process owners, guiding the overall recovery strategy and investment in resilience.</td></tr>
+          <tr><td><strong><code>RTO</code></strong></td><td>Recovery Time Objective, the maximum amount of time allowed for a system or application to be restored after a disruption.</td><td>A technical target for IT teams, aiming to bring systems back online within the MTD.</td></tr>
+          <tr><td><strong><code>WRT</code></strong></td><td>Work Recovery Time, the time required to perform all necessary tasks to make a system fully operational and ready for users after the RTO is met.</td><td>Accounts for post-restoration activities like data validation and user access, ensuring full functionality.</td></tr>
+          <tr><td><strong><code>RPO</code></strong></td><td>Recovery Point Objective, the maximum amount of data (measured in time) that an organization can afford to lose during a disruption.</td><td>Dictates backup frequency and strategy, directly impacting potential data loss.</td></tr>
+          <tr><td><strong><code>IRP</code></strong></td><td>Incident Response Plan, a detailed set of procedures for identifying, containing, eradicating, recovering from, and documenting cyber incidents.</td><td>Provides a structured approach for managing smaller, localized security events.</td></tr>
+          <tr><td><strong><code>DRP</code></strong></td><td>Disaster Recovery Plan, a comprehensive plan for restoring IT infrastructure and operations after a major disaster.</td><td>Focuses on technical recovery of systems, often at the primary site, following significant disruptions.</td></tr>
+          <tr><td><strong><code>BCP</code></strong></td><td>Business Continuity Plan, a holistic plan to ensure that critical business functions can continue during and after a major disruption.</td><td>The broadest level of planning, ensuring the entire organization can maintain essential operations, potentially at an alternate location.</td></tr>
+          <tr><td><strong><code>Hot Site</code></strong></td><td>A fully equipped, off-site data center that can take over operations immediately or with minimal downtime.</td><td>Offers the fastest recovery but is the most expensive, suitable for highly critical processes.</td></tr>
+          <tr><td><strong><code>Red Team</code></strong></td><td>A group that simulates attacks on an organization's systems to test its defenses.</td><td>Proactively identifies vulnerabilities and weaknesses in security posture and incident response capabilities.</td></tr>
+          <tr><td><strong><code>Blue Team</code></strong></td><td>A group responsible for defending an organization's systems against simulated and real attacks.</td><td>Practices and refines defensive strategies and incident handling procedures.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="margin-top:22px;">✨ ...and my colorful cheat-sheet version for faster revision:</p>
+    <div class="glossary">
+      <div class="term-card" style="background:var(--purple-light);">
+        <span class="badge" style="background:var(--purple);"><i class="fa-solid fa-user-tie"></i> CISO</span>
+        <p>the C-level exec steering the whole security strategy.</p>
+      </div>
+      <div class="term-card" style="background:var(--blue-light);">
+        <span class="badge" style="background:var(--blue);"><i class="fa-solid fa-users-gear"></i> CPMT</span>
+        <p>the committee that builds &amp; owns the contingency plans.</p>
+      </div>
+      <div class="term-card" style="background:var(--green-light);">
+        <span class="badge" style="background:var(--green);"><i class="fa-solid fa-magnifying-glass-chart"></i> BIA</span>
+        <p>maps how a disruption hits specific business processes.</p>
+      </div>
+      <div class="term-card" style="background:var(--orange-light);">
+        <span class="badge" style="background:var(--orange);"><i class="fa-solid fa-stopwatch"></i> MTD</span>
+        <p>the absolute max downtime a process owner can tolerate.</p>
+      </div>
+      <div class="term-card" style="background:var(--yellow-light);">
+        <span class="badge" style="background:#e0a800;"><i class="fa-solid fa-rotate"></i> RTO</span>
+        <p>time to get the system technically back online.</p>
+      </div>
+      <div class="term-card" style="background:var(--pink-light);">
+        <span class="badge" style="background:var(--pink);"><i class="fa-solid fa-user-check"></i> WRT</span>
+        <p>extra time to get it actually ready for real users.</p>
+      </div>
+      <div class="term-card" style="background:var(--blue-light);">
+        <span class="badge" style="background:var(--blue);"><i class="fa-solid fa-database"></i> RPO</span>
+        <p>how much data you can afford to lose — set by backup frequency.</p>
+      </div>
+      <div class="term-card" style="background:var(--green-light);">
+        <span class="badge" style="background:var(--green);"><i class="fa-solid fa-bandage"></i> IRP</span>
+        <p>the playbook for smaller, localized security events.</p>
+      </div>
+      <div class="term-card" style="background:var(--orange-light);">
+        <span class="badge" style="background:var(--orange);"><i class="fa-solid fa-triangle-exclamation"></i> DRP</span>
+        <p>restoring IT infrastructure after a major disaster.</p>
+      </div>
+      <div class="term-card" style="background:var(--red-light);">
+        <span class="badge" style="background:var(--red);"><i class="fa-solid fa-building-shield"></i> BCP</span>
+        <p>keeping the whole business alive through a major disruption.</p>
+      </div>
+      <div class="term-card" style="background:var(--purple-light);">
+        <span class="badge" style="background:var(--purple);"><i class="fa-solid fa-fire"></i> hot site</span>
+        <p>a mirrored facility, ready to take over almost instantly.</p>
+      </div>
+      <div class="term-card" style="background:var(--red-light);">
+        <span class="badge" style="background:var(--red);"><i class="fa-solid fa-user-ninja"></i> red team</span>
+        <p>the "attackers" — simulate a breach to find the gaps.</p>
+      </div>
+      <div class="term-card" style="background:var(--blue-light);">
+        <span class="badge" style="background:var(--blue);"><i class="fa-solid fa-user-shield"></i> blue team</span>
+        <p>the "defenders" — practice detecting &amp; responding for real.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="leadership">
+    <div class="eyebrow">01 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--pink);"><i class="fa-solid fa-user-tie"></i></div>
+      <h2>organizational strategy &amp; cybersecurity leadership</h2>
+    </div>
+    <p>Strategic planning starts abstract — <mark class="p">values, vision, mission</mark> — set by senior management, top-down (with useful bottom-up input). Cybersecurity has to align with all of it. 🧭</p>
+    <div class="orgchart">
+      <div class="org-node" style="background:var(--purple);">🏛️ senior management<br><small style="font-family:Poppins,sans-serif;font-weight:400;">sets vision, mission &amp; values</small></div>
+      <div class="org-line"></div>
+      <div class="org-node" style="background:var(--blue);">🧑‍💻 CIO</div>
+      <div class="org-line"></div>
+      <div class="org-node" style="background:var(--pink);">🛡️ CISO<br><small style="font-family:Poppins,sans-serif;font-weight:400;">bridges business, tech &amp; security</small></div>
+    </div>
+    <p>The <mark class="b">CISO</mark> creates strategic security plans, policy, budgets, and ensures legal compliance. Regulators like <mark class="y">India's RBI</mark> often mandate a CISO-equivalent role specifically for banks — that's how critical this role is. 🏦</p>
+  </section>
+
+  <section class="card" id="goals">
+    <div class="eyebrow">02 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--blue);"><i class="fa-solid fa-bullseye"></i></div>
+      <h2>contingency planning goals &amp; the CPMT</h2>
+    </div>
+    <p>Goal: restore normal operations at <mark class="b">minimum cost</mark> after the unexpected happens 🎯. In large orgs, a dedicated <mark class="p">CPMT</mark> (Contingency Plan Management Committee) owns this — planning, policy, documentation, and overseeing any subcommittees underneath it.</p>
+  </section>
+
+  <section class="card" id="bia">
+    <div class="eyebrow">03 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--green);"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+      <h2>business impact analysis (BIA)</h2>
+    </div>
+    <p>The CPMT's most critical assessment. Unlike risk management (which looks at <mark class="o">assets</mark>), BIA looks at <mark class="g">business processes</mark> 🔄 — e.g. if order fulfillment goes down, BIA quantifies exactly what that costs the business, process by process.</p>
+  </section>
+
+  <section class="card" id="timelines">
+    <div class="eyebrow">04 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--orange);"><i class="fa-solid fa-hourglass-half"></i></div>
+      <h2>key timelines in BIA</h2>
+    </div>
+    <p>Four parameters that anchor every recovery plan ⏱️:</p>
+    <div class="mtd-bar">
+      <div class="mtd-seg" style="background:var(--blue);">RTO — get it technically back up</div>
+      <div class="mtd-seg" style="background:var(--pink);">WRT — make it actually ready for users</div>
+    </div>
+    <div class="mtd-label">↑ &nbsp; together, RTO + WRT = MTD (the process owner's absolute limit) &nbsp; ↑</div>
+    <p>🎯 <strong>MTD</strong> — set by the <mark class="o">process owner</mark>; ideally zero, realistically negotiated. 🔧 <strong>RTO</strong> — technical target to get systems functional again. 👥 <strong>WRT</strong> — the extra time for checks, validation &amp; user access after RTO. 💾 <strong>RPO</strong> — max acceptable <mark class="b">data loss</mark>, driven directly by backup frequency (hourly backups → 1 hour RPO).</p>
+    <div class="callout fact">
+      <i class="fa-solid fa-equals"></i>
+      <div><strong>formula to remember:</strong> MTD = RTO + WRT. MTD is set by the business; RTO/WRT are engineered by the technical team to fit inside it.</div>
+    </div>
+  </section>
+
+  <section class="card" id="costs">
+    <div class="eyebrow">05 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-scale-balanced"></i></div>
+      <h2>cost balancing: recovery vs. disruption</h2>
+    </div>
+    <p>Two costs fight each other 🥊: faster recovery (redundant systems, hot sites) costs <mark class="p">more upfront</mark>; slower recovery costs <mark class="o">more in lost revenue &amp; reputation</mark> the longer it drags.</p>
+    <div class="cost-chart">
+      <svg viewBox="0 0 360 220" width="360" height="220">
+        <line x1="30" y1="190" x2="340" y2="190" stroke="#c9c3e0" stroke-width="2"/>
+        <line x1="30" y1="190" x2="30" y2="20" stroke="#c9c3e0" stroke-width="2"/>
+        <text x="185" y="212" font-size="11" fill="#8a7fa3" text-anchor="middle" font-family="Patrick Hand, cursive">disruption time →</text>
+        <text x="14" y="105" font-size="11" fill="#8a7fa3" text-anchor="middle" font-family="Patrick Hand, cursive" transform="rotate(-90 14 105)">cost →</text>
+        <path d="M 40 30 Q 120 40 340 185" fill="none" stroke="#ff8c42" stroke-width="3"/>
+        <path d="M 40 185 Q 160 40 335 30" fill="none" stroke="#3aa0ff" stroke-width="3"/>
+        <circle cx="150" cy="95" r="6" fill="#ff6fa5"/>
+        <text x="150" y="80" font-size="11" fill="#ff6fa5" text-anchor="middle" font-family="Patrick Hand, cursive" font-weight="700">optimum ✨</text>
+        <text x="300" y="35" font-size="10" fill="#3aa0ff" font-family="Patrick Hand, cursive">recovery cost</text>
+        <text x="230" y="195" font-size="10" fill="#ff8c42" font-family="Patrick Hand, cursive">disruption cost</text>
+      </svg>
+    </div>
+    <p>The goal: find the <mark class="p">optimum point</mark> where combined cost is lowest — essentially a <mark class="y">"negotiation for time"</mark> that needs real management buy-in and investment prioritized by system criticality. 💰</p>
+  </section>
+
+  <section class="card" id="phases">
+    <div class="eyebrow">06–07 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--green);"><i class="fa-solid fa-layer-group"></i></div>
+      <h2>IRP, DRP &amp; BCP — who actually leads what</h2>
+    </div>
+    <p>Same three phases from Part 1, now with ownership attached 🧑‍💼:</p>
+    <div class="glossary">
+      <div class="term-card" style="background:var(--green-light);">
+        <span class="badge" style="background:var(--green);"><i class="fa-solid fa-laptop-code"></i> IRP</span>
+        <p>low impact — led by <mark class="g">technical teams</mark>, focused on immediate containment.</p>
+      </div>
+      <div class="term-card" style="background:var(--yellow-light);">
+        <span class="badge" style="background:#e0a800;"><i class="fa-solid fa-user-tie"></i> DRP</span>
+        <p>major disruption, primary site stays — often led by the <mark class="y">CIO</mark>.</p>
+      </div>
+      <div class="term-card" style="background:var(--red-light);">
+        <span class="badge" style="background:var(--red);"><i class="fa-solid fa-crown"></i> BCP</span>
+        <p>site relocation needed — led by <mark class="o">senior management / the CEO</mark>.</p>
+      </div>
+    </div>
+
+    <p style="margin-top:18px;">An IRP breaks down into three timeframes ⏳:</p>
+    <div class="flow">
+      <div class="flow-step" style="border-color:var(--blue);">
+        <div class="emoji">📋</div>
+        <div class="label">before</div>
+        <div class="desc">protocols, templates, comms channels</div>
+      </div>
+      <div class="flow-arrow">➡️</div>
+      <div class="flow-step" style="border-color:var(--orange);">
+        <div class="emoji">🔍</div>
+        <div class="label">during</div>
+        <div class="desc">detect, analyze, contain, eradicate</div>
+      </div>
+      <div class="flow-arrow">➡️</div>
+      <div class="flow-step" style="border-color:var(--green);">
+        <div class="emoji">📝</div>
+        <div class="label">after</div>
+        <div class="desc">recover + document what/when/where/why/how</div>
+      </div>
+    </div>
+
+    <img class="pic" src="https://commons.wikimedia.org/wiki/Special:FilePath/SOC%20Security%20Monitors.jpg?width=480" alt="A security operations center with monitors">
+    <div class="caption">📸 exactly the kind of setup used to detect incidents — IDS, active logs, real-time monitoring</div>
+    <p>Indicators come in three flavors: <mark class="b">possible</mark>, <mark class="p">probable</mark>, or <mark class="g">definite</mark> (e.g. log tampering = definite). Note: <mark class="y">threat intelligence</mark> looks forward at future risks; <mark class="y">incident response</mark> deals with what's already happened.</p>
+
+    <div class="callout warn">
+      <i class="fa-solid fa-gavel"></i>
+      <div><strong>law enforcement matters:</strong> regulations like <mark class="o">GDPR</mark> require reporting breaches within a strict window — often <strong>72 hours</strong>. Organizations need clear policy on when/how to notify authorities and the public.</div>
+    </div>
+  </section>
+
+  <section class="card" id="sites">
+    <div class="eyebrow">08 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--orange);"><i class="fa-solid fa-server"></i></div>
+      <h2>disaster recovery &amp; business continuity strategies</h2>
+    </div>
+    <p>Choosing a recovery site is a cost-vs-speed trade-off 💸⚡:</p>
+    <div class="site-row">
+      <div class="site-card" style="background:var(--red-light); border-color:var(--red);">
+        <div class="emoji">🔥</div>
+        <h4>hot site</h4>
+        <p>fully mirrored, near-instant takeover. Fastest — and most expensive.</p>
+      </div>
+      <div class="site-card" style="background:var(--yellow-light); border-color:var(--yellow);">
+        <div class="emoji">🌤️</div>
+        <h4>warm site</h4>
+        <p>partially equipped — online within hours to days.</p>
+      </div>
+      <div class="site-card" style="background:var(--blue-light); border-color:var(--blue);">
+        <div class="emoji">🧊</div>
+        <h4>cold site</h4>
+        <p>just power &amp; cooling — slowest to activate, cheapest option.</p>
+      </div>
+    </div>
+    <p>Orgs also mix in <mark class="p">time-shared sites</mark> and other hybrids depending on budget and criticality of the systems involved.</p>
+  </section>
+
+  <section class="card" id="testing">
+    <div class="eyebrow">09 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--red);"><i class="fa-solid fa-flask"></i></div>
+      <h2>testing contingency plans</h2>
+    </div>
+    <p>A plan you've never tested is just a document 📄. Regular drills + simulated attacks are how you find out if it actually works:</p>
+    <div class="team-row">
+      <div class="team-card" style="background:var(--red-light);">
+        <div class="emoji">🔴</div>
+        <h4>red team</h4>
+        <p>plays the attacker — simulates real intrusions to find weak spots.</p>
+      </div>
+      <div class="team-card" style="background:var(--blue-light);">
+        <div class="emoji">🔵</div>
+        <h4>blue team</h4>
+        <p>plays defense — practices detection &amp; response for real.</p>
+      </div>
+      <div class="team-card" style="background:var(--purple-light);">
+        <div class="emoji">🟣</div>
+        <h4>purple team</h4>
+        <p>moderates between both — turns the exercise into shared lessons.</p>
+      </div>
+    </div>
+    <p>These drills keep plans <mark class="g">active and healthy</mark> — not just theoretical paperwork gathering dust. 🧹</p>
+  </section>
+
+  <section class="card" id="takeaways">
+    <div class="eyebrow">🌟 revision time</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:#e0a800;"><i class="fa-solid fa-star"></i></div>
+      <h2>key takeaways</h2>
+    </div>
+    <ul class="takeaways">
+      <li><i class="fa-solid fa-check"></i><span>strategic planning (values, vision, mission) is the top-down foundation for cybersecurity posture.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>the <mark class="p">CISO</mark> leads strategic security planning, policy, and business alignment.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>a <mark class="b">CPMT</mark> oversees contingency planning, aiming to restore operations at minimum cost.</span></li>
+      <li><i class="fa-solid fa-check"></i><span><mark class="g">BIA</mark> is the foundational step — focused on business process impact, not just assets.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>key timelines: <mark class="o">MTD</mark>, <mark class="y">RTO</mark>, <mark class="p">WRT</mark>, and <mark class="b">RPO</mark> — remember MTD = RTO + WRT.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>recovery cost vs. disruption cost must be balanced to find an <mark class="p">optimal</mark> investment point.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>IRP, DRP, and BCP differ by impact — and by who leads the response.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>incident documentation should cover what, when, where, why, and how.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>law enforcement &amp; regulations like <mark class="o">GDPR</mark> shape mandatory incident reporting.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>regular testing — <mark class="o">red</mark>, <mark class="b">blue</mark>, and purple team drills — keeps plans genuinely effective.</span></li>
+    </ul>
+  </section>
+
+  <section class="card" id="conclusion">
+    <div class="eyebrow">🏁 wrap up</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--green);"><i class="fa-solid fa-flag-checkered"></i></div>
+      <h2>conclusion</h2>
+    </div>
+    <p>Contingency planning is a <mark class="p">proactive, strategic imperative</mark> — not an afterthought 🧩. Clear leadership (CISO), a thorough BIA, and precisely defined recovery timelines build the framework for real resilience.</p>
+    <p>Downtime costs money, but so does recovery — the balancing act is the whole game 💰. Ultimately, the ability to respond, recover, and continue operating is a mark of organizational maturity — protecting not just systems, but reputation and stakeholder trust. 🛡️</p>
+  </section>
+
+</div>
+
+<footer>
+  made with 💗, highlighters &amp; way too many emojis — happy studying! 📚✨
+</footer>
+
+</body>
+</html>

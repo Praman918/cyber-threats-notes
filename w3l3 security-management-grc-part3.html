@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🛒 Security Management, GRC — Part 3</title>
+<link rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9B%92%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --pink:#ff6fa5; --pink-light:#ffe3ef;
+    --purple:#8c6bff; --purple-light:#ece6ff;
+    --blue:#3aa0ff; --blue-light:#dff1ff;
+    --yellow:#ffd23f; --yellow-light:#fff6d9;
+    --green:#33c98f; --green-light:#dcfbf0;
+    --orange:#ff8c42; --orange-light:#ffe9d6;
+    --red:#ff5566; --red-light:#ffe1e4;
+    --ink:#3a2e4d; --paper:#fffdf9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Poppins', sans-serif; color:var(--ink);
+    background:
+      radial-gradient(circle at 10% 10%, #ffe9f3 0%, transparent 45%),
+      radial-gradient(circle at 90% 20%, #e3ecff 0%, transparent 45%),
+      radial-gradient(circle at 20% 90%, #fff3d6 0%, transparent 45%),
+      radial-gradient(circle at 85% 85%, #e0fff2 0%, transparent 45%),
+      #fffdf9;
+    background-attachment: fixed;
+    line-height:1.65; padding-bottom:60px;
+  }
+  h1,h2,h3,h4{ font-family:'Caveat', cursive; margin:0 0 .3em; }
+  .hero{
+    position:relative; padding:50px 24px 70px; text-align:center;
+    background: linear-gradient(135deg, var(--red) 0%, var(--orange) 50%, var(--purple) 100%);
+    color:#fff; overflow:hidden; border-radius:0 0 40px 40px;
+    box-shadow: 0 10px 30px rgba(255,85,102,0.25);
+  }
+  .hero::before{
+    content:"🛒 💻 🚨 ⚖️ 📢 🕵️ 🔌 🧾";
+    position:absolute; inset:0; font-size:34px;
+    display:flex; align-items:center; justify-content:space-around;
+    opacity:0.18; padding:0 10px; pointer-events:none;
+  }
+  .hero h1{ font-size:42px; margin:0; text-shadow: 3px 3px 0 rgba(0,0,0,0.15); position:relative; }
+  .hero .sub{ font-family:'Patrick Hand', cursive; font-size:20px; margin-top:10px; position:relative; opacity:.95; }
+  .tape{
+    display:inline-block; background:rgba(255,255,255,0.25); border:2px dashed rgba(255,255,255,0.6);
+    padding:6px 18px; border-radius:30px; font-family:'Patrick Hand',cursive; font-size:16px; margin-top:16px; position:relative;
+  }
+  .wrap{ max-width:880px; margin:0 auto; padding:0 20px; }
+
+  .toc{
+    background:var(--paper); border:3px dashed var(--purple); border-radius:24px;
+    margin:-40px auto 40px; padding:24px 26px; max-width:820px;
+    box-shadow: 8px 8px 0 var(--purple-light); position:relative; z-index:5;
+  }
+  .toc h2{ color:var(--purple); font-size:32px; display:flex; align-items:center; gap:10px; }
+  .toc-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px; margin-top:14px; }
+  .toc-grid a{
+    text-decoration:none; color:var(--ink); background:var(--purple-light); border-radius:14px;
+    padding:12px 14px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14.5px;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease; border:2px solid transparent;
+  }
+  .toc-grid a i{ width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:#fff; color:var(--purple); font-size:14px; flex:none; }
+  .toc-grid a:hover{ transform:translateY(-3px) rotate(-1deg); background:#fff; border-color:var(--purple); box-shadow:4px 4px 0 var(--purple); }
+
+  section.card{
+    background:var(--paper); border-radius:26px; padding:30px 30px 34px; margin:34px 0;
+    position:relative; box-shadow: 0 6px 0 rgba(0,0,0,0.05), 0 10px 25px rgba(140,107,255,0.08);
+    border:1px solid rgba(0,0,0,0.04);
+  }
+  section.card::before{
+    content:''; position:absolute; top:-14px; left:36px; width:70px; height:26px;
+    background:repeating-linear-gradient(45deg, rgba(255,210,63,.6), rgba(255,210,63,.6) 6px, rgba(255,210,63,.35) 6px, rgba(255,210,63,.35) 12px);
+    border-radius:4px; transform:rotate(-3deg); box-shadow:0 2px 4px rgba(0,0,0,0.08);
+  }
+  .sec-head{ display:flex; align-items:center; gap:14px; margin-bottom:6px; }
+  .sec-icon{ width:54px; height:54px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff; flex:none; box-shadow:3px 3px 0 rgba(0,0,0,0.08); }
+  section.card h2{ font-size:34px; margin:0; }
+  .eyebrow{ font-family:'Patrick Hand',cursive; font-size:14px; letter-spacing:1px; text-transform:uppercase; color:var(--pink); font-weight:700; margin-bottom:2px; }
+
+  .pic{
+    display:block; margin:18px auto; max-width:320px; width:100%;
+    border-radius:16px; box-shadow:0 8px 18px rgba(0,0,0,0.15);
+    border:5px solid #fff; outline:2px solid rgba(0,0,0,0.05);
+  }
+  .caption{ text-align:center; font-family:'Patrick Hand',cursive; font-size:13.5px; color:#8a7fa3; margin-top:-10px; margin-bottom:14px; }
+
+  mark{ padding:1px 6px; border-radius:6px; font-weight:600; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+  mark.y{ background:linear-gradient(180deg, transparent 55%, var(--yellow) 55%); }
+  mark.p{ background:linear-gradient(180deg, transparent 55%, var(--pink-light) 55%); color:var(--pink); }
+  mark.g{ background:linear-gradient(180deg, transparent 55%, var(--green-light) 55%); color:#0d8a5f; }
+  mark.b{ background:linear-gradient(180deg, transparent 55%, var(--blue-light) 55%); color:#1465b3; }
+  mark.o{ background:linear-gradient(180deg, transparent 55%, var(--orange-light) 55%); color:#c9600e; }
+
+  .callout{ display:flex; gap:14px; align-items:flex-start; border-radius:16px; padding:16px 18px; margin:18px 0; font-size:15px; }
+  .callout i{ font-size:20px; margin-top:2px; flex:none; }
+  .callout.warn{ background:var(--red-light); color:#a3253a; }
+  .callout.tip{ background:var(--green-light); color:#0d8a5f; }
+  .callout.fact{ background:var(--blue-light); color:#1465b3; }
+
+  .orig-table-wrap{ overflow-x:auto; margin:18px 0; border-radius:16px; border:2px solid var(--purple-light); }
+  table.orig{ width:100%; border-collapse:collapse; font-size:13.5px; background:#fff; }
+  table.orig th{ background:var(--purple); color:#fff; font-family:'Patrick Hand',cursive; font-size:16px; text-align:left; padding:10px 14px; }
+  table.orig td{ padding:10px 14px; vertical-align:top; border-top:1px solid var(--purple-light); }
+  table.orig tr:nth-child(even) td{ background:#faf8ff; }
+  table.orig td strong code{ background:var(--pink-light); color:var(--pink); padding:2px 6px; border-radius:6px; font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px; }
+
+  .glossary{ display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:16px; margin-top:18px; }
+  .term-card{ border-radius:18px; padding:16px 18px; position:relative; overflow:hidden; color:var(--ink); border:2px solid rgba(0,0,0,0.05); }
+  .term-card .badge{
+    display:inline-flex; align-items:center; gap:6px; font-family:'Patrick Hand',cursive; font-weight:700; font-size:16px;
+    padding:5px 14px; border-radius:30px; color:#fff; margin-bottom:8px;
+  }
+  .term-card p{ margin:0; font-size:13.5px; color:#5b4f74; }
+  .term-card .sig{ margin-top:8px; font-size:12.5px; font-style:italic; color:#8a7fa3; }
+
+  /* DDoS / botnet diagram */
+  .ddos-wrap{ display:flex; flex-direction:column; align-items:center; gap:6px; margin:26px 0; }
+  .ddos-row{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+  .zombie{
+    width:56px; height:56px; border-radius:14px; background:var(--red-light);
+    display:flex; align-items:center; justify-content:center; font-size:24px;
+    border:2px solid var(--red);
+  }
+  .ddos-arrow{ font-family:'Patrick Hand',cursive; font-size:13px; color:var(--red); text-align:center; }
+  .ddos-target{
+    width:120px; height:70px; border-radius:16px; background:var(--blue-light); border:3px solid var(--blue);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    font-family:'Patrick Hand',cursive; font-weight:700; color:#1465b3; font-size:14px;
+  }
+  .ddos-target span{ font-size:24px; }
+  .ddos-caption{ font-family:'Patrick Hand',cursive; font-size:13px; color:#8a7fa3; text-align:center; max-width:440px; }
+
+  /* incident timeline */
+  .timeline{ position:relative; margin:24px 0; padding-left:28px; border-left:3px dashed var(--red); }
+  .t-item{ position:relative; margin-bottom:20px; }
+  .t-item::before{
+    content:''; position:absolute; left:-35px; top:2px; width:14px; height:14px; border-radius:50%;
+    background:var(--red); border:3px solid #fff; box-shadow:0 0 0 2px var(--red);
+  }
+  .t-item h4{ font-size:19px; margin:0 0 2px; color:var(--red); }
+  .t-item p{ margin:0; font-size:14px; }
+
+  /* stakeholder voices */
+  .voices{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:16px; margin:18px 0; }
+  .voice-card{ border-radius:18px; padding:16px 18px; border:2px solid rgba(0,0,0,0.05); }
+  .voice-card .who{ display:flex; align-items:center; gap:8px; font-family:'Patrick Hand',cursive; font-weight:700; font-size:17px; margin-bottom:6px; }
+  .voice-card .who i{ width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:15px; flex:none; }
+  .voice-card p{ margin:0; font-size:13px; font-style:italic; }
+
+  /* fork decision diagram */
+  .fork-wrap{ display:flex; justify-content:center; margin:24px 0; }
+  .fork{ display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; max-width:520px; }
+  .fork-start{
+    background:var(--purple); color:#fff; border-radius:14px; padding:10px 20px;
+    font-family:'Patrick Hand',cursive; font-weight:700; font-size:16px;
+  }
+  .fork-branches{ display:flex; gap:16px; width:100%; justify-content:center; flex-wrap:wrap; }
+  .fork-branch{ flex:1; min-width:200px; border-radius:16px; padding:14px 16px; border:2px solid; }
+  .fork-branch h4{ font-size:19px; margin:0 0 6px; }
+  .fork-branch p{ font-size:12.5px; margin:0; }
+
+  /* long-term options */
+  .options-row{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:16px; margin:18px 0; }
+  .option-card{ background:#fff; border-radius:18px; padding:16px 18px; border:2px solid var(--purple-light); }
+  .option-card h4{ font-size:20px; margin:0 0 8px; color:var(--purple); }
+  .option-card .pros, .option-card .cons{ font-size:12.5px; margin:6px 0; }
+  .option-card .pros i{ color:#0d8a5f; margin-right:5px; }
+  .option-card .cons i{ color:#a3253a; margin-right:5px; }
+
+  .takeaways{ list-style:none; padding:0; margin:16px 0 0; display:grid; gap:6px; }
+  .takeaways li{ display:flex; gap:10px; align-items:flex-start; background:var(--yellow-light); border-radius:12px; padding:8px 14px; font-size:14.5px; line-height:1.4; border-left:5px solid var(--yellow); }
+  .takeaways li i{ color:#e0a800; margin-top:3px; flex:none; }
+  .takeaways li span{ flex:1; }
+
+  footer{ text-align:center; margin-top:40px; font-family:'Patrick Hand',cursive; color:#8a7fa3; font-size:16px; }
+  ::selection{ background:var(--pink); color:#fff; }
+
+  @media (max-width:600px){
+    .hero h1{ font-size:30px; }
+    section.card{ padding:22px 18px 26px; }
+    section.card h2{ font-size:26px; }
+    table.orig{ font-size:12px; }
+    .pic{ max-width:240px; }
+    .fork-branches{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🛒 Security Management, GRC — Part 3</h1>
+  <div class="sub">✨ the iPremier case: a DDoS attack, a 5am phone call, and an impossible decision ✨</div>
+  <div class="tape"><i class="fa-solid fa-graduation-cap"></i>&nbsp; class notes • made pretty • made memorable</div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc">
+    <h2><i class="fa-solid fa-map-signs"></i> table of contents</h2>
+    <div class="toc-grid">
+      <a href="#intro"><i class="fa-solid fa-bag-shopping"></i> introduction</a>
+      <a href="#concepts"><i class="fa-solid fa-table-list"></i> core concepts</a>
+      <a href="#ddos"><i class="fa-solid fa-diagram-project"></i> how a DDoS actually works</a>
+      <a href="#crisis"><i class="fa-solid fa-triangle-exclamation"></i> 1. the unfolding crisis</a>
+      <a href="#dilemma"><i class="fa-solid fa-code-fork"></i> 2. the mysterious cessation &amp; Bob's dilemma</a>
+      <a href="#recommendations"><i class="fa-solid fa-lightbulb"></i> 3. strategic recommendations</a>
+      <a href="#takeaways"><i class="fa-solid fa-star"></i> key takeaways</a>
+      <a href="#conclusion"><i class="fa-solid fa-flag-checkered"></i> conclusion</a>
+    </div>
+  </nav>
+
+  <section class="card" id="intro">
+    <div class="eyebrow">💭 warm up</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--red);"><i class="fa-solid fa-bag-shopping"></i></div>
+      <h2>introduction</h2>
+    </div>
+    <p>In e-commerce, trust is everything 🤝. This lecture unpacks the <mark class="o">iPremier case</mark> — a luxury, rare &amp; vintage goods e-tailer with over a million regular customers — that gets hit by a <mark class="p">DDoS attack</mark> in the early hours of the morning.</p>
+    <img class="pic" src="https://commons.wikimedia.org/wiki/Special:FilePath/Macro%20photography%20of%20a%20Rolex%20watch.jpg?width=480" alt="A close-up of a luxury watch">
+    <div class="caption">📸 the kind of luxury inventory iPremier's high-end clientele expects to shop for, uninterrupted</div>
+    <p>iPremier prided itself on user experience and after-sales service — but a performance-driven culture, stock-option-linked pay, and neglected security fundamentals left it dangerously unprepared. This case is a crash course in what happens when <mark class="y">business ambition outruns cybersecurity readiness</mark>. ⚡</p>
+  </section>
+
+  <section class="card" id="concepts">
+    <div class="eyebrow">📖 vocab check — straight from the source</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-table-list"></i></div>
+      <h2>core concepts</h2>
+    </div>
+    <p>Original glossary table, kept close to the source 📋:</p>
+    <div class="orig-table-wrap">
+      <table class="orig">
+        <thead><tr><th>Term</th><th>Definition</th><th>Significance</th></tr></thead>
+        <tbody>
+          <tr><td><strong><code>Distributed Denial of Service (DDoS)</code></strong></td><td>A cyberattack where multiple compromised computer systems (botnets) are used to flood a target server or website with traffic, making it unavailable to legitimate users.</td><td>This was the specific type of attack iPremier faced, highlighting the challenge of distinguishing legitimate from malicious traffic and the difficulty in identifying the attacker's source.</td></tr>
+          <tr><td><strong><code>Denial of Service (DoS)</code></strong></td><td>A broader category of cyberattack aimed at overwhelming an internet-connected asset to prevent legitimate users from accessing it, often using a single source.</td><td>DDoS is a more advanced form of DoS, making it harder to mitigate due to the distributed nature of the attack, as seen in iPremier's struggle to respond.</td></tr>
+          <tr><td><strong><code>Botnet</code></strong></td><td>A network of private computers infected with malicious software and controlled as a group without the owners' knowledge, used to carry out tasks like DDoS attacks.</td><td>These "zombie networks" are crucial for executing DDoS attacks, enabling attackers to generate massive traffic volumes from diverse sources, complicating defense efforts.</td></tr>
+          <tr><td><strong><code>Incident Response Plan (IRP)</code></strong></td><td>A documented set of procedures and guidelines that an organization follows to prepare for, detect, respond to, and recover from a cybersecurity incident.</td><td>iPremier's lack of an updated and practiced IRP was a critical failure, leading to confusion and delayed action during the attack, emphasizing its importance for effective crisis management.</td></tr>
+          <tr><td><strong><code>Business Continuity Plan (BCP)</code></strong></td><td>A plan to ensure that business functions can continue during and after a disaster or disruption, focusing on maintaining essential operations.</td><td>While iPremier had a BCP, it was outdated and hadn't been practiced, demonstrating that a plan's existence is insufficient without regular review and drills.</td></tr>
+          <tr><td><strong><code>Log Data</code></strong></td><td>Records of events occurring within an organization's systems, including network traffic, user activity, and system errors.</td><td>iPremier's decision to remove log data detailing for "customer experience" severely hampered their ability to investigate the attack, identify its source, and gather evidence.</td></tr>
+          <tr><td><strong><code>Hacktivism</code></strong></td><td>The act of hacking, or breaking into a computer system, for a politically or socially motivated purpose.</td><td>One of the potential motivations for the iPremier attack, illustrating that cyber threats can stem from ideological rather than purely financial or competitive reasons.</td></tr>
+          <tr><td><strong><code>SYN Flood</code></strong></td><td>A type of DDoS attack that exploits the TCP three-way handshake by sending a high volume of SYN requests to a target server, overwhelming its connection tables.</td><td>This was the specific technical method used in the iPremier DDoS attack, indicating a sophisticated and targeted approach to disrupt service.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="margin-top:22px;">✨ ...and my colorful cheat-sheet version for faster revision:</p>
+    <div class="glossary">
+      <div class="term-card" style="background:var(--red-light);">
+        <span class="badge" style="background:var(--red);"><i class="fa-solid fa-network-wired"></i> DDoS</span>
+        <p>a flood of traffic from many machines at once — that's what hit iPremier.</p>
+      </div>
+      <div class="term-card" style="background:var(--orange-light);">
+        <span class="badge" style="background:var(--orange);"><i class="fa-solid fa-ban"></i> DoS</span>
+        <p>the simpler, single-source version of the same idea.</p>
+      </div>
+      <div class="term-card" style="background:var(--purple-light);">
+        <span class="badge" style="background:var(--purple);"><i class="fa-solid fa-robot"></i> botnet</span>
+        <p>a "zombie army" of hijacked computers, used without their owners knowing.</p>
+      </div>
+      <div class="term-card" style="background:var(--blue-light);">
+        <span class="badge" style="background:var(--blue);"><i class="fa-solid fa-clipboard-list"></i> IRP</span>
+        <p>the playbook for detecting, responding to &amp; recovering from an incident.</p>
+      </div>
+      <div class="term-card" style="background:var(--green-light);">
+        <span class="badge" style="background:var(--green);"><i class="fa-solid fa-building-shield"></i> BCP</span>
+        <p>keeps the business running through a disruption — if it's actually kept current.</p>
+      </div>
+      <div class="term-card" style="background:var(--yellow-light);">
+        <span class="badge" style="background:#e0a800;"><i class="fa-solid fa-file-lines"></i> log data</span>
+        <p>the evidence trail — iPremier deleted theirs for "customer experience." 😬</p>
+      </div>
+      <div class="term-card" style="background:var(--pink-light);">
+        <span class="badge" style="background:var(--pink);"><i class="fa-solid fa-bullhorn"></i> hacktivism</span>
+        <p>hacking with a political or social cause, not just profit.</p>
+      </div>
+      <div class="term-card" style="background:var(--red-light);">
+        <span class="badge" style="background:var(--red);"><i class="fa-solid fa-handshake-slash"></i> SYN flood</span>
+        <p>exploits the TCP handshake to clog up connection tables.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="ddos">
+    <div class="eyebrow">🔎 visual detour</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--red);"><i class="fa-solid fa-diagram-project"></i></div>
+      <h2>how a DDoS attack actually works</h2>
+    </div>
+    <p>Before the case study — here's the mechanics of what hit iPremier at 4:31 AM 👇</p>
+    <div class="ddos-wrap">
+      <div class="ddos-row">
+        <div class="zombie">🧟</div>
+        <div class="zombie">🧟</div>
+        <div class="zombie">🧟</div>
+        <div class="zombie">🧟</div>
+        <div class="zombie">🧟</div>
+      </div>
+      <div class="ddos-arrow">↓ &nbsp; a botnet of hijacked "zombie" computers, all firing SYN requests at once &nbsp; ↓</div>
+      <div class="ddos-target"><span>🔥</span>router / firewall<br>overwhelmed</div>
+    </div>
+    <p class="ddos-caption" style="margin:0 auto;">Each machine alone looks like normal traffic — the danger is the combined, distributed volume, which is exactly what made it so hard for iPremier to tell attackers apart from real customers.</p>
+    <img class="pic" src="https://commons.wikimedia.org/wiki/Special:FilePath/Network%20cables%20and%20switch.jpg?width=480" alt="Network cables plugged into a switch">
+    <div class="caption">📸 the router running iPremier's firewall — the exact target the SYN flood was aimed at</div>
+  </section>
+
+  <section class="card" id="crisis">
+    <div class="eyebrow">01 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--orange);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <h2>the unfolding crisis &amp; initial response failures</h2>
+    </div>
+    <p>It starts with taunting <mark class="o">"Ha Ha Ha"</mark> emails and site access issues reported to CIO <mark class="p">Bob Turley</mark> — an immediate sign of a missing, practiced response protocol. 🚨</p>
+
+    <div class="timeline">
+      <div class="t-item">
+        <h4>😬 no practiced IRP</h4>
+        <p>Ops lead Joanne Ripley admits: <mark class="o">"we have got a BCP but it's not been updated and we actually haven't practiced incident response."</mark></p>
+      </div>
+      <div class="t-item">
+        <h4>🏢 reliance on Qdata</h4>
+        <p>iPremier's data host was chosen for <mark class="p">proximity, not competence</mark> — Joanne even struggled to physically get into the building during the attack.</p>
+      </div>
+      <div class="t-item">
+        <h4>🗑️ log data removed</h4>
+        <p>Detailed logging was cut to <mark class="y">"increase customer experience by 20%"</mark> — CTO Tim Mandel: <mark class="y">"it is highly unlikely that we can preserve the log data."</mark></p>
+      </div>
+      <div class="t-item">
+        <h4>🗣️ conflicting advice floods in</h4>
+        <p>Four different voices, four different priorities — all landing on Bob at once.</p>
+      </div>
+    </div>
+
+    <div class="voices">
+      <div class="voice-card" style="background:var(--blue-light);">
+        <div class="who"><i style="background:var(--blue);" class="fa-solid fa-laptop-code"></i> Tim Mandel, CTO</div>
+        <p>"Don't cut the connection — we need to preserve whatever evidence we still have."</p>
+      </div>
+      <div class="voice-card" style="background:var(--red-light);">
+        <div class="who"><i style="background:var(--red);" class="fa-solid fa-scale-balanced"></i> Peter Stewart, Legal</div>
+        <p>"Cut the connection now — protect customer data and avoid legal exposure."</p>
+      </div>
+      <div class="voice-card" style="background:var(--orange-light);">
+        <div class="who"><i style="background:var(--orange);" class="fa-solid fa-chart-line"></i> Warren Spangler, VP Biz Dev</div>
+        <p>"Let me handle PR — focus on protecting the stock price."</p>
+      </div>
+      <div class="voice-card" style="background:var(--green-light);">
+        <div class="who"><i style="background:var(--green);" class="fa-solid fa-user-tie"></i> Jack Samuelson, CEO</div>
+        <p>"Just get the business back up and running."</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="dilemma">
+    <div class="eyebrow">02 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-code-fork"></i></div>
+      <h2>the mysterious cessation &amp; Bob's dilemma</h2>
+    </div>
+    <p>At <mark class="p">5:26 AM</mark>, the attack just… stops. No clear reason. Joanne can't rule out a data breach: <mark class="o">"there is nothing that makes a DDoS attack and intrusion mutually exclusive."</mark> 😳</p>
+
+    <div class="fork-wrap">
+      <div class="fork">
+        <div class="fork-start">🤔 Bob's decision</div>
+        <div class="fork-branches">
+          <div class="fork-branch" style="background:var(--green-light); border-color:var(--green);">
+            <h4>✅ resume as usual</h4>
+            <p>Site's back up, stakeholders focused on stock price are appeased — but the cause is still <mark class="g">completely unknown</mark>.</p>
+          </div>
+          <div class="fork-branch" style="background:var(--red-light); border-color:var(--red);">
+            <h4>🛑 shut down &amp; investigate</h4>
+            <p>Full forensic audit, real answers — but <mark class="o">downtime</mark>, lost revenue, and shaken customer trust in the short term.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p>Underneath it all: a culture that prioritized <mark class="y">profit &amp; stock options</mark> over security, a missing dedicated security team, no adherence to standards like ISO, and infrastructure (Qdata, an outdated BCP) that was never built to withstand this. 🧩</p>
+  </section>
+
+  <section class="card" id="recommendations">
+    <div class="eyebrow">03 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--green);"><i class="fa-solid fa-lightbulb"></i></div>
+      <h2>immediate &amp; long-term strategic recommendations</h2>
+    </div>
+    <p>Class consensus: <mark class="g">shut down and run forensics</mark> 🕵️ — understand the attack, find vulnerabilities, protect against a repeat.</p>
+    <div class="callout tip">
+      <i class="fa-solid fa-bullhorn"></i>
+      <div><strong>PR strategy:</strong> skip "server maintenance." Be honest about <mark class="p">"unusual, irregular traffic"</mark> and a commitment to customer privacy — transparency builds long-term trust; hiding facts backfires worse if a breach surfaces later.</div>
+    </div>
+
+    <p style="margin-top:18px;">Three long-term paths forward for cybersecurity infrastructure 🔧:</p>
+    <div class="options-row">
+      <div class="option-card">
+        <h4>🔄 replace Qdata</h4>
+        <p class="pros"><i class="fa-solid fa-plus"></i>state-of-the-art defenses, better public perception</p>
+        <p class="cons"><i class="fa-solid fa-minus"></i>high cost, slow migration, relationship disruption</p>
+      </div>
+      <div class="option-card">
+        <h4>🏗️ insource (build in-house)</h4>
+        <p class="pros"><i class="fa-solid fa-plus"></i>full control, faster fixes, cheaper long-run</p>
+        <p class="cons"><i class="fa-solid fa-minus"></i>big upfront investment, slow setup, constant upkeep</p>
+      </div>
+      <div class="option-card">
+        <h4>🤝 stay &amp; upgrade Qdata</h4>
+        <p class="pros"><i class="fa-solid fa-plus"></i>no switching cost, faster return to normal</p>
+        <p class="cons"><i class="fa-solid fa-minus"></i>Qdata may not actually be capable of the upgrade</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="takeaways">
+    <div class="eyebrow">🌟 revision time</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:#e0a800;"><i class="fa-solid fa-star"></i></div>
+      <h2>key takeaways</h2>
+    </div>
+    <ul class="takeaways">
+      <li><i class="fa-solid fa-check"></i><span>cybersecurity must be a <mark class="p">strategic priority</mark>, especially for e-commerce.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>an unpracticed <mark class="b">BCP</mark> or <mark class="b">IRP</mark> is effectively useless during a real crisis.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>choosing a vendor on <mark class="o">convenience</mark> instead of competence (hi, Qdata) is a real vulnerability.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>cutting <mark class="y">log data</mark> for a UX metric can cripple your ability to investigate an attack.</span></li>
+      <li><i class="fa-solid fa-check"></i><span><mark class="g">transparent communication</mark> protects trust better than a cover story does.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>an attack stopping doesn't mean it's <em>over</em> — it demands forensic follow-up regardless.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>conflicting advice across departments shows the need for one unified <mark class="p">crisis framework</mark>.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>long-term resilience means real investment — outsourced or insourced, but not ignored.</span></li>
+    </ul>
+  </section>
+
+  <section class="card" id="conclusion">
+    <div class="eyebrow">🏁 wrap up</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--blue);"><i class="fa-solid fa-flag-checkered"></i></div>
+      <h2>conclusion</h2>
+    </div>
+    <p>iPremier's DDoS attack wasn't just a technical hiccup — it was a <mark class="p">business continuity, legal, and PR crisis</mark> all at once. Bob Turley's dilemma shows that the "right" call in a crisis rarely feels comfortable: shutting down hurts short-term, but protects long-term trust. 🧭</p>
+    <p>The real lesson: a cyberattack can be the <mark class="g">"eye-opener"</mark> that finally forces an organization to treat security as everyone's responsibility — not just an IT afterthought. 💡</p>
+  </section>
+
+</div>
+
+<footer>
+  made with 💗, highlighters &amp; way too many emojis — happy studying! 📚✨
+</footer>
+
+</body>
+</html>

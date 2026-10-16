@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foundation Notes Part 3 — Impact, the Titanic &amp; Paranoid Management</title>
+<link rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9A%A2%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --pink:#ff6fa5; --pink-light:#ffe3ef;
+    --purple:#8c6bff; --purple-light:#ece6ff;
+    --blue:#3aa0ff; --blue-light:#dff1ff;
+    --yellow:#ffd23f; --yellow-light:#fff6d9;
+    --green:#33c98f; --green-light:#dcfbf0;
+    --orange:#ff8c42; --orange-light:#ffe9d6;
+    --red:#ff5566; --red-light:#ffe1e4;
+    --ink:#3a2e4d; --paper:#fffdf9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Poppins', sans-serif; color:var(--ink);
+    background:
+      radial-gradient(circle at 10% 10%, #ffe9f3 0%, transparent 45%),
+      radial-gradient(circle at 90% 20%, #e3ecff 0%, transparent 45%),
+      radial-gradient(circle at 20% 90%, #fff3d6 0%, transparent 45%),
+      radial-gradient(circle at 85% 85%, #e0fff2 0%, transparent 45%),
+      #fffdf9;
+    background-attachment: fixed;
+    line-height:1.65; padding-bottom:60px;
+  }
+  h1,h2,h3,h4{ font-family:'Caveat', cursive; margin:0 0 .3em; }
+  .hero{
+    position:relative; padding:50px 24px 70px; text-align:center;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 50%, var(--red) 100%);
+    color:#fff; overflow:hidden; border-radius:0 0 40px 40px;
+    box-shadow: 0 10px 30px rgba(58,160,255,0.25);
+  }
+  .hero::before{
+    content:"🚢 🧊 💰 ⚖️ 📉 🧭 🛡️ 📋";
+    position:absolute; inset:0; font-size:34px;
+    display:flex; align-items:center; justify-content:space-around;
+    opacity:0.18; padding:0 10px; pointer-events:none;
+  }
+  .hero h1{ font-size:50px; margin:0; text-shadow: 3px 3px 0 rgba(0,0,0,0.15); position:relative; }
+  .hero .sub{ font-family:'Patrick Hand', cursive; font-size:20px; margin-top:10px; position:relative; opacity:.95; }
+  .tape{
+    display:inline-block; background:rgba(255,255,255,0.25); border:2px dashed rgba(255,255,255,0.6);
+    padding:6px 18px; border-radius:30px; font-family:'Patrick Hand',cursive; font-size:16px; margin-top:16px; position:relative;
+  }
+  .wrap{ max-width:880px; margin:0 auto; padding:0 20px; }
+
+  .toc{
+    background:var(--paper); border:3px dashed var(--purple); border-radius:24px;
+    margin:-40px auto 40px; padding:24px 26px; max-width:820px;
+    box-shadow: 8px 8px 0 var(--purple-light); position:relative; z-index:5;
+  }
+  .toc h2{ color:var(--purple); font-size:32px; display:flex; align-items:center; gap:10px; }
+  .toc-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px; margin-top:14px; }
+  .toc-grid a{
+    text-decoration:none; color:var(--ink); background:var(--purple-light); border-radius:14px;
+    padding:12px 14px; display:flex; align-items:center; gap:10px; font-weight:600; font-size:14.5px;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease; border:2px solid transparent;
+  }
+  .toc-grid a i{ width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:#fff; color:var(--purple); font-size:14px; flex:none; }
+  .toc-grid a:hover{ transform:translateY(-3px) rotate(-1deg); background:#fff; border-color:var(--purple); box-shadow:4px 4px 0 var(--purple); }
+
+  section.card{
+    background:var(--paper); border-radius:26px; padding:30px 30px 34px; margin:34px 0;
+    position:relative; box-shadow: 0 6px 0 rgba(0,0,0,0.05), 0 10px 25px rgba(140,107,255,0.08);
+    border:1px solid rgba(0,0,0,0.04);
+  }
+  section.card::before{
+    content:''; position:absolute; top:-14px; left:36px; width:70px; height:26px;
+    background:repeating-linear-gradient(45deg, rgba(255,210,63,.6), rgba(255,210,63,.6) 6px, rgba(255,210,63,.35) 6px, rgba(255,210,63,.35) 12px);
+    border-radius:4px; transform:rotate(-3deg); box-shadow:0 2px 4px rgba(0,0,0,0.08);
+  }
+  .sec-head{ display:flex; align-items:center; gap:14px; margin-bottom:6px; }
+  .sec-icon{ width:54px; height:54px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff; flex:none; box-shadow:3px 3px 0 rgba(0,0,0,0.08); }
+  section.card h2{ font-size:34px; margin:0; }
+  .eyebrow{ font-family:'Patrick Hand',cursive; font-size:14px; letter-spacing:1px; text-transform:uppercase; color:var(--pink); font-weight:700; margin-bottom:2px; }
+
+  /* ===== smaller, framed images ===== */
+  .pic{
+    display:block; margin:18px auto; max-width:340px; width:100%;
+    border-radius:16px; box-shadow:0 8px 18px rgba(0,0,0,0.15);
+    border:5px solid #fff; outline:2px solid rgba(0,0,0,0.05);
+  }
+  .caption{ text-align:center; font-family:'Patrick Hand',cursive; font-size:13.5px; color:#8a7fa3; margin-top:-10px; margin-bottom:14px; }
+
+  mark{ padding:1px 6px; border-radius:6px; font-weight:600; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+  mark.y{ background:linear-gradient(180deg, transparent 55%, var(--yellow) 55%); }
+  mark.p{ background:linear-gradient(180deg, transparent 55%, var(--pink-light) 55%); color:var(--pink); }
+  mark.g{ background:linear-gradient(180deg, transparent 55%, var(--green-light) 55%); color:#0d8a5f; }
+  mark.b{ background:linear-gradient(180deg, transparent 55%, var(--blue-light) 55%); color:#1465b3; }
+  mark.o{ background:linear-gradient(180deg, transparent 55%, var(--orange-light) 55%); color:#c9600e; }
+
+  .callout{ display:flex; gap:14px; align-items:flex-start; border-radius:16px; padding:16px 18px; margin:18px 0; font-size:15px; }
+  .callout i{ font-size:20px; margin-top:2px; }
+  .callout.warn{ background:var(--red-light); color:#a3253a; }
+  .callout.tip{ background:var(--green-light); color:#0d8a5f; }
+  .callout.fact{ background:var(--blue-light); color:#1465b3; }
+
+  /* ===== original table ===== */
+  .orig-table-wrap{ overflow-x:auto; margin:18px 0; border-radius:16px; border:2px solid var(--purple-light); }
+  table.orig{ width:100%; border-collapse:collapse; font-size:13.5px; background:#fff; }
+  table.orig th{ background:var(--purple); color:#fff; font-family:'Patrick Hand',cursive; font-size:16px; text-align:left; padding:10px 14px; }
+  table.orig td{ padding:10px 14px; vertical-align:top; border-top:1px solid var(--purple-light); }
+  table.orig tr:nth-child(even) td{ background:#faf8ff; }
+  table.orig td strong code{ background:var(--pink-light); color:var(--pink); padding:2px 6px; border-radius:6px; font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px; }
+
+  .glossary{ display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:16px; margin-top:18px; }
+  .term-card{ border-radius:18px; padding:16px 18px; position:relative; overflow:hidden; color:var(--ink); border:2px solid rgba(0,0,0,0.05); }
+  .term-card .badge{
+    display:inline-flex; align-items:center; gap:6px; font-family:'Patrick Hand',cursive; font-weight:700; font-size:16px;
+    padding:5px 14px; border-radius:30px; color:#fff; margin-bottom:8px;
+  }
+  .term-card p{ margin:0; font-size:13.5px; color:#5b4f74; }
+  .term-card .sig{ margin-top:8px; font-size:12.5px; font-style:italic; color:#8a7fa3; }
+
+  .split{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0; }
+  .split-col{ border-radius:18px; padding:18px; }
+  .split-col h4{ font-size:22px; margin:0 0 8px; display:flex; align-items:center; gap:8px; }
+  .split-col ul{ margin:0; padding-left:20px; font-size:13.5px; }
+  .split-col li{ margin-bottom:6px; }
+  .split-t{ background:var(--blue-light); }
+  .split-i{ background:var(--pink-light); }
+  @media (max-width:600px){ .split{ grid-template-columns:1fr; } }
+
+  .money-bar{ display:flex; height:44px; border-radius:12px; overflow:hidden; margin:16px 0 10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+  .money-seg{ display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Patrick Hand',cursive; font-size:13px; font-weight:700; }
+  .money-legend{ display:flex; flex-wrap:wrap; gap:10px; font-size:12.5px; font-family:'Patrick Hand',cursive; }
+  .money-legend span{ display:flex; align-items:center; gap:5px; }
+  .dot{ width:12px; height:12px; border-radius:4px; display:inline-block; }
+
+  .timeline{ position:relative; margin:24px 0; padding-left:28px; border-left:3px dashed var(--red); }
+  .t-item{ position:relative; margin-bottom:20px; }
+  .t-item::before{
+    content:''; position:absolute; left:-35px; top:2px; width:14px; height:14px; border-radius:50%;
+    background:var(--red); border:3px solid #fff; box-shadow:0 0 0 2px var(--red);
+  }
+  .t-item h4{ font-size:19px; margin:0 0 2px; color:var(--red); }
+  .t-item p{ margin:0; font-size:14px; }
+
+  .stat-row{ display:flex; flex-wrap:wrap; gap:12px; margin:18px 0; }
+  .stat-chip{ background:#fff; border:2px solid var(--purple-light); border-radius:14px; padding:10px 16px; text-align:center; min-width:120px; }
+  .stat-chip .num{ font-family:'Caveat',cursive; font-size:28px; font-weight:700; color:var(--purple); display:block; }
+  .stat-chip .lbl{ font-size:11.5px; color:#8a7fa3; }
+
+  .positions{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:16px; margin:18px 0; }
+  .position-card{ border-radius:18px; padding:18px; border:2px solid; }
+  .position-card h4{ font-size:21px; margin:0 0 6px; }
+  .position-card p{ font-size:13.5px; margin:0; }
+
+  .takeaways{ list-style:none; padding:0; margin:16px 0 0; display:grid; gap:10px; }
+  .takeaways li{ display:flex; gap:12px; align-items:flex-start; background:var(--yellow-light); border-radius:14px; padding:12px 16px; font-size:14.5px; border-left:5px solid var(--yellow); }
+  .takeaways li i{ color:#e0a800; margin-top:2px; }
+  .takeaways li > span{ flex:1; min-width:0; }
+
+  footer{ text-align:center; margin-top:40px; font-family:'Patrick Hand',cursive; color:#8a7fa3; font-size:16px; }
+  ::selection{ background:var(--pink); color:#fff; }
+
+  @media (max-width:600px){
+    .hero h1{ font-size:32px; }
+    section.card{ padding:22px 18px 26px; }
+    section.card h2{ font-size:26px; }
+    table.orig{ font-size:12px; }
+    .pic{ max-width:260px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🚢 Foundation — Part 3</h1>
+  <div class="sub">✨ measuring the damage, the Titanic's warning, and a paranoid mindset for managers ✨</div>
+  <div class="tape"><i class="fa-solid fa-graduation-cap"></i>&nbsp; class notes • made pretty • made memorable</div>
+</div>
+
+<div class="wrap">
+
+  <nav class="toc">
+    <h2><i class="fa-solid fa-map-signs"></i> table of contents</h2>
+    <div class="toc-grid">
+      <a href="#intro"><i class="fa-solid fa-gauge-high"></i> introduction</a>
+      <a href="#concepts"><i class="fa-solid fa-table-list"></i> core concepts</a>
+      <a href="#impact"><i class="fa-solid fa-scale-balanced"></i> 1. assessing the impact</a>
+      <a href="#target"><i class="fa-solid fa-cart-shopping"></i> 2. the Target case study</a>
+      <a href="#titanic"><i class="fa-solid fa-ship"></i> 3. leadership, attitude &amp; safety</a>
+      <a href="#lessons"><i class="fa-solid fa-lightbulb"></i> 4. lessons &amp; implications</a>
+      <a href="#takeaways"><i class="fa-solid fa-star"></i> key takeaways</a>
+      <a href="#conclusion"><i class="fa-solid fa-flag-checkered"></i> conclusion</a>
+    </div>
+  </nav>
+
+  <section class="card" id="intro">
+    <div class="eyebrow">💭 warm up</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--blue);"><i class="fa-solid fa-gauge-high"></i></div>
+      <h2>introduction</h2>
+    </div>
+    <p>Even with heavy investment in cybersecurity infrastructure, breaches still happen 😬. This session goes beyond the tech to explore <mark class="p">tangible financial losses</mark>, the <mark class="y">erosion of trust</mark>, and what it all means for governance and regulation.</p>
+    <p>Our guide: the <mark class="o">2013 Target data breach</mark> 🛒 — proof that cybersecurity is a mix of technology, process, <em>and</em> human factors, and a case rich enough to teach us how to actually <mark class="b">quantify</mark> loss — direct and indirect.</p>
+  </section>
+
+  <section class="card" id="concepts">
+    <div class="eyebrow">📖 vocab check</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--purple);"><i class="fa-solid fa-table-list"></i></div>
+      <h2>core concepts</h2>
+    </div>
+    <p>Here's the original glossary table, kept close to the source 📋:</p>
+    <div class="orig-table-wrap">
+      <table class="orig">
+        <thead><tr><th>Term</th><th>Definition</th><th>Significance</th></tr></thead>
+        <tbody>
+          <tr><td><strong><code>Tangible Impact</code></strong></td><td>Measurable financial losses directly attributable to a cyber incident, such as legal settlements, fines, and direct costs of remediation.</td><td>These are quantifiable costs that directly affect a company's bottom line and can be used to assess immediate financial damage.</td></tr>
+          <tr><td><strong><code>Intangible Impact</code></strong></td><td>Non-monetary consequences of a cyber incident, including damage to reputation, loss of customer trust, and decreased goodwill.</td><td>These impacts, though harder to quantify, can have long-term detrimental effects on market share, brand value, and future business opportunities.</td></tr>
+          <tr><td><strong><code>Goodwill Loss</code></strong></td><td>A significant intangible impact where a company's positive reputation and customer loyalty diminish due to negative events like a data breach.</td><td>Crucial in competitive markets, as customers may switch to competitors, leading to sustained revenue loss and reduced market standing.</td></tr>
+          <tr><td><strong><code>Techno-Managerial Failure</code></strong></td><td>A failure that arises from a combination of technical vulnerabilities and inadequate management processes or oversight.</td><td>Highlights that even advanced technology can be compromised if managerial decisions or processes are flawed, emphasizing the human element in security.</td></tr>
+          <tr><td><strong><code>RAM Scrapers</code></strong></td><td>Malicious software designed to extract sensitive data, such as credit card numbers, directly from a computer's active memory (RAM) at the point of sale.</td><td>Represents a specific technical exploit that bypasses traditional encryption methods, demonstrating the evolving sophistication of cyber threats.</td></tr>
+          <tr><td><strong><code>Paranoid Mindset</code></strong></td><td>A management philosophy advocating for constant vigilance, skepticism, and proactive identification of potential risks and threats, even when things appear calm.</td><td>Essential for cybersecurity, as it encourages managers to anticipate problems and avoid complacency, preventing incidents like the Titanic disaster.</td></tr>
+          <tr><td><strong><code>Watershed Moment</code></strong></td><td>A critical turning point or event that significantly changes the course of development or policy in a particular area.</td><td>The Target breach served as one for cybersecurity regulation, prompting governments and industries to rethink existing policies and frameworks.</td></tr>
+          <tr><td><strong><code>Administrative Failure</code></strong></td><td>A breakdown in organizational processes, policies, or human oversight that leads to security vulnerabilities or compromises.</td><td>Underscores that even with robust technical security, human error or negligence in management can render investments ineffective.</td></tr>
+          <tr><td><strong><code>Risk Management</code></strong></td><td>The systematic process of identifying, assessing, and controlling threats to an organization's capital and earnings.</td><td>In cybersecurity, it involves making informed decisions about investing in security measures versus accepting potential breach costs and fines.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="margin-top:22px;">✨ ...and here's my colorful cheat-sheet version of the same terms, for faster revision:</p>
+    <div class="glossary">
+      <div class="term-card" style="background:var(--blue-light);">
+        <span class="badge" style="background:var(--blue);"><i class="fa-solid fa-coins"></i> tangible impact</span>
+        <p>measurable $ losses — settlements, fines, remediation costs.</p>
+      </div>
+      <div class="term-card" style="background:var(--pink-light);">
+        <span class="badge" style="background:var(--pink);"><i class="fa-solid fa-heart-crack"></i> intangible impact</span>
+        <p>non-monetary damage — reputation, trust, goodwill.</p>
+      </div>
+      <div class="term-card" style="background:var(--green-light);">
+        <span class="badge" style="background:var(--green);"><i class="fa-solid fa-handshake-slash"></i> goodwill loss</span>
+        <p>loyal customers walk away — straight to a competitor.</p>
+      </div>
+      <div class="term-card" style="background:var(--orange-light);">
+        <span class="badge" style="background:var(--orange);"><i class="fa-solid fa-sitemap"></i> techno-managerial failure</span>
+        <p>tech gaps + management gaps, combined = disaster.</p>
+      </div>
+      <div class="term-card" style="background:var(--yellow-light);">
+        <span class="badge" style="background:#e0a800;"><i class="fa-solid fa-memory"></i> RAM scrapers</span>
+        <p>malware that grabs card data straight from POS memory.</p>
+      </div>
+      <div class="term-card" style="background:var(--red-light);">
+        <span class="badge" style="background:var(--red);"><i class="fa-solid fa-brain"></i> paranoid mindset</span>
+        <p>stay skeptical, even when everything looks calm.</p>
+      </div>
+      <div class="term-card" style="background:var(--purple-light);">
+        <span class="badge" style="background:var(--purple);"><i class="fa-solid fa-scale-unbalanced"></i> watershed moment</span>
+        <p>a turning point that rewrites the rulebook.</p>
+      </div>
+      <div class="term-card" style="background:var(--blue-light);">
+        <span class="badge" style="background:var(--blue);"><i class="fa-solid fa-triangle-exclamation"></i> administrative failure</span>
+        <p>process/oversight breakdowns — not a tech problem at all.</p>
+      </div>
+      <div class="term-card" style="background:var(--green-light);">
+        <span class="badge" style="background:var(--green);"><i class="fa-solid fa-chess-board"></i> risk management</span>
+        <p>deciding: invest in security, or budget for the breach?</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="impact">
+    <div class="eyebrow">01 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--blue);"><i class="fa-solid fa-scale-balanced"></i></div>
+      <h2>assessing the impact of cyber incidents</h2>
+    </div>
+    <p>Total net financial loss for Target: <mark class="b">~$100 million USD</mark> 💰. But that number is only half the story.</p>
+
+    <div class="split">
+      <div class="split-col split-t">
+        <h4>💰 tangible</h4>
+        <ul>
+          <li><mark class="b">legal settlements &amp; fines</mark> — customers, banks, credit card companies</li>
+          <li>$90M insurance-funded payout</li>
+          <li>$20M settlement with payment providers (Visa)</li>
+          <li>operational costs: incident response, forensics, customer notification, credit monitoring</li>
+          <li><mark class="b">profit fell 46%</mark> during the 2013 holiday period</li>
+        </ul>
+      </div>
+      <div class="split-col split-i">
+        <h4>💔 intangible</h4>
+        <ul>
+          <li>loss of <mark class="p">customer trust</mark> &amp; reputation</li>
+          <li><mark class="p">goodwill loss</mark> — competitive retail means easy switching (hi, Walmart 🛒)</li>
+          <li><mark class="p">opportunity cost</mark> of lost future business</li>
+          <li>shaken <mark class="p">investor &amp; lender</mark> sentiment</li>
+          <li><mark class="p">government policy rethink</mark> — even repaying customers whose data wasn't "damaged"</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>Where the $100M actually went 🧾:</p>
+    <div class="money-bar">
+      <div class="money-seg" style="background:var(--blue); width:20%;">banks $20M</div>
+      <div class="money-seg" style="background:var(--pink); width:10%;">people $10M</div>
+      <div class="money-seg" style="background:var(--green); flex-basis:0; flex-grow:9;">insurance payout $90M</div>
+    </div>
+    <div class="money-legend">
+      <span><i class="dot" style="background:var(--blue);"></i> banks / payment providers ≈ $20M</span>
+      <span><i class="dot" style="background:var(--pink);"></i> individuals ≈ $10M</span>
+      <span><i class="dot" style="background:var(--green);"></i> insurance-funded payout ≈ $90M</span>
+    </div>
+
+    <img class="pic" src="https://commons.wikimedia.org/wiki/Special:FilePath/3D%20Judges%20Gavel.jpg?width=500" alt="A judge's gavel representing courtroom settlements">
+    <div class="caption">📸 individuals, banks &amp; credit card companies all sued over the breach</div>
+
+    <div class="callout warn">
+      <i class="fa-solid fa-piggy-bank"></i>
+      <div>Target had to repay <mark class="o">customers whose data was breached but never actually misused</mark> — pushing governments to rethink how "damage" is even defined.</div>
+    </div>
+  </section>
+
+  <section class="card" id="target">
+    <div class="eyebrow">02 · case study</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--orange);"><i class="fa-solid fa-cart-shopping"></i></div>
+      <h2>the Target data breach: a case study</h2>
+    </div>
+    <div class="stat-row">
+      <div class="stat-chip"><span class="num">2013</span><span class="lbl">holiday season</span></div>
+      <div class="stat-chip"><span class="num">1,797</span><span class="lbl">US stores</span></div>
+      <div class="stat-chip"><span class="num">$1.6M</span><span class="lbl">malware tool, 6mo prior</span></div>
+      <div class="stat-chip"><span class="num">90+</span><span class="lbl">lawsuits filed</span></div>
+      <div class="stat-chip"><span class="num">−46%</span><span class="lbl">holiday profit drop</span></div>
+    </div>
+    <p>Target wasn't careless 🧐 — <mark class="o">CIA-grade security systems</mark>, multiple protection layers, periodic audits, external validation, benchmarking, full compliance with credit card industry standards. And still — breached.</p>
+
+    <div class="timeline">
+      <div class="t-item">
+        <h4>🔌 vendor access exploitation</h4>
+        <p>Hackers entered via a <mark class="o">third-party vendor</mark> whose access wasn't correctly defined or restricted.</p>
+      </div>
+      <div class="t-item">
+        <h4>🕸️ network segmentation failure</h4>
+        <p>No proper segmentation meant third-party access reached all the way to the <mark class="p">POS system</mark> — a major vulnerability.</p>
+      </div>
+      <div class="t-item">
+        <h4>🦠 malware deployment</h4>
+        <p>Hackers uploaded <mark class="g">"RAM scrapers"</mark> — malware built to steal card data directly from POS active memory, bypassing encryption entirely.</p>
+      </div>
+      <div class="t-item">
+        <h4>🔕 administrative oversight</h4>
+        <p>The malware reporting system was allegedly <mark class="y">switched off</mark> — a breakdown in internal process, not technology.</p>
+      </div>
+    </div>
+
+    <img class="pic" src="https://commons.wikimedia.org/wiki/Special:FilePath/Credit-cards.jpg?width=500" alt="Two credit cards">
+    <div class="caption">📸 exactly the kind of data RAM scrapers were built to steal, straight from POS memory</div>
+  </section>
+
+  <section class="card" id="titanic">
+    <div class="eyebrow">03 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--red);"><i class="fa-solid fa-ship"></i></div>
+      <h2>leadership, attitude &amp; safety in cyber security</h2>
+    </div>
+    <img class="pic" src="https://commons.wikimedia.org/wiki/Special:FilePath/RMS%20Titanic%202.jpg?width=500" alt="The RMS Titanic ship">
+    <div class="caption">📸 the RMS Titanic — a century-old lesson in ignored warnings</div>
+    <p>A captain's real job isn't just A-to-B — it's getting there <mark class="b">safely</mark>. Same goes for cybersecurity leadership 🧭.</p>
+    <p><strong>the Titanic analogy:</strong> Captain Smith ignored iceberg warnings — the sea was calm, so <mark class="y">"everything looked fine"</mark> — leading to catastrophe. In the Target case, allegedly switching off the malware reporting system was the same kind of decision: <mark class="o">compromising safety despite a warning system in place</mark>.</p>
+    <img class="pic" src="https://commons.wikimedia.org/wiki/Special:FilePath/Iceberg.jpg?width=500" alt="A large iceberg floating in the ocean">
+    <div class="caption">📸 calm on the surface, danger underneath — much like a system that "looks" secure</div>
+    <p><strong>ignoring warnings:</strong> whether maritime or digital, safety warnings must never be ignored. Complacency + overconfidence = disaster. 🧊</p>
+    <p><strong>the "paranoid mindset":</strong> Andrew Grove's <mark class="p">"Only The Paranoid Survive"</mark> is required reading here 📚 — constant doubt, constant vigilance, worrying about plants, people, market. It sounds negative, but it's really about refusing to believe "everything is fine" by default.</p>
+    <div class="callout fact">
+      <i class="fa-solid fa-plane"></i>
+      <div><strong>safety protocols:</strong> flying is statistically the safest transport mode — precisely because of extremely strict, non-negotiable protocols. Bypass them (intentionally or not), and disaster follows. ✈️</div>
+    </div>
+  </section>
+
+  <section class="card" id="lessons">
+    <div class="eyebrow">04 · detailed analysis</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--green);"><i class="fa-solid fa-lightbulb"></i></div>
+      <h2>key lessons &amp; managerial implications</h2>
+    </div>
+    <p>🧑‍💻 <strong>employees can circumvent security</strong> — even CIA-grade tech falls if managerial processes or human behavior aren't foolproof. <mark class="o">Administrative failure</mark> can undo it all.</p>
+    <p>⚖️ <strong>watershed moment for regulation</strong> — Target exposed the US's lack of comprehensive cybersecurity law, especially around breach reporting, redressal, and accountability, pushing for frameworks closer to the <mark class="b">EU's</mark>.</p>
+
+    <p style="margin-top:16px;">Two controversial management stances came out of the discussion 🤔:</p>
+    <div class="positions">
+      <div class="position-card" style="background:var(--red-light); border-color:var(--red);">
+        <h4>🙈 "bare minimum" strategy</h4>
+        <p>Invest as little as possible, treat fines/breach costs as an accepted business expense — <em>as long as they don't threaten bankruptcy</em>. Raises real ethical &amp; regulatory questions.</p>
+      </div>
+      <div class="position-card" style="background:var(--green-light); border-color:var(--green);">
+        <h4>📢 "invest &amp; signal" strategy</h4>
+        <p>Heavy investment doubles as a <mark class="g">market signal</mark> — "your data is safe here" — a competitive advantage, and pressure on rivals to match it.</p>
+      </div>
+    </div>
+
+    <img class="pic" src="https://commons.wikimedia.org/wiki/Special:FilePath/Stack%20of%20100%20dollar%20bills.jpg?width=500" alt="A stack of 100 dollar bills">
+    <div class="caption">📸 the $100 million question — bare minimum, or invest to signal trust?</div>
+
+    <p>🎯 <strong>risk management options</strong> — accept, mitigate, or transfer risk; each choice comes with consequences, to be explored further in dedicated risk management sessions.</p>
+  </section>
+
+  <section class="card" id="takeaways">
+    <div class="eyebrow">🌟 revision time</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:#e0a800;"><i class="fa-solid fa-star"></i></div>
+      <h2>key takeaways</h2>
+    </div>
+    <ul class="takeaways">
+      <li><i class="fa-solid fa-check"></i><span>cyber incidents cost both <mark class="b">tangible</mark> (financial/legal) and <mark class="p">intangible</mark> (reputation/trust/goodwill) — and intangible costs often last longer.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>tech investment alone isn't enough — <mark class="o">administrative failures</mark> can erase it entirely.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>Target proved the importance of <mark class="g">network segmentation</mark> and tightly-scoped <mark class="g">vendor access</mark>.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>a <mark class="y">techno-managerial failure</mark> = technical gaps exploited because of management breakdowns.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>complacency + ignored warnings (the <mark class="p">Titanic analogy</mark>) is a dangerous cybersecurity attitude.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>a <mark class="p">paranoid mindset</mark> (Andrew Grove) is essential — assume nothing is fine by default.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>major breaches can be <mark class="g">watershed moments</mark> — reshaping policy &amp; regulation.</span></li>
+      <li><i class="fa-solid fa-check"></i><span>"bare minimum" vs. "invest to signal" is a real ethical &amp; strategic trade-off companies must weigh.</span></li>
+    </ul>
+  </section>
+
+  <section class="card" id="conclusion">
+    <div class="eyebrow">🏁 wrap up</div>
+    <div class="sec-head">
+      <div class="sec-icon" style="background:var(--blue);"><i class="fa-solid fa-flag-checkered"></i></div>
+      <h2>conclusion</h2>
+    </div>
+    <p>The Target breach is a foundational case study: effective cybersecurity is <mark class="b">holistic</mark>, needing cutting-edge tech <em>and</em> robust managerial process <em>and</em> a culture of vigilance 🧩.</p>
+    <p>From immediate financial loss to long-term reputational damage and a re-evaluation of national privacy regulation — one breach rippled everywhere. The goal going forward: adopt the <mark class="p">paranoid mindset</mark>, prioritize leadership and safety, and avoid becoming the next "Titanic" moment in cybersecurity. 🚢🧊</p>
+  </section>
+
+</div>
+
+<footer>
+  made with 💗, highlighters &amp; way too many emojis — happy studying! 📚✨
+</footer>
+
+</body>
+</html>
