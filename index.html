@@ -488,7 +488,10 @@
     .focus-view-container {
       display: none;
       height: 100%;
+      min-height: 100%;
       flex-direction: column;
+      background: var(--bg-surface);
+      overflow: hidden;
     }
 
     .focus-view-container.active {
@@ -504,23 +507,50 @@
       justify-content: space-between;
       gap: 16px;
       flex-shrink: 0;
+      z-index: 10;
     }
 
     .focus-title-block {
       display: flex;
       align-items: center;
       gap: 12px;
+      min-width: 0;
     }
 
     .focus-title-block h2 {
       font-size: 1.1rem;
       font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .focus-actions {
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .focus-lecture-select {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+      transition: var(--transition-fast);
+      max-width: 260px;
+    }
+
+    .focus-lecture-select:hover,
+    .focus-lecture-select:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 2px var(--accent-glow);
     }
 
     .pill-action-btn {
@@ -537,6 +567,7 @@
       text-decoration: none;
       cursor: pointer;
       transition: var(--transition-fast);
+      white-space: nowrap;
     }
 
     .pill-action-btn:hover {
@@ -545,12 +576,19 @@
     }
 
     .focus-iframe-wrapper {
-      flex: 1;
+      flex: 1 1 auto;
+      min-height: 0;
       position: relative;
       background: #ffffff;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
     }
 
     .focus-iframe-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       border: none;
@@ -565,6 +603,7 @@
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
+      z-index: 10;
     }
 
     .nav-step-btn {
@@ -940,6 +979,26 @@
       .continuous-view-container {
         padding: 20px 16px 60px;
       }
+      .focus-top-bar {
+        padding: 10px 14px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .focus-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .focus-lecture-select {
+        flex: 1;
+        max-width: none;
+      }
+      .focus-bottom-nav {
+        padding: 10px 14px;
+      }
+      .nav-step-btn {
+        padding: 6px 12px;
+        font-size: 0.78rem;
+      }
     }
   </style>
 </head>
@@ -1068,14 +1127,17 @@
             <div class="nav-item-icon" id="focus-icon"><i class="fa-solid fa-shield-halved"></i></div>
             <div>
               <div class="nav-item-meta">
-                <span class="nav-week-badge" id="focus-week-badge">Week 1</span>
-                <span class="nav-lecture-badge" id="focus-lecture-badge">Lecture 2</span>
+                <span class="nav-week-badge" id="focus-week-badge">Overview</span>
+                <span class="nav-lecture-badge" id="focus-lecture-badge">Summary Notes</span>
               </div>
-              <h2 id="focus-lecture-title">Loading Lecture...</h2>
+              <h2 id="focus-lecture-title">Cyber Threats Notes — Comprehensive Overview</h2>
             </div>
           </div>
           <div class="focus-actions">
-            <a href="#" target="_blank" class="pill-action-btn" id="focus-open-raw" title="Open this lecture in a standalone window">
+            <select id="focus-lecture-picker" class="focus-lecture-select" title="Jump directly to any lecture">
+              <!-- Dynamically populated -->
+            </select>
+            <a href="summary-notes.html" target="_blank" class="pill-action-btn" id="focus-open-raw" title="Open this lecture in a standalone window">
               <i class="fa-solid fa-arrow-up-right-from-square"></i> Standalone View
             </a>
           </div>
@@ -1089,7 +1151,7 @@
           <button class="nav-step-btn" id="btn-prev-lecture">
             <i class="fa-solid fa-chevron-left"></i> Previous Lecture
           </button>
-          <span style="font-size:0.82rem; color:var(--text-dim);" id="focus-progress-text">Lecture 1 of 13</span>
+          <span style="font-size:0.82rem; color:var(--text-dim);" id="focus-progress-text">Lecture 1 of 20</span>
           <button class="nav-step-btn" id="btn-next-lecture">
             Next Lecture <i class="fa-solid fa-chevron-right"></i>
           </button>
@@ -1399,7 +1461,7 @@
                 <i class="fa-solid fa-chevron-down toggle-icon" id="icon-${lec.id}"></i>
                 <span id="text-${lec.id}">Hide</span>
               </button>
-              <button class="pill-action-btn" onclick="selectLecture(${index}); setViewMode('focus');" title="Open in focus mode">
+              <button class="pill-action-btn" onclick="setViewMode('focus'); selectLecture(${index});" title="Open in focus mode">
                 <i class="fa-solid fa-expand"></i> Focus
               </button>
               <a href="${encodeURI(lec.file)}" target="_blank" class="pill-action-btn" title="Open original standalone HTML">
@@ -1509,7 +1571,19 @@
       document.getElementById('btn-prev-lecture').disabled = (index === 0);
       document.getElementById('btn-next-lecture').disabled = (index === lectures.length - 1);
 
+      // Sync Focus Mode lecture dropdown selector if present
+      const focusPicker = document.getElementById('focus-lecture-picker');
+      if (focusPicker) {
+        focusPicker.value = index;
+      }
+
+      // Update Focus iframe src
       focusFrameEl.src = encodeURI(lec.file);
+
+      // If in focus mode, guarantee scroll is pinned to top of viewport
+      if (currentViewMode === 'focus') {
+        mainContentArea.scrollTop = 0;
+      }
 
       // If in continuous mode, auto-expand if collapsed and scroll to the section
       if (currentViewMode === 'continuous') {
@@ -1537,12 +1611,34 @@
         btnFocus.classList.remove('active');
         continuousViewEl.classList.add('active');
         focusViewEl.classList.remove('active');
+        mainContentArea.style.overflowY = 'auto';
         document.getElementById('floating-toc').style.display = window.innerWidth >= 1540 ? 'block' : 'none';
+
+        // Seamlessly scroll to currently active lecture section in continuous feed
+        const activeSec = document.getElementById(`sec-${lectures[currentLectureIndex].id}`);
+        if (activeSec) {
+          if (activeSec.classList.contains('collapsed')) {
+            activeSec.classList.remove('collapsed');
+            const textEl = document.getElementById(`text-${lectures[currentLectureIndex].id}`);
+            if (textEl) textEl.textContent = 'Hide';
+            updateVisibleCount();
+          }
+          activeSec.scrollIntoView({ behavior: 'smooth' });
+        }
       } else {
         btnContinuous.classList.remove('active');
         btnFocus.classList.add('active');
         continuousViewEl.classList.remove('active');
         focusViewEl.classList.add('active');
+        mainContentArea.style.overflowY = 'hidden';
+
+        // Instantly reset scroll so Focus View isn't displaced off-screen
+        mainContentArea.style.scrollBehavior = 'auto';
+        mainContentArea.scrollTop = 0;
+        requestAnimationFrame(() => {
+          mainContentArea.style.scrollBehavior = '';
+        });
+
         document.getElementById('floating-toc').style.display = 'none';
         selectLecture(currentLectureIndex);
       }
@@ -1566,6 +1662,18 @@
       document.body.setAttribute('data-theme', next);
       themeToggleBtn.innerHTML = next === 'dark' ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun" style="color:#d946ef;"></i>';
     });
+
+    // Populate Focus Mode Lecture Selector Dropdown
+    function populateFocusPicker() {
+      const picker = document.getElementById('focus-lecture-picker');
+      if (!picker) return;
+      picker.innerHTML = lectures.map((lec, idx) => `
+        <option value="${idx}">${idx + 1}. ${lec.week} - ${lec.lecture}</option>
+      `).join('');
+      picker.addEventListener('change', (e) => {
+        selectLecture(parseInt(e.target.value, 10));
+      });
+    }
 
     // Print Button
     printBtn.addEventListener('click', () => {
@@ -1608,7 +1716,7 @@
         searchResultsBox.innerHTML = results.map(r => {
           const idx = lectures.findIndex(l => l.id === r.id);
           return `
-            <div class="search-result-item" onclick="selectLecture(${idx}); setViewMode('focus'); document.getElementById('search-results-box').style.display='none';">
+            <div class="search-result-item" onclick="setViewMode('focus'); selectLecture(${idx}); document.getElementById('search-results-box').style.display='none';">
               <div>
                 <div class="search-result-title">${r.title}</div>
                 <div style="font-size:0.75rem; color:var(--text-dim);">${r.summary.slice(0, 60)}...</div>
@@ -1669,6 +1777,7 @@
     // Initialize
     renderSidebar();
     renderContinuousFeed();
+    populateFocusPicker();
 
     // Check URL Hash for direct lecture linking
     const initialHash = window.location.hash.replace('#', '');
