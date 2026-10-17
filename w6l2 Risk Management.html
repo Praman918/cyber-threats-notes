@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>W6 L2 · Risk Management Part 02</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1f4d;--blue:#2563ff;--sky:#7cc7ff;--ice:#e8f3ff;--pale:#f4f9ff;--yel:#ffd94a;--mint:#5eead4;--pink:#ff8fb1;--w:#fff;--b:3px solid var(--ink);--sh:6px 6px 0 var(--ink)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--pale);line-height:1.7;font-size:17px;
+background-image:radial-gradient(#b9d8ff 1.6px,transparent 1.6px);background-size:26px 26px;animation:dots 12s linear infinite}
+@keyframes dots{to{background-position:26px 26px}}
+h1,h2,h3,h4,h5{font-family:'Bricolage Grotesque',sans-serif;line-height:1.15}
+#bar{position:fixed;top:0;left:0;height:8px;width:0;background:repeating-linear-gradient(45deg,var(--blue) 0 12px,var(--sky) 12px 24px);background-size:34px 34px;animation:stripe 1s linear infinite;z-index:99;border-bottom:2px solid var(--ink)}
+@keyframes stripe{to{background-position:34px 0}}
+#glow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(rgba(37,99,255,.18),transparent 65%);pointer-events:none;transform:translate(-50%,-50%);z-index:0}
+nav.pill{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:90;display:flex;gap:4px;background:var(--w);border:var(--b);border-radius:40px;padding:5px;box-shadow:4px 4px 0 var(--ink);max-width:96vw;overflow-x:auto}
+nav.pill a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:7px 14px;border-radius:30px;white-space:nowrap;transition:.3s}
+nav.pill a:hover{background:var(--ice)}nav.pill a.on{background:var(--blue);color:#fff;transform:scale(1.06)}
+.wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 18px 80px}
+
+/* hero */
+.hero{position:relative;margin-top:90px;border:var(--b);border-radius:34px;background:var(--blue);color:#fff;padding:60px 44px;box-shadow:10px 10px 0 var(--ink);overflow:hidden;animation:drop .9s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes drop{from{transform:translateY(-60px) rotate(-2deg);opacity:0}}
+#net{position:absolute;inset:0;width:100%;height:100%}
+.hero>*:not(canvas){position:relative}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;max-width:720px}
+.type::after{content:"|";animation:blink .8s steps(1) infinite}@keyframes blink{50%{opacity:0}}
+.hero p{margin-top:14px;max-width:560px;font-size:1.1rem}
+.sticker{position:absolute;font-size:46px;animation:wob 4s ease-in-out infinite;filter:drop-shadow(3px 3px 0 var(--ink));cursor:grab}
+@keyframes wob{50%{transform:translateY(-16px) rotate(12deg)}}
+.tag{display:inline-block;background:var(--yel);color:var(--ink);font-weight:700;border:var(--b);border-radius:30px;padding:3px 16px;margin-bottom:16px;transform:rotate(-3deg);animation:tilt 3s ease-in-out infinite}
+@keyframes tilt{50%{transform:rotate(3deg) scale(1.06)}}
+
+/* sections */
+section{margin:60px 0}
+.head{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.head .num{background:var(--yel);border:var(--b);box-shadow:4px 4px 0 var(--ink);width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:24px;font-family:'Bricolage Grotesque';font-weight:800;transition:.4s}
+.head:hover .num{transform:rotate(-12deg) scale(1.15)}
+.head h2{font-size:clamp(1.6rem,4vw,2.3rem)}
+.box{background:var(--w);border:var(--b);border-radius:24px;padding:26px;box-shadow:var(--sh);transition:.35s}
+.box+.box{margin-top:22px}
+.hid{opacity:0;transform:translateY(40px) scale(.97);transition:opacity .7s,transform .7s cubic-bezier(.2,1.3,.4,1)}.hid.in{opacity:1;transform:none}
+p{margin-bottom:13px}
+mark{background:linear-gradient(transparent 50%,var(--yel) 50%);padding:0 2px;color:inherit;background-size:0 100%;background-repeat:no-repeat;transition:background-size 1s .3s}
+.in mark,mark.in{background-size:100% 100%}
+mark.b{background-image:linear-gradient(transparent 50%,var(--sky) 50%)}mark.m{background-image:linear-gradient(transparent 50%,var(--mint) 50%)}
+mark.p{background-image:linear-gradient(transparent 50%,var(--pink) 50%)}
+.bd{display:inline-block;border:2px solid var(--ink);background:var(--sky);border-radius:30px;padding:0 12px;font-weight:700;font-size:.9em;box-shadow:2px 2px 0 var(--ink);animation:jig 3s ease-in-out infinite;white-space:nowrap}
+.bd.y{background:var(--yel)}.bd.m{background:var(--mint)}.bd.p{background:var(--pink)}.bd:nth-of-type(2n){animation-delay:-1.4s}
+@keyframes jig{0%,90%,100%{transform:none}93%{transform:rotate(-4deg) scale(1.08)}96%{transform:rotate(4deg) scale(1.08)}}
+
+.photo{float:right;width:260px;margin:0 0 14px 22px;border:var(--b);border-radius:18px;background:#fff;padding:8px 8px 4px;box-shadow:var(--sh);transform:rotate(3deg);transition:.5s;text-align:center;font-size:13px;font-weight:700}
+.photo:hover{transform:rotate(-2deg) scale(1.07)}.photo img{width:100%;height:170px;object-fit:cover;border-radius:10px;display:block;margin-bottom:4px}
+.photo.l{float:left;margin:0 22px 14px 0;transform:rotate(-3deg)}
+@media(max-width:640px){.photo,.photo.l{float:none;margin:0 auto 16px}.hero{padding:40px 22px}}
+.clear{clear:both}
+
+/* flip cards */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.flip{height:250px;perspective:900px;cursor:pointer}
+.fi{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.3,1.4,.5,1);transform-style:preserve-3d}
+.flip.on .fi{transform:rotateY(180deg)}.flip:hover .fi{translate:0 -6px}
+.ff,.fb{position:absolute;inset:0;backface-visibility:hidden;border:var(--b);border-radius:20px;box-shadow:5px 5px 0 var(--ink);padding:16px;overflow:auto}
+.ff{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;font-family:'Bricolage Grotesque';font-weight:800;font-size:1.45rem}
+.ff i{font-size:34px}.ff small{font-family:'DM Sans';font-weight:500;font-size:12px;opacity:.7}
+.fb{transform:rotateY(180deg);background:#fff;font-size:13.5px;line-height:1.45}.fb b{display:block;font-size:11.5px;color:var(--blue);margin-top:8px}
+.fb::-webkit-scrollbar{width:4px}
+
+/* tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab{font:700 15px 'DM Sans';border:var(--b);background:#fff;border-radius:30px;padding:8px 18px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:.2s}
+.tab:hover{transform:translate(-2px,-2px)}.tab.on{background:var(--blue);color:#fff;box-shadow:none;transform:translate(3px,3px)}
+.pane{display:none;animation:swap .5s cubic-bezier(.2,1.3,.4,1)}.pane.on{display:block}
+@keyframes swap{from{opacity:0;transform:translateX(30px) scale(.96)}}
+.pane .big{font-size:48px;float:left;margin:0 16px 0 0;animation:wob 3s infinite}
+
+/* accordion */
+.acc{border:var(--b);border-radius:18px;background:#fff;margin-bottom:12px;box-shadow:4px 4px 0 var(--ink);overflow:hidden}
+.acc button{width:100%;text-align:left;font:700 1.05rem 'Bricolage Grotesque';background:none;border:0;padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;color:var(--ink)}
+.acc button i.k{width:36px;height:36px;border-radius:10px;border:2px solid var(--ink);display:grid;place-items:center;background:var(--sky)}
+.acc button i.ch{margin-left:auto;transition:.4s}.acc.on .ch{transform:rotate(180deg)}
+.acc .in2{max-height:0;overflow:hidden;transition:max-height .5s ease;padding:0 18px}.acc.on .in2{padding-bottom:14px}
+.acc:hover{background:var(--ice)}
+
+/* pyramid */
+.pyr{display:flex;flex-direction:column;align-items:center;gap:7px;margin:12px 0}
+.pyr button{font:700 1rem 'Bricolage Grotesque';color:var(--ink);border:var(--b);border-radius:14px;padding:12px;cursor:pointer;transition:.35s;box-shadow:3px 3px 0 var(--ink)}
+.pyr button:nth-child(1){width:42%;background:var(--yel)}.pyr button:nth-child(2){width:58%;background:var(--mint)}.pyr button:nth-child(3){width:74%;background:var(--sky)}.pyr button:nth-child(4){width:90%;background:var(--pink)}
+.pyr button:hover{transform:scale(1.07) rotate(-1deg)}.pyr button.on{outline:4px dashed var(--blue);outline-offset:3px}
+#pdesc{min-height:80px;text-align:center;background:var(--ice);border:2px dashed var(--blue);border-radius:16px;padding:14px;margin-top:6px}
+@media(max-width:600px){.pyr button{width:100%!important}}
+
+/* SETA */
+.seta{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px}
+.seta div{border:var(--b);border-radius:20px;padding:20px;text-align:center;box-shadow:var(--sh);transition:.4s}
+.seta div:hover{transform:translateY(-10px) rotate(-2deg)}.seta i{font-size:34px;display:block;margin-bottom:8px;animation:wob 3.5s infinite}
+.seta div:nth-child(1){background:#ffe98a}.seta div:nth-child(2){background:#a6f5e8}.seta div:nth-child(3){background:#ffc1d4}
+
+/* crown jewel diagram */
+.svgbox{background:var(--ink);border-radius:20px;padding:10px;border:var(--b);position:relative}
+.svgbox svg{width:100%;height:auto;display:block}
+.path{stroke:#ff6b8b;stroke-width:3;stroke-dasharray:10 8;fill:none;animation:march 1s linear infinite;transition:opacity .6s}
+@keyframes march{to{stroke-dashoffset:-36}}
+.cut .path{opacity:0}.cut .pk{display:none}.cut .safe{opacity:1}
+.safe{opacity:0;transition:opacity .8s}
+.jewel{animation:pulse 1.6s ease-in-out infinite;transform-origin:500px 150px}@keyframes pulse{50%{transform:scale(1.15)}}
+.btn{font:700 16px 'DM Sans';border:var(--b);background:var(--yel);border-radius:30px;padding:10px 22px;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:.2s;color:var(--ink)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:18px 0}
+.stat{background:var(--blue);color:#fff;border:var(--b);border-radius:20px;padding:18px;text-align:center;box-shadow:var(--sh)}
+.stat b{display:block;font:800 2.6rem 'Bricolage Grotesque';color:var(--yel)}
+
+/* stepper */
+.steps{display:flex;gap:8px;margin:12px 0}
+.steps span{flex:1;height:14px;border:2px solid var(--ink);border-radius:10px;background:#fff;transition:.5s}.steps span.on{background:var(--blue)}
+#stepCard{border:var(--b);border-radius:20px;padding:22px;background:var(--ice);min-height:130px;animation:swap .5s}
+
+/* takeaways */
+.take{list-style:none;display:grid;gap:12px;margin-top:14px}
+.take li{display:flex;gap:14px;border:var(--b);border-radius:16px;padding:12px 16px;cursor:pointer;background:#fff;box-shadow:4px 4px 0 var(--ink);transition:.3s;user-select:none}
+.take li:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--ink)}
+.take .ck{flex:none;width:30px;height:30px;border:var(--b);border-radius:9px;display:grid;place-items:center;color:transparent;transition:.4s}
+.take li.d{background:var(--ice);text-decoration:line-through;text-decoration-color:var(--blue)}.take li.d .ck{background:var(--blue);color:#fff;transform:rotate(360deg)}
+.meter{height:20px;border:var(--b);border-radius:20px;overflow:hidden;background:#fff;margin:8px 0}.meter div{height:100%;width:0;background:repeating-linear-gradient(45deg,var(--blue) 0 12px,var(--sky) 12px 24px);transition:width .6s cubic-bezier(.2,1.5,.4,1)}
+.conf{position:fixed;width:10px;height:14px;z-index:120;pointer-events:none;animation:fall 2.2s ease-in forwards}
+@keyframes fall{to{transform:translate(var(--x),105vh) rotate(720deg);opacity:.8}}
+.fin{background:var(--blue);color:#fff}.fin mark{color:var(--ink)}
+footer{text-align:center;font-weight:700;padding:30px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.hid{opacity:1;transform:none}}
+
+.slid{display:grid;grid-template-columns:150px 1fr 70px;gap:10px;align-items:center;margin:8px 0;font-weight:700}
+input[type=range]{width:100%;accent-color:var(--blue);height:8px}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.res{background:var(--ink);color:#fff;border-radius:20px;padding:18px;border:var(--b)}
+.res .row{display:flex;justify-content:space-between;border-bottom:1px dashed #4b64a0;padding:5px 0}.res b{color:var(--yel)}
+.res .final{font:800 2.6rem 'Bricolage Grotesque';color:var(--mint);text-align:center;transition:.3s}
+.res .final.pop{transform:scale(1.25)}
+.fm{background:var(--ice);border:2px dashed var(--blue);border-radius:14px;padding:10px 14px;font-family:monospace;font-size:14px;margin:10px 0;overflow-x:auto}
+.phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;counter-reset:ph}
+.ph{border:var(--b);border-radius:22px;padding:22px 18px 16px;box-shadow:var(--sh);position:relative;transition:.4s;background:#fff}
+.ph::before{counter-increment:ph;content:counter(ph);position:absolute;top:-18px;left:16px;width:38px;height:38px;border-radius:50%;background:var(--yel);border:var(--b);display:grid;place-items:center;font:800 1.1rem 'Bricolage Grotesque'}
+.ph:not(:last-child)::after{content:"\f061";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;right:-20px;top:45%;font-size:20px;color:var(--blue);animation:nud 1.2s infinite;z-index:2}
+@keyframes nud{50%{transform:translateX(6px)}}.ph:hover{transform:translateY(-8px) rotate(-1.5deg)}
+.ph:nth-child(1){background:#ffe98a}.ph:nth-child(2){background:#a6f5e8}.ph:nth-child(3){background:#ffc1d4}
+@media(max-width:700px){.ph::after{display:none!important}}
+.mx{display:grid;grid-template-columns:110px repeat(4,1fr);gap:6px;font-size:13px;font-weight:700;min-width:560px}
+.mx div{padding:10px 6px;text-align:center;border:2px solid var(--ink);border-radius:10px;background:#fff}
+.mx .h{background:var(--blue);color:#fff}.mx .c{cursor:pointer;transition:.3s;font-size:20px}.mx .c:hover{transform:scale(1.18) rotate(-4deg)}
+.mx .c[data-l="1"]{background:#c9f7ee}.mx .c[data-l="2"]{background:#ffe98a}.mx .c[data-l="3"]{background:#ffb3b3}
+.tl{position:relative;margin:10px 0 0 18px;border-left:5px dotted var(--blue);padding-left:26px}
+.tl .ev{position:relative;margin-bottom:20px;background:#fff;border:var(--b);border-radius:16px;padding:12px 16px;box-shadow:4px 4px 0 var(--ink);transition:.3s}
+.tl .ev:hover{transform:translateX(10px)}.tl .ev::before{content:attr(data-e);position:absolute;left:-52px;top:8px;width:40px;height:40px;border-radius:50%;background:var(--yel);border:var(--b);display:grid;place-items:center;font-size:18px;animation:jig 3s infinite}
+.pc{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.pc>div{border:var(--b);border-radius:20px;padding:18px;box-shadow:var(--sh)}.pc ul{list-style:none}.pc li{padding:7px 0 7px 30px;position:relative}
+.pc .pro{background:#c9f7ee}.pc .con{background:#ffd3de}.pc .pro li::before{content:"✅";position:absolute;left:0}.pc .con li::before{content:"⚠️";position:absolute;left:0}
+.pc li{transition:.3s}.pc li:hover{transform:translateX(8px)}
+.path3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.path3 .card{border:var(--b);border-radius:18px;padding:16px;background:#fff;box-shadow:4px 4px 0 var(--ink);text-align:center;transition:.4s}.path3 .card:hover{transform:translateY(-8px) rotate(2deg)}.path3 i{font-size:30px;display:block;margin-bottom:6px;color:var(--blue)}
+.scroll-x{overflow-x:auto;padding-bottom:6px}
+
+mark{background-size:100% 100%!important}
+.u{text-decoration:underline wavy var(--blue);text-decoration-thickness:2px;text-underline-offset:5px;font-weight:700}
+.u2{border-bottom:4px solid var(--pink);font-weight:700}
+.k{font-weight:800;color:var(--blue)}
+ul.n{list-style:none;margin:8px 0}
+ul.n>li{position:relative;padding:7px 10px 7px 38px;margin:5px 0;border-radius:12px;transition:.3s}
+ul.n>li::before{content:"\f058";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;left:10px;top:7px;color:var(--blue)}
+ul.n>li:hover{background:var(--ice);transform:translateX(6px)}
+ul.n ul{list-style:none;margin:4px 0 0}ul.n ul li{padding:3px 0 3px 22px;position:relative}ul.n ul li::before{content:"➜";position:absolute;left:0;color:var(--pink);font-weight:800}
+.tip{display:flex;gap:14px;background:var(--yel);border:var(--b);border-radius:18px;padding:14px 18px;box-shadow:4px 4px 0 var(--ink);margin:16px 0;font-weight:500}
+.tip .ti{font-size:30px;animation:wob 3s infinite}
+.tip.bl{background:#c8e1ff}.tip.pk{background:#ffc9da}.tip.mt{background:#b5f5e8}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:16px 0}
+.three>div{border:var(--b);border-radius:22px;padding:18px;box-shadow:var(--sh);transition:.4s;background:#fff}
+.three>div:hover{transform:translateY(-8px) rotate(-1.5deg)}
+.three .ic{font-size:40px;display:block;margin-bottom:4px;animation:wob 3.5s infinite}
+.three h4{font-size:1.3rem;margin-bottom:6px}.three small{display:block;margin-top:8px;font-weight:700}
+.en{height:12px;border:2px solid var(--ink);border-radius:10px;background:#fff;margin-top:4px;overflow:hidden}.en i{display:block;height:100%;background:var(--blue);width:0;transition:width 1.4s .4s}
+.in .en i{width:var(--w)}
+.gl{width:100%;border-collapse:separate;border-spacing:0 8px;min-width:620px;font-size:15px}
+.gl th{background:var(--ink);color:#fff;padding:10px 12px;text-align:left;font-family:'Bricolage Grotesque'}
+.gl th:first-child{border-radius:12px 0 0 12px}.gl th:last-child{border-radius:0 12px 12px 0}
+.gl td{padding:11px 12px;background:#fff;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);vertical-align:top;transition:.3s}
+.gl td:first-child{border-left:2px solid var(--ink);border-radius:12px 0 0 12px;font-weight:800;width:150px}.gl td:last-child{border-right:2px solid var(--ink);border-radius:0 12px 12px 0}
+.gl tr:hover td{background:var(--ice)}.gl tr:hover{transform:scale(1.01)}
+.gl td:first-child span{display:inline-block;padding:3px 12px;border-radius:30px;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.gl tr:nth-child(1) td:first-child span{background:#ffe98a}.gl tr:nth-child(2) td:first-child span{background:#a6f5e8}.gl tr:nth-child(3) td:first-child span{background:#ffc1d4}.gl tr:nth-child(4) td:first-child span{background:#b9dcff}.gl tr:nth-child(5) td:first-child span{background:#ffe98a}.gl tr:nth-child(6) td:first-child span{background:#a6f5e8}.gl tr:nth-child(7) td:first-child span{background:#ffc1d4}
+.scale{background:var(--ice);border:var(--b);border-radius:22px;padding:14px;text-align:center}
+.scale svg{width:100%;max-width:520px;height:auto}
+#beam{transition:transform .5s cubic-bezier(.3,1.6,.5,1);transform-origin:260px 90px}
+.lv{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.lv>div{border:var(--b);border-radius:20px;overflow:hidden;box-shadow:var(--sh);background:#fff;transition:.4s}.lv>div:hover{transform:translateY(-8px) rotate(1.5deg)}
+.lv img{width:100%;height:130px;object-fit:cover;display:block}.lv div div{padding:12px}.lv .ph0{height:130px;display:grid;place-items:center;font-size:54px;background:var(--sky)}
+.photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.photos figure{border:var(--b);border-radius:16px;background:#fff;padding:6px 6px 2px;box-shadow:4px 4px 0 var(--ink);text-align:center;font-size:12.5px;font-weight:700;transition:.4s}
+.photos figure:nth-child(odd){transform:rotate(-2deg)}.photos figure:nth-child(even){transform:rotate(2deg)}.photos figure:hover{transform:scale(1.08) rotate(0)}
+.photos img{width:100%;height:105px;object-fit:cover;border-radius:10px;display:block}
+.mm{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}
+.mm span{border:var(--b);border-radius:30px;padding:6px 16px;font-weight:700;background:#fff;box-shadow:3px 3px 0 var(--ink);transition:.3s}.mm span:hover{transform:translateY(-5px) rotate(-3deg);background:var(--yel)}
+
+.flip{height:360px}.fb{font-size:13.5px}.fb .one{background:var(--yel);border:2px solid var(--ink);border-radius:12px;padding:8px 10px;font-weight:700;font-size:14px;margin-bottom:6px}
+.fb b.l{display:block;font-size:11px;color:var(--blue);margin-top:8px;letter-spacing:.5px}
+.mm span{cursor:pointer}.mm span.on{background:var(--blue);color:#fff;transform:scale(1.08)}
+.stp .steps{margin:8px 0}.stp .card{border:var(--b);border-radius:20px;padding:20px;background:var(--ice);min-height:110px;animation:swap .5s}
+.stp .card h3{margin-bottom:6px}.stp .row{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+
+.acl{display:grid;grid-template-columns:110px repeat(3,1fr);gap:6px;min-width:520px;font-weight:700;font-size:14px}
+.acl div{padding:10px 6px;text-align:center;border:2px solid var(--ink);border-radius:10px;background:#fff}
+.acl .h{background:var(--blue);color:#fff}.acl .c{cursor:pointer;transition:.3s;letter-spacing:2px}.acl .c:hover{transform:scale(1.12) rotate(-3deg)}
+.acl .c[data-l="0"]{background:#ffd3de}.acl .c[data-l="1"]{background:#fff3b0}.acl .c[data-l="2"]{background:#c9f7ee}.acl .c[data-l="3"]{background:#9be8ff}
+.fw{background:var(--ink);border-radius:20px;border:var(--b);padding:8px}.fw svg{width:100%;height:auto;display:block}
+.wall{transition:.5s}
+.vs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:14px}
+.vs>div{border:var(--b);border-radius:20px;padding:16px;box-shadow:var(--sh)}
+.chips2{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.chips2 span{border:2px solid var(--ink);border-radius:30px;padding:4px 14px;font-weight:700;font-size:14px;background:#fff;box-shadow:2px 2px 0 var(--ink);cursor:default;transition:.3s}
+.chips2 span:hover{transform:translateY(-4px) rotate(-3deg);background:var(--yel)}
+
+.banner{position:relative;height:210px;border:var(--b);border-radius:24px;overflow:hidden;box-shadow:var(--sh);margin:0 0 20px;transition:.5s}
+.banner:hover{transform:rotate(-1deg) scale(1.02)}.banner img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1s}.banner:hover img{transform:scale(1.1)}
+.banner figcaption{position:absolute;left:14px;bottom:14px;background:var(--yel);border:var(--b);border-radius:30px;padding:3px 16px;font-weight:800;box-shadow:3px 3px 0 var(--ink);transform:rotate(-2deg)}
+.pnl{width:100%;height:100%;min-height:110px;display:grid;place-items:center;font-size:58px;background:linear-gradient(135deg,var(--sky),var(--blue));animation:wob 4s ease-in-out infinite}
+.photos img,.photos .pnl{height:150px!important;border-radius:10px}.photos figure{padding-bottom:4px}
+.photo img,.photo .pnl{height:190px!important;border-radius:10px}
+.lv img,.lv .pnl{height:150px!important;border-radius:0}
+
+.dom{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:16px 0}
+.dom div{width:112px;border:var(--b);border-radius:16px;padding:12px 6px;text-align:center;font-weight:700;font-size:13px;background:#fff;box-shadow:4px 4px 0 var(--ink);transition:.6s cubic-bezier(.5,1.8,.5,1);transform-origin:bottom left}
+.dom div i{display:block;font-size:28px;margin-bottom:4px;color:var(--blue)}
+.dom div.fall{transform:rotate(24deg) translateY(16px);background:#ffb3b3;box-shadow:none}.dom div.fall i{color:#c62828}
+.dom div.fall::after{content:" 💥"}
+.bars .r{display:grid;grid-template-columns:120px 1fr 50px;gap:10px;align-items:center;margin:8px 0;font-weight:700}
+.bars .t{height:22px;border:var(--b);border-radius:20px;background:#fff;overflow:hidden}.bars .t i{display:block;height:100%;width:0;transition:width .5s cubic-bezier(.3,1.5,.5,1);border-radius:20px}
+.shift{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin:12px 0}
+.shift div{border:var(--b);border-radius:18px;padding:12px 20px;font:800 1.2rem 'Bricolage Grotesque';box-shadow:4px 4px 0 var(--ink)}
+.shift .a{background:#ffd3de;text-decoration:line-through wavy var(--pink)}.shift .b{background:#c9f7ee;animation:tilt 3s infinite}.shift i{font-size:26px;color:var(--blue);animation:nud 1.2s infinite}
+.vs2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}.vs2>div{border:var(--b);border-radius:20px;padding:16px;box-shadow:var(--sh)}
+
+.cmp{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px;margin:14px 0}.cmp>div{border:var(--b);border-radius:22px;padding:18px;box-shadow:var(--sh);transition:.4s}.cmp>div:hover{transform:translateY(-8px) rotate(-1deg)}
+.lay label{display:flex;gap:12px;align-items:center;border:var(--b);border-radius:14px;padding:10px 14px;margin:8px 0;cursor:pointer;background:#fff;font-weight:700;transition:.3s;box-shadow:3px 3px 0 var(--ink)}
+.lay label:hover{transform:translateX(8px)}.lay input{width:20px;height:20px;accent-color:var(--blue)}
+.big-bar{height:38px;border:var(--b);border-radius:30px;background:#fff;overflow:hidden;margin:10px 0}.big-bar i{display:block;height:100%;background:linear-gradient(90deg,#ff8fb1,#ff6b8b);transition:width .7s cubic-bezier(.3,1.5,.5,1);display:flex;align-items:center;justify-content:flex-end;padding-right:12px;color:#fff;font-weight:800}
+.lad{display:flex;flex-direction:column;gap:6px;margin:8px 0}.lad div{border:2px solid var(--ink);border-radius:12px;padding:8px 14px;font-weight:700;transition:.3s}.lad div:hover{transform:translateX(10px)}
+.crit{display:grid;grid-template-columns:150px 1fr 40px;gap:10px;align-items:center;margin:6px 0;font-weight:700}
+.sc{font:800 3rem 'Bricolage Grotesque';text-align:center;color:var(--mint)}
+
+.rk{display:grid;grid-template-columns:150px 1fr 1fr 70px;gap:10px;align-items:center;margin:6px 0;font-weight:700;font-size:14px}
+.rk input{width:100%}.rkh{font-weight:800;color:var(--blue)}
+.rank{list-style:none;counter-reset:r;margin-top:10px}.rank li{counter-increment:r;display:flex;align-items:center;gap:10px;border:var(--b);border-radius:14px;padding:8px 12px;margin:6px 0;background:#fff;box-shadow:3px 3px 0 var(--ink);transition:.4s;font-weight:700}
+.rank li::before{content:"#" counter(r);background:var(--yel);border:2px solid var(--ink);border-radius:30px;padding:0 10px}
+.rank li i{display:block;height:12px;border-radius:10px;background:linear-gradient(90deg,var(--sky),var(--blue));margin-left:auto;transition:width .5s}
+.tva{display:grid;grid-template-columns:130px repeat(4,1fr);gap:6px;min-width:600px;font-size:13px;font-weight:700}
+.tva div{padding:10px 4px;text-align:center;border:2px solid var(--ink);border-radius:10px;background:#fff}.tva .h{background:var(--blue);color:#fff}
+.tva .c{cursor:pointer;transition:.3s}.tva .c:hover{transform:scale(1.1) rotate(-3deg)}
+.tva .c[data-l="0"]{background:#eaf4ff;color:#7a93b8}.tva .c[data-l="1"]{background:#c9f7ee}.tva .c[data-l="2"]{background:#ffe98a}.tva .c[data-l="3"]{background:#ffb3b3}
+.fx{background:var(--ink);color:#fff;border-radius:18px;padding:14px 18px;font-family:monospace;font-size:14.5px;margin:10px 0;overflow-x:auto;border:var(--b)}.fx b{color:var(--yel)}
+</style></head><body>
+<div id="bar"></div><div id="glow"></div>
+<nav class="pill"><a href="#intro">Intro</a><a href="#core">Terms</a><a href="#s1">Threats</a><a href="#s2">TVA</a><a href="#s3">Formulas</a><a href="#s4">Example</a><a href="#take">Recap</a></nav>
+<div class="wrap">
+<header class="hero"><canvas id="net"></canvas>
+<span class="sticker" style="right:70px;top:40px">🕵️</span><span class="sticker" style="right:190px;bottom:36px;animation-delay:-1s">🧮</span><span class="sticker" style="right:30px;bottom:100px;animation-delay:-2s">📉</span>
+<span class="tag"><i class="fa-solid fa-bolt"></i> Week 6 · Lecture 2</span>
+<h1><span class="type" id="typed"></span></h1>
+<p>Classify the threats, map the vulnerabilities, and do the maths for residual risk. Short notes, a calculator you can play with, and pictures. 👆</p></header>
+
+<section id="intro" class="hid"><div class="head"><div class="num">📖</div><h2>Introduction</h2></div><div class="box">
+<figure class="banner"><img data-k="hacker,threat" data-n="31" alt=""><figcaption>🕵️ Know the threats</figcaption></figure>
+<ul class="n"><li>Previous lecture: <b>identify &amp; value assets</b>. This one: <mark>understand &amp; assess the cyber threats</mark> that constantly evolve.</li>
+<li>Threats range from <b>sophisticated attacks</b> to <b>simple human errors</b> ➜ vast &amp; dynamic avenues for compromise.</li>
+<li>We learn how orgs <span class="k">identify ➜ classify ➜ quantitatively assess</span> threats.</li>
+<li>Leads to understanding <u class="u">vulnerabilities</u> and calculating <mark class="m">residual risk</mark>.</li>
+<li>Takeaway: effective risk management = <mark class="b">continuous, data-driven</mark> endeavor.</li></ul>
+<div class="tip"><span class="ti">🗺️</span><div><b>The flow:</b> Assets (L1) ➜ <u class="u">Threats</u> ➜ <u class="u">Vulnerabilities (TVA)</u> ➜ <u class="u">LF × LM</u> ➜ Residual Risk</div></div></div></section>
+
+<section id="core" class="hid"><div class="head"><div class="num">🃏</div><h2>Core Concepts</h2></div>
+<figure class="banner"><img data-k="computer,code" data-n="32" alt=""><figcaption>📚 Know your terms</figcaption></figure>
+<p style="font-weight:700">Tap a card to flip it: one-liner first, then the original definition and significance.</p><div class="fgrid" id="fgrid"></div></section>
+
+<section id="s1" class="hid"><div class="head"><div class="num">1</div><h2>Identifying &amp; Classifying Cyber Threats</h2></div><div class="box">
+<figure class="banner"><img data-k="cybersecurity,network" data-n="33" alt=""><figcaption>🌐 Threats are dynamic &amp; external</figcaption></figure>
+<ul class="n"><li>Assets are <b>internal</b>; threats are <mark class="p">dynamic &amp; largely external</mark>.</li><li><b>Hundreds</b> of known cyber threats ➜ individual analysis impractical ➜ <u class="u">categorize them</u>.</li></ul>
+<h4 class="sub" style="font-size:1.1rem">📡 Threat intelligence</h4>
+<ul class="n"><li>Threats keep evolving ➜ orgs rely on <span class="bd y">threat intelligence</span>.</li><li>Source: professional bodies like <b>CERT</b> (Computer Emergency Response Team) or <b>subscriptions to cyber intelligence services</b>.</li><li>Gives insight into <mark>criticality, frequency, potential impact</mark> of current threats.</li><li>Crucial because it's <u class="u">data orgs cannot generate internally</u>.</li></ul>
+<h4 class="sub" style="font-size:1.1rem">🗂️ Threat categories (tap one)</h4>
+<div class="mm" id="mm"><span>🙋 Human error</span><span>©️ IP compromise</span><span>🕵️ Espionage / trespass</span><span>💰 Extortion</span><span>📼 Obsolescence</span></div>
+<div class="tip bl" id="mmTxt" style="min-height:90px"><span class="ti">👆</span><div>Pick a category.</div></div>
+<ul class="n"><li>Classifying <mark class="m">simplifies analysis</mark> and allows <b>efficient resource allocation</b>.</li></ul>
+<h4 class="sub" style="font-size:1.1rem">📊 Quantitative threat assessment</h4>
+<ul class="n"><li>Assign a <b>score/rank</b> from <mark>occurrence frequency</mark> and <mark class="p">potential impact</mark> ➜ a <u class="u">"weighted rank"</u> per threat.</li><li>Exact weighting method varies; principle = use data to <b>prioritize the most severe &amp; likely threats</b>.</li><li>Typically derived from <mark class="b">external threat intelligence</mark>.</li></ul>
+<p style="font-weight:700">🎚️ Try ranking threats (frequency × impact; scores are my example):</p>
+<div id="rk"></div><ol class="rank" id="rank"></ol></div></section>
+
+<section id="s2" class="hid"><div class="head"><div class="num">2</div><h2>Vulnerability Assessment &amp; the TVA Worksheet</h2></div><div class="box">
+<figure class="banner"><img data-k="server,router" data-n="34" alt=""><figcaption>🔍 Weak spots live at the intersection</figcaption></figure>
+<ul class="n"><li>A vulnerability is <mark class="p">not standalone</mark>: it exists at the <b>intersection of a particular asset AND a particular threat</b>.</li><li>= the weakness an asset has against a <u class="u">specific</u> threat.</li><li>Eg: a <b>server</b> may be vulnerable to a <mark>denial-of-service attack</mark> (weak network defenses) but <u class="u">not</u> to physical theft (secure data center).</li><li>Needs <span class="k">expert judgment</span> to decide how well an asset is protected.</li></ul>
+<h4 class="sub" style="font-size:1.1rem">📋 The TVA worksheet <small>(Threat-Vulnerability-Asset)</small></h4>
+<div class="stp" id="stpTva"></div>
+<p style="font-weight:700;margin-top:14px">🧪 Try a TVA worksheet: tap a cell to change the vulnerability level (my example data)</p>
+<div class="chips2"><span>⚪ none</span><span>🟢 low</span><span>🟡 medium</span><span>🔴 high</span></div>
+<div class="scroll-x"><div class="tva" id="tva"></div></div>
+<ul class="n" style="margin-top:12px"><li>Eg cell note: <i>"DMZ router is vulnerable to unpatched firmware exploits from external network attacks."</i></li><li>Rank <b>assets</b> (by valuation) + <b>threats</b> (by intelligence) ➜ critical vulnerabilities show up along the <mark>"diagonal"</mark> of <u class="u">high-value assets × high-impact threats</u>.</li></ul></div></section>
+
+<section id="s3" class="hid"><div class="head"><div class="num">3</div><h2>Quantitative Risk Calculation</h2></div><div class="box">
+<figure class="banner"><img data-k="calculator,finance" data-n="35" alt=""><figcaption>🧮 Turning fear into numbers</figcaption></figure>
+<p>Assets valued + threats assessed + vulnerabilities found ➜ calculate risk with <b>2 components</b> ➜ <span class="bd y">Residual Risk</span>.</p>
+<div class="vs2"><div style="background:#ffe9b0"><h4>🔁 Loss Frequency (LF)</h4><ul class="n"><li>How often a <b>successful</b> attack is expected</li><li><b>Likelihood of attack</b>: chance threat materializes (eg phishing), from external threat intel</li><li><b>Probability of success</b>: chance it beats current defenses; tied to identified vulnerabilities</li></ul><div class="fx"><b>LF</b> = Likelihood of Attack × Probability of Success</div></div>
+<div style="background:#ffd3de"><h4>💸 Loss Magnitude (LM)</h4><ul class="n"><li>Also called <mark class="p">"asset exposure"</mark>: financial impact of a successful attack</li><li><b>Asset value</b>: previously determined value</li><li><b>% of asset lost</b>: proportion compromised</li></ul><div class="fx"><b>LM</b> = Asset Value × Percentage of Asset Lost</div></div></div>
+<h4 class="sub" style="font-size:1.1rem">🎯 Residual Risk formula</h4>
+<div class="fx"><b>Residual Risk</b> = (LF × LM) − (% of Risk Mitigated by Current Controls) + (Measurement Uncertainty)</div>
+<ul class="n"><li><b>LF × LM</b> = initial estimated risk (probability × impact).</li><li><b>% mitigated by current controls</b>: e.g. firewalls, antivirus ➜ subtract risk they effectively reduce. <u class="u">No controls mentioned ➜ 0.</u></li><li><b>Measurement uncertainty</b>: LF &amp; LM are <mark class="p">estimates</mark> ➜ add a "worst-case" factor, a % of initial risk (eg 75% accurate ➜ 25% uncertainty) ➜ <mark class="m">conservative &amp; realistic</mark>.</li></ul>
+<div class="fx"><b>Measurement Uncertainty</b> = (1 − Accuracy %) × (LF × LM)</div>
+<p style="font-weight:700">🎚️ Calculator (starts on the lecture's example):</p>
+<div class="calc"><div>
+<div class="slid"><span>Likelihood of attack</span><input type="range" id="s1" min="0" max="100" value="10"><span id="o1"></span></div>
+<div class="slid"><span>Probability of success</span><input type="range" id="s2" min="0" max="100" value="50"><span id="o2"></span></div>
+<div class="slid"><span>Asset value (0-100)</span><input type="range" id="s3" min="0" max="100" value="50"><span id="o3"></span></div>
+<div class="slid"><span>% of asset lost</span><input type="range" id="s4" min="0" max="100" value="80"><span id="o4"></span></div>
+<div class="slid"><span>Accuracy of estimates</span><input type="range" id="s5" min="0" max="100" value="75"><span id="o5"></span></div>
+<div class="slid"><span>% risk mitigated</span><input type="range" id="s6" min="0" max="100" value="0"><span id="o6"></span></div></div>
+<div class="res"><div class="row"><span>LF</span><b id="rLF"></b></div><div class="row"><span>LM</span><b id="rLM"></b></div><div class="row"><span>LF × LM</span><b id="rB"></b></div><div class="row"><span>Measurement uncertainty</span><b id="rU"></b></div><div class="row"><span>Mitigated</span><b id="rM"></b></div><p style="margin:10px 0 0;text-align:center">Residual Risk</p><div class="final" id="rR"></div></div></div>
+<p style="font-size:14px;margin-top:8px">ℹ️ I treat "% mitigated" as a percentage of the initial risk (LF × LM).</p></div></section>
+
+<section id="s4" class="hid"><div class="head"><div class="num">4</div><h2>Worked Example: Residual Risk</h2></div><div class="box">
+<figure class="banner"><img data-k="ecommerce,shopping" data-n="36" alt=""><figcaption>🛒 The e-commerce database</figcaption></figure>
+<div class="tip bl"><span class="ti">📝</span><div><b>Problem:</b> E-commerce database · <mark>10% chance of attack</mark> this year (industry reports) · InfoSec says <mark>50% chance of success</mark> · asset value <b>50</b> (scale 0-100) · <mark>80%</mark> compromised if successful · estimates <mark>75% accurate</mark>. Find the residual risk.</div></div>
+<p style="font-weight:700">Click through the solution:</p><div class="stp" id="stpEx"></div>
+<div class="tip pk"><span class="ti">⚠️</span><div>Simplistic example. In reality, precise numbers are hard to get ➜ orgs often use <u class="u">qualitative assessments</u> due to data limitations.</div></div></div></section>
+
+<section id="take" class="hid"><div class="head"><div class="num">✅</div><h2>Key Takeaways (tick as you revise)</h2></div><div class="box"><b id="mt">0 / 10 mastered</b><div class="meter"><div id="mb"></div></div><ul class="take" id="tl2"></ul></div></section>
+
+<section class="hid"><div class="head"><div class="num">🏁</div><h2>Conclusion</h2></div><div class="box fin"><ul class="n" style="color:#fff">
+<li>Understanding &amp; <b>quantifying cyber risk</b> = foundation of robust cybersecurity.</li>
+<li>Identify threats ➜ classify ➜ assess vulnerabilities (<b>TVA worksheet</b>) ➜ apply <b>LF &amp; LM</b> = move beyond reactive security.</li>
+<li>Residual risk <mark>with measurement uncertainty</mark> = realistic, conservative view of remaining exposure ➜ guides further controls &amp; resource allocation.</li>
+<li>Turns abstract security worries into <u class="u" style="text-decoration-color:#7cc7ff">actionable insights</u>: prioritize investments, mitigate effectively.</li>
+<li>Next: the <b>specific actions &amp; controls</b> to address the identified risks.</li></ul></div></section>
+<footer>💙 Week 6 · Lecture 2 · you've got this</footer></div><script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+addEventListener('scroll',()=>{const h=document.documentElement;$('#bar').style.width=h.scrollTop/(h.scrollHeight-h.clientHeight)*100+'%'},{passive:true});
+addEventListener('pointermove',e=>{const g=$('#glow');g.style.left=e.clientX+'px';g.style.top=e.clientY+'px'});
+const T='Risk Management: Part 02';let ti=0;(function t(){$('#typed').textContent=T.slice(0,ti++);if(ti<=T.length)setTimeout(t,50)})();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});$$('.hid').forEach(e=>io.observe(e));
+const links=$$('nav.pill a'),spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-40% 0px -55% 0px'});$$('section[id]').forEach(s=>spy.observe(s));
+const cv=$('#net'),cx=cv.getContext('2d');let W,H,P=[];function rs(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight}rs();addEventListener('resize',rs);
+for(let i=0;i<45;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.7,vy:(Math.random()-.5)*.7});
+(function d(){cx.clearRect(0,0,W,H);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;cx.fillStyle='rgba(255,255,255,.7)';cx.beginPath();cx.arc(p.x,p.y,2.5,0,7);cx.fill()});for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){const a=P[i],b=P[j],D=Math.hypot(a.x-b.x,a.y-b.y);if(D<120){cx.strokeStyle=`rgba(255,255,255,${.35-D/400})`;cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke()}}requestAnimationFrame(d)})();
+const C=[['Threat Intelligence','fa-satellite-dish','#ffe98a',"Up-to-date info about current threats, bought or shared from experts.","Dynamic, informed information about current cyber threats, including their criticality, likelihood, frequency, and potential impact.","Essential for understanding the external threat landscape, as this data is too dynamic and specialized for internal generation."],
+['Espionage','fa-user-secret','#a6f5e8',"An insider (or ex-insider) betraying the org by leaking secrets.","A deliberate act by an insider or former insider within an organization or country to leak sensitive information against its interests.","Represents a severe internal threat category, often involving high-level information compromise."],
+['Information Extortion','fa-money-bill-wave','#ffc1d4',"\"Pay up or we expose or damage your data.\"","A threat category involving the use of intimidation or coercion to unlawfully obtain money or assets from individuals or organizations.","A common and impactful cyber threat, often seen in ransomware attacks or data breach scenarios."],
+['Technological Obsolescence','fa-hourglass-end','#b9dcff',"Running old, unsupported hardware or software.","The state where an organization's hardware or software systems are outdated, unpatched, or no longer supported, creating security vulnerabilities.","Classified as a threat category because outdated technology significantly increases an organization's susceptibility to attacks."],
+['Vulnerability Assessment','fa-magnifying-glass','#ffe98a',"Finding where an asset is weak against a specific threat.","The process of identifying weaknesses in an asset's protection against specific threats, typically requiring expert judgment.","Crucial for understanding specific points of failure, as vulnerabilities are always relative to a particular asset and threat."],
+['TVA Worksheet','fa-table-cells','#a6f5e8',"A spreadsheet crossing assets with threats to log weaknesses.","(Threat-Vulnerability-Asset Worksheet) A spreadsheet-based tool used to systematically chart and assess vulnerabilities for each combination of assets and threats.","Provides a structured, detailed overview of an organization's vulnerability posture, enabling prioritized mitigation efforts."],
+['Loss Frequency (LF)','fa-rotate','#ffc1d4',"Chance an attack happens × chance it works.","A quantitative measure representing the likelihood of a successful attack, calculated as the probability of an attack occurring multiplied by the probability of its success.","A key component in quantitative risk calculation, indicating how often an organization might experience a successful security incident."],
+['Loss Magnitude (LM)','fa-sack-dollar','#b9dcff',"Asset value × share of it you'd lose.","A quantitative measure of the financial impact of a successful attack, calculated as the asset's value multiplied by the percentage of the asset compromised.","The second key component in quantitative risk, representing the potential financial damage from a successful security breach."],
+['Residual Risk','fa-hourglass-half','#ffe98a',"The risk left after controls, plus a safety margin for guesswork.","The level of risk remaining after security controls have been implemented and measurement uncertainties are accounted for.","The ultimate quantitative measure of risk, guiding decisions on further mitigation strategies and resource allocation."],
+['Measurement Uncertainty','fa-circle-question','#a6f5e8',"Extra padding added because our estimates are only guesses.","An additional value added to risk calculations to account for the inherent imprecision and subjectivity in estimating loss frequency and magnitude.","Ensures a conservative and realistic risk assessment, acknowledging that initial estimates are approximations and may underrepresent actual risk."]];
+$('#fgrid').innerHTML=C.map(c=>`<div class="flip"><div class="fi"><div class="ff" style="background:${c[2]}"><i class="fa-solid ${c[1]}"></i><span style="font-size:1.2rem">${c[0]}</span><small>tap to flip</small></div><div class="fb"><div class="one">💡 ${c[3]}</div><b class="l">ORIGINAL DEFINITION</b>${c[4]}<b class="l">SIGNIFICANCE</b>${c[5]}</div></div></div>`).join('');
+$$('.flip').forEach(f=>f.onclick=()=>f.classList.toggle('on'));
+function stepper(id,S){const el=$('#'+id);let i=0;el.innerHTML='<div class="steps">'+S.map(()=>'<span></span>').join('')+'</div><div class="card"></div><div class="row"><button class="btn b1">◀ Back</button><button class="btn b2">Next ▶</button></div>';
+const draw=()=>{const c=$('.card',el);c.style.animation='none';c.offsetHeight;c.style.animation='';c.innerHTML=`<h3>${S[i][2]} ${S[i][0]}</h3><p>${S[i][1]}</p>`;$$('.steps span',el).forEach((x,k)=>x.classList.toggle('on',k<=i))};
+$('.b1',el).onclick=()=>{i=(i+S.length-1)%S.length;draw()};$('.b2',el).onclick=()=>{i=(i+1)%S.length;draw()};draw()}
+
+stepper('stpTva',[['Axis 1: assets','Rows list identified <b>assets</b> (eg: a <mark>DMZ router</mark>, a <mark>database server</mark>).','🖥️'],['Axis 2: threats','Columns list the <b>threat categories</b> or specific threats.','⚠️'],['Each cell = one pair','Each cell is the intersection of <u class="u">one asset and one threat</u>. Inside, document &amp; assess <b>that asset\'s vulnerability to that threat</b>.','🔲'],['Spot the critical weaknesses','Rank assets (by valuation) + threats (by intelligence) ➜ the worst vulnerabilities cluster on the <mark class="p">diagonal</mark> of high-value assets facing high-impact threats.','🎯']]);
+stepper('stpEx',[['1. Loss Frequency','Chance of attack = 10% = 0.1 · Probability of success = 50% = 0.5 ➜ <b>LF = 0.1 × 0.5 = 0.05</b>','1️⃣'],['2. Loss Magnitude','Asset value = 50 · % compromised = 80% = 0.8 ➜ <b>LM = 50 × 0.8 = 40</b>','2️⃣'],['3. Initial risk','<b>LF × LM = 0.05 × 40 = 2</b>','3️⃣'],['4. Risk mitigated by controls','The problem mentions <u class="u">no current controls</u> ➜ <b>mitigated = 0</b>','4️⃣'],['5. Measurement uncertainty','75% accurate ➜ 25% uncertainty (100% − 75%) ➜ <b>0.25 × 2 = 0.5</b>','5️⃣'],['6. Residual risk','<b>Residual Risk = 2 − 0 + 0.5 = 2.5</b> 🎉','✅']]);
+const MM=['<b>Acts of human error or failure:</b> <mark>unintentional mistakes</mark> by employees that lead to security breaches.','<b>Compromises to intellectual property:</b> <mark>theft or unauthorized access</mark> to proprietary information.','<b>Deliberate acts of espionage or trespass:</b> malicious actions, often by <u class="u">insiders or state-sponsored actors</u>. <b>Espionage</b> = someone working inside (or formerly part of) the org <mark class="p">betraying it by leaking information</mark>.','<b>Information extortion:</b> threatening to <mark>expose or damage data unless a ransom is paid</mark>.','<b>Technological obsolescence:</b> using <mark class="p">outdated/unsupported hardware &amp; software</mark> (eg critical operations on unsupported <i>Windows 8</i>) ➜ highly vulnerable to known exploits. <u class="u">Significant, often overlooked.</u>'];
+$$('#mm span').forEach((sp,i)=>sp.onclick=()=>{$$('#mm span').forEach(x=>x.classList.remove('on'));sp.classList.add('on');$('#mmTxt div').innerHTML=MM[i]});
+// threat ranker
+const TH=[['Phishing / human error',4,3],['IP theft',2,4],['Insider espionage',1,5],['Ransomware extortion',3,5],['Unsupported OS',3,4]];
+$('#rk').innerHTML='<div class="rk rkh"><span>Threat</span><span>Frequency</span><span>Impact</span><span>Score</span></div>'+TH.map((t,i)=>`<div class="rk"><span>${t[0]}</span><input type="range" min="1" max="5" value="${t[1]}" data-i="${i}" data-k="1"><input type="range" min="1" max="5" value="${t[2]}" data-i="${i}" data-k="2"><span id="sc${i}"></span></div>`).join('');
+function rank(){const s=TH.map((t,i)=>{const f=+$(`#rk input[data-i="${i}"][data-k="1"]`).value,m=+$(`#rk input[data-i="${i}"][data-k="2"]`).value;$('#sc'+i).textContent=f*m;return[t[0],f*m]}).sort((a,b)=>b[1]-a[1]);
+$('#rank').innerHTML=s.map(x=>`<li>${x[0]}<i style="width:${x[1]*4}px"></i><span style="margin-left:8px">${x[1]}</span></li>`).join('')}
+$$('#rk input').forEach(i=>i.oninput=rank);rank();
+// TVA grid
+const AS=['DMZ router','Database server','Employee laptop'],TC=['Human error','Espionage','Extortion','Obsolescence'],LV=['⚪ none','🟢 low','🟡 med','🔴 high'],TD=[[1,0,2,3],[1,2,3,2],[3,1,2,1]];
+$('#tva').innerHTML='<div class="h">Asset ↓ / Threat →</div>'+TC.map(t=>`<div class="h">${t}</div>`).join('')+AS.map((a,i)=>`<div class="h">${a}</div>`+TD[i].map(l=>`<div class="c" data-l="${l}">${LV[l]}</div>`).join('')).join('');
+$$('#tva .c').forEach(c=>c.onclick=()=>{const l=(+c.dataset.l+1)%4;c.dataset.l=l;c.textContent=LV[l]});
+// calculator
+const g=i=>+$('#s'+i).value;function calc(){const lf=g(1)/100*g(2)/100,lm=g(3)*g(4)/100,b=lf*lm,u=(1-g(5)/100)*b,m=b*g(6)/100,r=b-m+u;
+[['o1',g(1)+'%'],['o2',g(2)+'%'],['o3',g(3)],['o4',g(4)+'%'],['o5',g(5)+'%'],['o6',g(6)+'%'],['rLF',lf.toFixed(3)],['rLM',lm.toFixed(1)],['rB',b.toFixed(2)],['rU','+'+u.toFixed(2)],['rM','−'+m.toFixed(2)]].forEach(([k,v])=>$('#'+k).textContent=v);
+const f=$('#rR');f.textContent=r.toFixed(2);f.classList.add('pop');setTimeout(()=>f.classList.remove('pop'),150)}
+$$('.calc input').forEach(s=>s.oninput=calc);calc();
+const K=["Cyber threats are dynamic and require continuous monitoring through specialized threat intelligence.","Threats are classified into categories (e.g., human error, espionage, technological obsolescence) to manage complexity.","Threat intelligence, often from external bodies, is crucial for quantitative threat assessment and ranking.","Vulnerability is specific to an asset-threat combination and requires expert judgment for assessment.","The Threat-Vulnerability-Asset (TVA) worksheet is a vital tool for systematically mapping and assessing vulnerabilities across an organization.","Quantitative risk calculation relies on Loss Frequency (likelihood of successful attack) and Loss Magnitude (financial impact).","Loss Frequency combines the probability of an attack with the probability of its success against existing defenses.","Loss Magnitude combines asset value with the percentage of the asset compromised in an attack.","Residual Risk accounts for initial risk, risk mitigated by controls, and an added measurement uncertainty to reflect estimation inaccuracies.","While quantitative risk assessment is ideal, practical challenges in data acquisition often lead to qualitative approaches in real-world scenarios."];
+$('#tl2').innerHTML=K.map(k=>`<li><span class="ck"><i class="fa-solid fa-check"></i></span><span>${k}</span></li>`).join('');
+$$('.tabs').forEach(tb=>{const ps=$$('.pane',$(`[data-p="${tb.dataset.t}"]`));$$('.tab',tb).forEach((b,i)=>b.onclick=()=>{$$('.tab',tb).forEach(x=>x.classList.remove('on'));b.classList.add('on');ps.forEach(p=>p.classList.remove('on'));ps[i].classList.add('on')})});
+$$('#tl2 li').forEach(li=>li.onclick=()=>{li.classList.toggle('d');const n=$$('#tl2 li.d').length;$('#mb').style.width=n*10+'%';$('#mt').textContent=n+' / 10 mastered';if(n==10){$('#mt').textContent='🎉 10 / 10, exam ready!';boom()}});
+function boom(){for(let i=0;i<70;i++){const c=document.createElement('i');c.className='conf';c.style.cssText=`left:${Math.random()*100}vw;top:-20px;background:${['#2563ff','#ffd94a','#5eead4','#ff8fb1','#7cc7ff'][i%5]};--x:${(Math.random()-.5)*200}px;animation-delay:${Math.random()*.5}s`;document.body.appendChild(c);setTimeout(()=>c.remove(),3000)}}
+(function(){const pools={tech:['1550751827-4bd374c3f58b','1563986768609-322da13575f3','1558494949-ef010cbdcc31','1518770660439-4636190af475','1526374965328-7f61d4dc18c5','1555949963-ff9fe0c870eb','1461749280684-dccba630e2f6','1451187580459-43490279c0fa'],ppl:['1504384308090-c894fdcc538d','1531482615713-2afd69097998','1522202176988-66273c2fd55f','1497366216548-37526070297c','1573164713714-d95e436ab8d6']};
+const cat=k=>/office|meeting|team|planning|strategy|money|business|chess|finance|ecommerce|shopping/.test(k)?'ppl':'tech';
+const EM=[['hacker','🕵️'],['calculator','🧮'],['ecommerce','🛒'],['router','📡'],['chess','♟️'],['money','💰'],['monitor','📡'],['team','👥'],['planning','🗺️'],['shield','🛡️'],['server','🖥️'],['computer','💻'],['office','🏢']];
+const emo=k=>(EM.find(e=>k.includes(e[0]))||[0,'🎯'])[1];
+$$('img[data-k]').forEach(img=>{const k=img.dataset.k,n=+img.dataset.n,p=pools[cat(k)];const list=['https://images.unsplash.com/photo-'+p[n%p.length]+'?auto=format&fit=crop&w=800&q=70','https://images.unsplash.com/photo-'+p[(n+3)%p.length]+'?auto=format&fit=crop&w=800&q=70','https://loremflickr.com/800/500/'+k+'?lock='+n];let i=0;
+img.onerror=()=>{i++;if(i<list.length)img.src=list[i];else{const d=document.createElement('div');d.className='pnl';d.textContent=emo(k);img.replaceWith(d)}};img.src=list[0]})})();
+</script></body></html>

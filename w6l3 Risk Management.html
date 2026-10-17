@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>W6 L3 · Risk Management Part 03</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1f4d;--blue:#2563ff;--sky:#7cc7ff;--ice:#e8f3ff;--pale:#f4f9ff;--yel:#ffd94a;--mint:#5eead4;--pink:#ff8fb1;--w:#fff;--b:3px solid var(--ink);--sh:6px 6px 0 var(--ink)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--pale);line-height:1.7;font-size:17px;
+background-image:radial-gradient(#b9d8ff 1.6px,transparent 1.6px);background-size:26px 26px;animation:dots 12s linear infinite}
+@keyframes dots{to{background-position:26px 26px}}
+h1,h2,h3,h4,h5{font-family:'Bricolage Grotesque',sans-serif;line-height:1.15}
+#bar{position:fixed;top:0;left:0;height:8px;width:0;background:repeating-linear-gradient(45deg,var(--blue) 0 12px,var(--sky) 12px 24px);background-size:34px 34px;animation:stripe 1s linear infinite;z-index:99;border-bottom:2px solid var(--ink)}
+@keyframes stripe{to{background-position:34px 0}}
+#glow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(rgba(37,99,255,.18),transparent 65%);pointer-events:none;transform:translate(-50%,-50%);z-index:0}
+nav.pill{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:90;display:flex;gap:4px;background:var(--w);border:var(--b);border-radius:40px;padding:5px;box-shadow:4px 4px 0 var(--ink);max-width:96vw;overflow-x:auto}
+nav.pill a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:7px 14px;border-radius:30px;white-space:nowrap;transition:.3s}
+nav.pill a:hover{background:var(--ice)}nav.pill a.on{background:var(--blue);color:#fff;transform:scale(1.06)}
+.wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 18px 80px}
+
+/* hero */
+.hero{position:relative;margin-top:90px;border:var(--b);border-radius:34px;background:var(--blue);color:#fff;padding:60px 44px;box-shadow:10px 10px 0 var(--ink);overflow:hidden;animation:drop .9s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes drop{from{transform:translateY(-60px) rotate(-2deg);opacity:0}}
+#net{position:absolute;inset:0;width:100%;height:100%}
+.hero>*:not(canvas){position:relative}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;max-width:720px}
+.type::after{content:"|";animation:blink .8s steps(1) infinite}@keyframes blink{50%{opacity:0}}
+.hero p{margin-top:14px;max-width:560px;font-size:1.1rem}
+.sticker{position:absolute;font-size:46px;animation:wob 4s ease-in-out infinite;filter:drop-shadow(3px 3px 0 var(--ink));cursor:grab}
+@keyframes wob{50%{transform:translateY(-16px) rotate(12deg)}}
+.tag{display:inline-block;background:var(--yel);color:var(--ink);font-weight:700;border:var(--b);border-radius:30px;padding:3px 16px;margin-bottom:16px;transform:rotate(-3deg);animation:tilt 3s ease-in-out infinite}
+@keyframes tilt{50%{transform:rotate(3deg) scale(1.06)}}
+
+/* sections */
+section{margin:60px 0}
+.head{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.head .num{background:var(--yel);border:var(--b);box-shadow:4px 4px 0 var(--ink);width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:24px;font-family:'Bricolage Grotesque';font-weight:800;transition:.4s}
+.head:hover .num{transform:rotate(-12deg) scale(1.15)}
+.head h2{font-size:clamp(1.6rem,4vw,2.3rem)}
+.box{background:var(--w);border:var(--b);border-radius:24px;padding:26px;box-shadow:var(--sh);transition:.35s}
+.box+.box{margin-top:22px}
+.hid{opacity:0;transform:translateY(40px) scale(.97);transition:opacity .7s,transform .7s cubic-bezier(.2,1.3,.4,1)}.hid.in{opacity:1;transform:none}
+p{margin-bottom:13px}
+mark{background:linear-gradient(transparent 50%,var(--yel) 50%);padding:0 2px;color:inherit;background-size:0 100%;background-repeat:no-repeat;transition:background-size 1s .3s}
+.in mark,mark.in{background-size:100% 100%}
+mark.b{background-image:linear-gradient(transparent 50%,var(--sky) 50%)}mark.m{background-image:linear-gradient(transparent 50%,var(--mint) 50%)}
+mark.p{background-image:linear-gradient(transparent 50%,var(--pink) 50%)}
+.bd{display:inline-block;border:2px solid var(--ink);background:var(--sky);border-radius:30px;padding:0 12px;font-weight:700;font-size:.9em;box-shadow:2px 2px 0 var(--ink);animation:jig 3s ease-in-out infinite;white-space:nowrap}
+.bd.y{background:var(--yel)}.bd.m{background:var(--mint)}.bd.p{background:var(--pink)}.bd:nth-of-type(2n){animation-delay:-1.4s}
+@keyframes jig{0%,90%,100%{transform:none}93%{transform:rotate(-4deg) scale(1.08)}96%{transform:rotate(4deg) scale(1.08)}}
+
+.photo{float:right;width:260px;margin:0 0 14px 22px;border:var(--b);border-radius:18px;background:#fff;padding:8px 8px 4px;box-shadow:var(--sh);transform:rotate(3deg);transition:.5s;text-align:center;font-size:13px;font-weight:700}
+.photo:hover{transform:rotate(-2deg) scale(1.07)}.photo img{width:100%;height:170px;object-fit:cover;border-radius:10px;display:block;margin-bottom:4px}
+.photo.l{float:left;margin:0 22px 14px 0;transform:rotate(-3deg)}
+@media(max-width:640px){.photo,.photo.l{float:none;margin:0 auto 16px}.hero{padding:40px 22px}}
+.clear{clear:both}
+
+/* flip cards */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.flip{height:250px;perspective:900px;cursor:pointer}
+.fi{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.3,1.4,.5,1);transform-style:preserve-3d}
+.flip.on .fi{transform:rotateY(180deg)}.flip:hover .fi{translate:0 -6px}
+.ff,.fb{position:absolute;inset:0;backface-visibility:hidden;border:var(--b);border-radius:20px;box-shadow:5px 5px 0 var(--ink);padding:16px;overflow:auto}
+.ff{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;font-family:'Bricolage Grotesque';font-weight:800;font-size:1.45rem}
+.ff i{font-size:34px}.ff small{font-family:'DM Sans';font-weight:500;font-size:12px;opacity:.7}
+.fb{transform:rotateY(180deg);background:#fff;font-size:13.5px;line-height:1.45}.fb b{display:block;font-size:11.5px;color:var(--blue);margin-top:8px}
+.fb::-webkit-scrollbar{width:4px}
+
+/* tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab{font:700 15px 'DM Sans';border:var(--b);background:#fff;border-radius:30px;padding:8px 18px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:.2s}
+.tab:hover{transform:translate(-2px,-2px)}.tab.on{background:var(--blue);color:#fff;box-shadow:none;transform:translate(3px,3px)}
+.pane{display:none;animation:swap .5s cubic-bezier(.2,1.3,.4,1)}.pane.on{display:block}
+@keyframes swap{from{opacity:0;transform:translateX(30px) scale(.96)}}
+.pane .big{font-size:48px;float:left;margin:0 16px 0 0;animation:wob 3s infinite}
+
+/* accordion */
+.acc{border:var(--b);border-radius:18px;background:#fff;margin-bottom:12px;box-shadow:4px 4px 0 var(--ink);overflow:hidden}
+.acc button{width:100%;text-align:left;font:700 1.05rem 'Bricolage Grotesque';background:none;border:0;padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;color:var(--ink)}
+.acc button i.k{width:36px;height:36px;border-radius:10px;border:2px solid var(--ink);display:grid;place-items:center;background:var(--sky)}
+.acc button i.ch{margin-left:auto;transition:.4s}.acc.on .ch{transform:rotate(180deg)}
+.acc .in2{max-height:0;overflow:hidden;transition:max-height .5s ease;padding:0 18px}.acc.on .in2{padding-bottom:14px}
+.acc:hover{background:var(--ice)}
+
+/* pyramid */
+.pyr{display:flex;flex-direction:column;align-items:center;gap:7px;margin:12px 0}
+.pyr button{font:700 1rem 'Bricolage Grotesque';color:var(--ink);border:var(--b);border-radius:14px;padding:12px;cursor:pointer;transition:.35s;box-shadow:3px 3px 0 var(--ink)}
+.pyr button:nth-child(1){width:42%;background:var(--yel)}.pyr button:nth-child(2){width:58%;background:var(--mint)}.pyr button:nth-child(3){width:74%;background:var(--sky)}.pyr button:nth-child(4){width:90%;background:var(--pink)}
+.pyr button:hover{transform:scale(1.07) rotate(-1deg)}.pyr button.on{outline:4px dashed var(--blue);outline-offset:3px}
+#pdesc{min-height:80px;text-align:center;background:var(--ice);border:2px dashed var(--blue);border-radius:16px;padding:14px;margin-top:6px}
+@media(max-width:600px){.pyr button{width:100%!important}}
+
+/* SETA */
+.seta{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px}
+.seta div{border:var(--b);border-radius:20px;padding:20px;text-align:center;box-shadow:var(--sh);transition:.4s}
+.seta div:hover{transform:translateY(-10px) rotate(-2deg)}.seta i{font-size:34px;display:block;margin-bottom:8px;animation:wob 3.5s infinite}
+.seta div:nth-child(1){background:#ffe98a}.seta div:nth-child(2){background:#a6f5e8}.seta div:nth-child(3){background:#ffc1d4}
+
+/* crown jewel diagram */
+.svgbox{background:var(--ink);border-radius:20px;padding:10px;border:var(--b);position:relative}
+.svgbox svg{width:100%;height:auto;display:block}
+.path{stroke:#ff6b8b;stroke-width:3;stroke-dasharray:10 8;fill:none;animation:march 1s linear infinite;transition:opacity .6s}
+@keyframes march{to{stroke-dashoffset:-36}}
+.cut .path{opacity:0}.cut .pk{display:none}.cut .safe{opacity:1}
+.safe{opacity:0;transition:opacity .8s}
+.jewel{animation:pulse 1.6s ease-in-out infinite;transform-origin:500px 150px}@keyframes pulse{50%{transform:scale(1.15)}}
+.btn{font:700 16px 'DM Sans';border:var(--b);background:var(--yel);border-radius:30px;padding:10px 22px;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:.2s;color:var(--ink)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:18px 0}
+.stat{background:var(--blue);color:#fff;border:var(--b);border-radius:20px;padding:18px;text-align:center;box-shadow:var(--sh)}
+.stat b{display:block;font:800 2.6rem 'Bricolage Grotesque';color:var(--yel)}
+
+/* stepper */
+.steps{display:flex;gap:8px;margin:12px 0}
+.steps span{flex:1;height:14px;border:2px solid var(--ink);border-radius:10px;background:#fff;transition:.5s}.steps span.on{background:var(--blue)}
+#stepCard{border:var(--b);border-radius:20px;padding:22px;background:var(--ice);min-height:130px;animation:swap .5s}
+
+/* takeaways */
+.take{list-style:none;display:grid;gap:12px;margin-top:14px}
+.take li{display:flex;gap:14px;border:var(--b);border-radius:16px;padding:12px 16px;cursor:pointer;background:#fff;box-shadow:4px 4px 0 var(--ink);transition:.3s;user-select:none}
+.take li:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--ink)}
+.take .ck{flex:none;width:30px;height:30px;border:var(--b);border-radius:9px;display:grid;place-items:center;color:transparent;transition:.4s}
+.take li.d{background:var(--ice);text-decoration:line-through;text-decoration-color:var(--blue)}.take li.d .ck{background:var(--blue);color:#fff;transform:rotate(360deg)}
+.meter{height:20px;border:var(--b);border-radius:20px;overflow:hidden;background:#fff;margin:8px 0}.meter div{height:100%;width:0;background:repeating-linear-gradient(45deg,var(--blue) 0 12px,var(--sky) 12px 24px);transition:width .6s cubic-bezier(.2,1.5,.4,1)}
+.conf{position:fixed;width:10px;height:14px;z-index:120;pointer-events:none;animation:fall 2.2s ease-in forwards}
+@keyframes fall{to{transform:translate(var(--x),105vh) rotate(720deg);opacity:.8}}
+.fin{background:var(--blue);color:#fff}.fin mark{color:var(--ink)}
+footer{text-align:center;font-weight:700;padding:30px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.hid{opacity:1;transform:none}}
+
+.slid{display:grid;grid-template-columns:150px 1fr 70px;gap:10px;align-items:center;margin:8px 0;font-weight:700}
+input[type=range]{width:100%;accent-color:var(--blue);height:8px}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.res{background:var(--ink);color:#fff;border-radius:20px;padding:18px;border:var(--b)}
+.res .row{display:flex;justify-content:space-between;border-bottom:1px dashed #4b64a0;padding:5px 0}.res b{color:var(--yel)}
+.res .final{font:800 2.6rem 'Bricolage Grotesque';color:var(--mint);text-align:center;transition:.3s}
+.res .final.pop{transform:scale(1.25)}
+.fm{background:var(--ice);border:2px dashed var(--blue);border-radius:14px;padding:10px 14px;font-family:monospace;font-size:14px;margin:10px 0;overflow-x:auto}
+.phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;counter-reset:ph}
+.ph{border:var(--b);border-radius:22px;padding:22px 18px 16px;box-shadow:var(--sh);position:relative;transition:.4s;background:#fff}
+.ph::before{counter-increment:ph;content:counter(ph);position:absolute;top:-18px;left:16px;width:38px;height:38px;border-radius:50%;background:var(--yel);border:var(--b);display:grid;place-items:center;font:800 1.1rem 'Bricolage Grotesque'}
+.ph:not(:last-child)::after{content:"\f061";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;right:-20px;top:45%;font-size:20px;color:var(--blue);animation:nud 1.2s infinite;z-index:2}
+@keyframes nud{50%{transform:translateX(6px)}}.ph:hover{transform:translateY(-8px) rotate(-1.5deg)}
+.ph:nth-child(1){background:#ffe98a}.ph:nth-child(2){background:#a6f5e8}.ph:nth-child(3){background:#ffc1d4}
+@media(max-width:700px){.ph::after{display:none!important}}
+.mx{display:grid;grid-template-columns:110px repeat(4,1fr);gap:6px;font-size:13px;font-weight:700;min-width:560px}
+.mx div{padding:10px 6px;text-align:center;border:2px solid var(--ink);border-radius:10px;background:#fff}
+.mx .h{background:var(--blue);color:#fff}.mx .c{cursor:pointer;transition:.3s;font-size:20px}.mx .c:hover{transform:scale(1.18) rotate(-4deg)}
+.mx .c[data-l="1"]{background:#c9f7ee}.mx .c[data-l="2"]{background:#ffe98a}.mx .c[data-l="3"]{background:#ffb3b3}
+.tl{position:relative;margin:10px 0 0 18px;border-left:5px dotted var(--blue);padding-left:26px}
+.tl .ev{position:relative;margin-bottom:20px;background:#fff;border:var(--b);border-radius:16px;padding:12px 16px;box-shadow:4px 4px 0 var(--ink);transition:.3s}
+.tl .ev:hover{transform:translateX(10px)}.tl .ev::before{content:attr(data-e);position:absolute;left:-52px;top:8px;width:40px;height:40px;border-radius:50%;background:var(--yel);border:var(--b);display:grid;place-items:center;font-size:18px;animation:jig 3s infinite}
+.pc{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.pc>div{border:var(--b);border-radius:20px;padding:18px;box-shadow:var(--sh)}.pc ul{list-style:none}.pc li{padding:7px 0 7px 30px;position:relative}
+.pc .pro{background:#c9f7ee}.pc .con{background:#ffd3de}.pc .pro li::before{content:"✅";position:absolute;left:0}.pc .con li::before{content:"⚠️";position:absolute;left:0}
+.pc li{transition:.3s}.pc li:hover{transform:translateX(8px)}
+.path3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.path3 .card{border:var(--b);border-radius:18px;padding:16px;background:#fff;box-shadow:4px 4px 0 var(--ink);text-align:center;transition:.4s}.path3 .card:hover{transform:translateY(-8px) rotate(2deg)}.path3 i{font-size:30px;display:block;margin-bottom:6px;color:var(--blue)}
+.scroll-x{overflow-x:auto;padding-bottom:6px}
+
+mark{background-size:100% 100%!important}
+.u{text-decoration:underline wavy var(--blue);text-decoration-thickness:2px;text-underline-offset:5px;font-weight:700}
+.u2{border-bottom:4px solid var(--pink);font-weight:700}
+.k{font-weight:800;color:var(--blue)}
+ul.n{list-style:none;margin:8px 0}
+ul.n>li{position:relative;padding:7px 10px 7px 38px;margin:5px 0;border-radius:12px;transition:.3s}
+ul.n>li::before{content:"\f058";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;left:10px;top:7px;color:var(--blue)}
+ul.n>li:hover{background:var(--ice);transform:translateX(6px)}
+ul.n ul{list-style:none;margin:4px 0 0}ul.n ul li{padding:3px 0 3px 22px;position:relative}ul.n ul li::before{content:"➜";position:absolute;left:0;color:var(--pink);font-weight:800}
+.tip{display:flex;gap:14px;background:var(--yel);border:var(--b);border-radius:18px;padding:14px 18px;box-shadow:4px 4px 0 var(--ink);margin:16px 0;font-weight:500}
+.tip .ti{font-size:30px;animation:wob 3s infinite}
+.tip.bl{background:#c8e1ff}.tip.pk{background:#ffc9da}.tip.mt{background:#b5f5e8}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:16px 0}
+.three>div{border:var(--b);border-radius:22px;padding:18px;box-shadow:var(--sh);transition:.4s;background:#fff}
+.three>div:hover{transform:translateY(-8px) rotate(-1.5deg)}
+.three .ic{font-size:40px;display:block;margin-bottom:4px;animation:wob 3.5s infinite}
+.three h4{font-size:1.3rem;margin-bottom:6px}.three small{display:block;margin-top:8px;font-weight:700}
+.en{height:12px;border:2px solid var(--ink);border-radius:10px;background:#fff;margin-top:4px;overflow:hidden}.en i{display:block;height:100%;background:var(--blue);width:0;transition:width 1.4s .4s}
+.in .en i{width:var(--w)}
+.gl{width:100%;border-collapse:separate;border-spacing:0 8px;min-width:620px;font-size:15px}
+.gl th{background:var(--ink);color:#fff;padding:10px 12px;text-align:left;font-family:'Bricolage Grotesque'}
+.gl th:first-child{border-radius:12px 0 0 12px}.gl th:last-child{border-radius:0 12px 12px 0}
+.gl td{padding:11px 12px;background:#fff;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);vertical-align:top;transition:.3s}
+.gl td:first-child{border-left:2px solid var(--ink);border-radius:12px 0 0 12px;font-weight:800;width:150px}.gl td:last-child{border-right:2px solid var(--ink);border-radius:0 12px 12px 0}
+.gl tr:hover td{background:var(--ice)}.gl tr:hover{transform:scale(1.01)}
+.gl td:first-child span{display:inline-block;padding:3px 12px;border-radius:30px;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.gl tr:nth-child(1) td:first-child span{background:#ffe98a}.gl tr:nth-child(2) td:first-child span{background:#a6f5e8}.gl tr:nth-child(3) td:first-child span{background:#ffc1d4}.gl tr:nth-child(4) td:first-child span{background:#b9dcff}.gl tr:nth-child(5) td:first-child span{background:#ffe98a}.gl tr:nth-child(6) td:first-child span{background:#a6f5e8}.gl tr:nth-child(7) td:first-child span{background:#ffc1d4}
+.scale{background:var(--ice);border:var(--b);border-radius:22px;padding:14px;text-align:center}
+.scale svg{width:100%;max-width:520px;height:auto}
+#beam{transition:transform .5s cubic-bezier(.3,1.6,.5,1);transform-origin:260px 90px}
+.lv{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.lv>div{border:var(--b);border-radius:20px;overflow:hidden;box-shadow:var(--sh);background:#fff;transition:.4s}.lv>div:hover{transform:translateY(-8px) rotate(1.5deg)}
+.lv img{width:100%;height:130px;object-fit:cover;display:block}.lv div div{padding:12px}.lv .ph0{height:130px;display:grid;place-items:center;font-size:54px;background:var(--sky)}
+.photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.photos figure{border:var(--b);border-radius:16px;background:#fff;padding:6px 6px 2px;box-shadow:4px 4px 0 var(--ink);text-align:center;font-size:12.5px;font-weight:700;transition:.4s}
+.photos figure:nth-child(odd){transform:rotate(-2deg)}.photos figure:nth-child(even){transform:rotate(2deg)}.photos figure:hover{transform:scale(1.08) rotate(0)}
+.photos img{width:100%;height:105px;object-fit:cover;border-radius:10px;display:block}
+.mm{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}
+.mm span{border:var(--b);border-radius:30px;padding:6px 16px;font-weight:700;background:#fff;box-shadow:3px 3px 0 var(--ink);transition:.3s}.mm span:hover{transform:translateY(-5px) rotate(-3deg);background:var(--yel)}
+
+.flip{height:360px}.fb{font-size:13.5px}.fb .one{background:var(--yel);border:2px solid var(--ink);border-radius:12px;padding:8px 10px;font-weight:700;font-size:14px;margin-bottom:6px}
+.fb b.l{display:block;font-size:11px;color:var(--blue);margin-top:8px;letter-spacing:.5px}
+.mm span{cursor:pointer}.mm span.on{background:var(--blue);color:#fff;transform:scale(1.08)}
+.stp .steps{margin:8px 0}.stp .card{border:var(--b);border-radius:20px;padding:20px;background:var(--ice);min-height:110px;animation:swap .5s}
+.stp .card h3{margin-bottom:6px}.stp .row{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+
+.acl{display:grid;grid-template-columns:110px repeat(3,1fr);gap:6px;min-width:520px;font-weight:700;font-size:14px}
+.acl div{padding:10px 6px;text-align:center;border:2px solid var(--ink);border-radius:10px;background:#fff}
+.acl .h{background:var(--blue);color:#fff}.acl .c{cursor:pointer;transition:.3s;letter-spacing:2px}.acl .c:hover{transform:scale(1.12) rotate(-3deg)}
+.acl .c[data-l="0"]{background:#ffd3de}.acl .c[data-l="1"]{background:#fff3b0}.acl .c[data-l="2"]{background:#c9f7ee}.acl .c[data-l="3"]{background:#9be8ff}
+.fw{background:var(--ink);border-radius:20px;border:var(--b);padding:8px}.fw svg{width:100%;height:auto;display:block}
+.wall{transition:.5s}
+.vs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:14px}
+.vs>div{border:var(--b);border-radius:20px;padding:16px;box-shadow:var(--sh)}
+.chips2{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.chips2 span{border:2px solid var(--ink);border-radius:30px;padding:4px 14px;font-weight:700;font-size:14px;background:#fff;box-shadow:2px 2px 0 var(--ink);cursor:default;transition:.3s}
+.chips2 span:hover{transform:translateY(-4px) rotate(-3deg);background:var(--yel)}
+
+.banner{position:relative;height:210px;border:var(--b);border-radius:24px;overflow:hidden;box-shadow:var(--sh);margin:0 0 20px;transition:.5s}
+.banner:hover{transform:rotate(-1deg) scale(1.02)}.banner img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1s}.banner:hover img{transform:scale(1.1)}
+.banner figcaption{position:absolute;left:14px;bottom:14px;background:var(--yel);border:var(--b);border-radius:30px;padding:3px 16px;font-weight:800;box-shadow:3px 3px 0 var(--ink);transform:rotate(-2deg)}
+.pnl{width:100%;height:100%;min-height:110px;display:grid;place-items:center;font-size:58px;background:linear-gradient(135deg,var(--sky),var(--blue));animation:wob 4s ease-in-out infinite}
+.photos img,.photos .pnl{height:150px!important;border-radius:10px}.photos figure{padding-bottom:4px}
+.photo img,.photo .pnl{height:190px!important;border-radius:10px}
+.lv img,.lv .pnl{height:150px!important;border-radius:0}
+
+.dom{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:16px 0}
+.dom div{width:112px;border:var(--b);border-radius:16px;padding:12px 6px;text-align:center;font-weight:700;font-size:13px;background:#fff;box-shadow:4px 4px 0 var(--ink);transition:.6s cubic-bezier(.5,1.8,.5,1);transform-origin:bottom left}
+.dom div i{display:block;font-size:28px;margin-bottom:4px;color:var(--blue)}
+.dom div.fall{transform:rotate(24deg) translateY(16px);background:#ffb3b3;box-shadow:none}.dom div.fall i{color:#c62828}
+.dom div.fall::after{content:" 💥"}
+.bars .r{display:grid;grid-template-columns:120px 1fr 50px;gap:10px;align-items:center;margin:8px 0;font-weight:700}
+.bars .t{height:22px;border:var(--b);border-radius:20px;background:#fff;overflow:hidden}.bars .t i{display:block;height:100%;width:0;transition:width .5s cubic-bezier(.3,1.5,.5,1);border-radius:20px}
+.shift{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin:12px 0}
+.shift div{border:var(--b);border-radius:18px;padding:12px 20px;font:800 1.2rem 'Bricolage Grotesque';box-shadow:4px 4px 0 var(--ink)}
+.shift .a{background:#ffd3de;text-decoration:line-through wavy var(--pink)}.shift .b{background:#c9f7ee;animation:tilt 3s infinite}.shift i{font-size:26px;color:var(--blue);animation:nud 1.2s infinite}
+.vs2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}.vs2>div{border:var(--b);border-radius:20px;padding:16px;box-shadow:var(--sh)}
+
+.cmp{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px;margin:14px 0}.cmp>div{border:var(--b);border-radius:22px;padding:18px;box-shadow:var(--sh);transition:.4s}.cmp>div:hover{transform:translateY(-8px) rotate(-1deg)}
+.lay label{display:flex;gap:12px;align-items:center;border:var(--b);border-radius:14px;padding:10px 14px;margin:8px 0;cursor:pointer;background:#fff;font-weight:700;transition:.3s;box-shadow:3px 3px 0 var(--ink)}
+.lay label:hover{transform:translateX(8px)}.lay input{width:20px;height:20px;accent-color:var(--blue)}
+.big-bar{height:38px;border:var(--b);border-radius:30px;background:#fff;overflow:hidden;margin:10px 0}.big-bar i{display:block;height:100%;background:linear-gradient(90deg,#ff8fb1,#ff6b8b);transition:width .7s cubic-bezier(.3,1.5,.5,1);display:flex;align-items:center;justify-content:flex-end;padding-right:12px;color:#fff;font-weight:800}
+.lad{display:flex;flex-direction:column;gap:6px;margin:8px 0}.lad div{border:2px solid var(--ink);border-radius:12px;padding:8px 14px;font-weight:700;transition:.3s}.lad div:hover{transform:translateX(10px)}
+.crit{display:grid;grid-template-columns:150px 1fr 40px;gap:10px;align-items:center;margin:6px 0;font-weight:700}
+.sc{font:800 3rem 'Bricolage Grotesque';text-align:center;color:var(--mint)}
+
+.rk{display:grid;grid-template-columns:150px 1fr 1fr 70px;gap:10px;align-items:center;margin:6px 0;font-weight:700;font-size:14px}
+.rk input{width:100%}.rkh{font-weight:800;color:var(--blue)}
+.rank{list-style:none;counter-reset:r;margin-top:10px}.rank li{counter-increment:r;display:flex;align-items:center;gap:10px;border:var(--b);border-radius:14px;padding:8px 12px;margin:6px 0;background:#fff;box-shadow:3px 3px 0 var(--ink);transition:.4s;font-weight:700}
+.rank li::before{content:"#" counter(r);background:var(--yel);border:2px solid var(--ink);border-radius:30px;padding:0 10px}
+.rank li i{display:block;height:12px;border-radius:10px;background:linear-gradient(90deg,var(--sky),var(--blue));margin-left:auto;transition:width .5s}
+.tva{display:grid;grid-template-columns:130px repeat(4,1fr);gap:6px;min-width:600px;font-size:13px;font-weight:700}
+.tva div{padding:10px 4px;text-align:center;border:2px solid var(--ink);border-radius:10px;background:#fff}.tva .h{background:var(--blue);color:#fff}
+.tva .c{cursor:pointer;transition:.3s}.tva .c:hover{transform:scale(1.1) rotate(-3deg)}
+.tva .c[data-l="0"]{background:#eaf4ff;color:#7a93b8}.tva .c[data-l="1"]{background:#c9f7ee}.tva .c[data-l="2"]{background:#ffe98a}.tva .c[data-l="3"]{background:#ffb3b3}
+.fx{background:var(--ink);color:#fff;border-radius:18px;padding:14px 18px;font-family:monospace;font-size:14.5px;margin:10px 0;overflow-x:auto;border:var(--b)}.fx b{color:var(--yel)}
+
+.chars{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:12px 0}
+.chars button{font:700 15px 'DM Sans';border:var(--b);border-radius:18px;padding:12px 8px;background:#fff;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:.3s;color:var(--ink)}
+.chars button span{display:block;font-size:34px}.chars button small{display:block;font-weight:500}
+.chars button:hover{transform:translateY(-6px) rotate(-2deg)}.chars button.on{background:var(--blue);color:#fff;transform:translateY(-4px)}
+.vote button{display:block;width:100%;text-align:left;font:700 15px 'DM Sans';border:var(--b);border-radius:14px;padding:10px 14px;margin:8px 0;background:#fff;cursor:pointer;position:relative;overflow:hidden;box-shadow:3px 3px 0 var(--ink);color:var(--ink);transition:.3s}
+.vote button:hover{transform:translateX(8px)}.vote button i{position:absolute;left:0;top:0;bottom:0;background:var(--sky);opacity:.6;width:0;transition:width .6s;z-index:0}.vote button span{position:relative;z-index:1}
+.flowx{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:14px 0}
+.flowx div{border:var(--b);border-radius:16px;padding:10px 14px;font-weight:700;text-align:center;background:#fff;box-shadow:3px 3px 0 var(--ink);transition:.3s}.flowx div:hover{transform:translateY(-5px)}
+.flowx i.ar{color:var(--blue);font-size:20px;animation:nud 1.2s infinite}
+.warnb{background:#ffd3de;border:var(--b);border-radius:14px;padding:6px 14px;font-weight:800;animation:tilt 2.5s infinite;display:inline-block}
+</style></head><body>
+<div id="bar"></div><div id="glow"></div>
+<nav class="pill"><a href="#intro">Intro</a><a href="#core">Terms</a><a href="#s1">Crisis</a><a href="#s2">Consultant</a><a href="#s3">Findings</a><a href="#s4">Debate</a><a href="#s5">Ransomware</a><a href="#s6">Hybrid?</a><a href="#take">Recap</a></nav>
+<div class="wrap">
+<header class="hero"><canvas id="net"></canvas>
+<span class="sticker" style="right:70px;top:40px">🧀</span><span class="sticker" style="right:190px;bottom:36px;animation-delay:-1s">💀</span><span class="sticker" style="right:30px;bottom:100px;animation-delay:-2s">🏭</span>
+<span class="tag"><i class="fa-solid fa-bolt"></i> Week 6 · Lecture 3</span>
+<h1><span class="type" id="typed"></span></h1>
+<p>The Newhouse Cheese ransomware case: characters, plot, findings, and the big debate. Notes you can click through like a story. 👆</p></header>
+
+<section id="intro" class="hid"><div class="head"><div class="num">📖</div><h2>Introduction: The Case</h2></div><div class="box">
+<figure class="banner"><img data-k="cheese,dairy" data-n="41" alt=""><figcaption>🧀 Newhouse Cheese Company</figcaption></figure>
+<ul class="n"><li>Digital age = <mark class="m">huge opportunities</mark> + <mark class="p">significant vulnerabilities</mark>, even for businesses with deep roots.</li>
+<li><span class="bd y">Newhouse Cheese Company</span>, founded <b>1811</b> ➜ a venerable institution.</li>
+<li>After centuries of traditional operations: <b>extensive digitalization in the early 2000s</b> under <b>5th-generation CEO Chadwick Newhouse</b>: heavy investment in <mark>precision control monitors &amp; devices</mark>.</li>
+<li>Result: <b>efficiency &amp; cost savings</b> ✅ but <mark class="p">exposed to sophisticated cyber threats</mark> ❌.</li>
+<li>Lecture: aftermath of a <u class="u">crippling ransomware attack</u> ➜ company paid a <b>substantial sum</b> to regain control.</li>
+<li>Real-world lesson: <b>industrial control systems</b>, once isolated, are now <mark>prime targets</mark> ➜ consequences from financial loss to <u class="u">public health crises</u>.</li>
+<li>Needs a comprehensive approach: <b>technology advancement ⚖️ robust security</b>, often re-evaluating the very processes that drive modern industry.</li></ul>
+<p style="font-weight:700">📜 The story so far (click through):</p><div class="stp" id="stpStory"></div></div></section>
+
+<section id="core" class="hid"><div class="head"><div class="num">🃏</div><h2>Core Concepts</h2></div>
+<figure class="banner"><img data-k="computer,code" data-n="42" alt=""><figcaption>📚 Know your terms</figcaption></figure>
+<p style="font-weight:700">Tap a card to flip it: one-liner first, then the original definition and significance.</p><div class="fgrid" id="fgrid"></div></section>
+
+<section id="s1" class="hid"><div class="head"><div class="num">1</div><h2>The Ransomware Crisis &amp; Initial Response</h2></div><div class="box">
+<figure class="banner"><img data-k="executives,meeting" data-n="43" alt=""><figcaption>😬 A very tense meeting</figcaption></figure>
+<ul class="n"><li>Hackers <mark class="p">gained access</mark>, <b>shut down a critical temperature control device</b> to prove control, and <b>claimed access to sensitive recipe files</b>.</li><li>On <u class="u">legal advice</u>, CEO Chad <span class="bd p">wired $49,999</span> to the unknown attackers.</li></ul>
+<div class="stats"><div class="stat"><b data-n="1811">0</b>year founded</div><div class="stat"><b>$<span data-n="49999">0</span></b>ransom paid</div><div class="stat"><b>$<span data-n="6">0</span>M</b>already spent on security, yet breaches rising</div></div>
+<p style="font-weight:700">👥 The tense meeting: tap each person for their stance</p>
+<div class="chars" id="chars"><button><span>😠</span>Chad<small>Newhouse</small></button><button><span>🛡️</span>Frank Armen<small>CISO</small></button><button><span>👩‍💼</span>Sara<small>Deputy to the CEO</small></button><button><span>👔</span>Bruce Boyle<small>CEO (as in notes)</small></button><button><span>💼</span>Jenny Cruickshank<small>CFO</small></button></div>
+<div class="tip bl" id="charTxt" style="min-height:100px"><span class="ti">👆</span><div>Pick a character.</div></div></div></section>
+
+<section id="s2" class="hid"><div class="head"><div class="num">2</div><h2>The Consultant's Risk Assessment</h2></div><div class="box">
+<figure class="banner"><img data-k="consultant,laptop" data-n="44" alt=""><figcaption>🕵️ Enter consultant Jack Parem</figcaption></figure>
+<ul class="n"><li><b>3 weeks later</b>: Chad, Frank &amp; Sara meet cybersecurity consultant <span class="bd y">Jack Parem</span>.</li><li>Jack starts by understanding the <b>digital infrastructure</b>:</li></ul>
+<div class="flowx"><div>🧪 Tank sensors<br><small>impurities · temperature · bacteria</small></div><i class="ar fa-solid fa-arrow-right"></i><div>🌐 Networked system</div><i class="ar fa-solid fa-arrow-right"></i><div>📲 Remote monitoring &amp; alerts<br><small>saves millions</small></div></div>
+<ul class="n"><li>Real-time data = <mark class="m">saving millions of dollars</mark>.</li><li>⚠️ Access was broad: <span class="warnb">"anyone with a login"</span> ➜ even Chad logged in <u class="u">from a hotel</u>.</li></ul>
+<p style="font-weight:700">Jack's 4-step plan (click through):</p><div class="stp" id="stpPlan"></div>
+<ul class="n" style="margin-top:12px"><li>Result: execs saw <mark>how deeply integrated</mark> operations were with digital networks, and the vulnerabilities that came with it.</li></ul></div></section>
+
+<section id="s3" class="hid"><div class="head"><div class="num">3</div><h2>Findings &amp; Recommendations</h2></div><div class="box">
+<figure class="banner"><img data-k="factory,machinery" data-n="45" alt=""><figcaption>🏭 Industrial control systems</figcaption></figure>
+<h4 class="sub" style="font-size:1.1rem;margin-top:0">🚨 3 points of failure</h4>
+<div class="stats"><div class="stat"><b data-n="4">0</b>distinct pathways into the network</div><div class="stat"><b>ICS</b>evidence of hacker access to industrial control systems</div><div class="stat"><b data-n="1">0</b>system compromised by a bot</div></div>
+<h4 class="sub" style="font-size:1.1rem">✅ Recommendations</h4>
+<div class="three" style="margin-top:6px"><div style="background:#ffe9a3"><span class="ic">🌡️</span><h4>Thermization</h4><ul class="n"><li>Take it <mark>completely offline</mark></li><li>Isolate from the network</li></ul></div>
+<div style="background:#b5f5e8"><span class="ic">🎛️</span><h4>Temperature controls</h4><ul class="n"><li><b>Remove</b> network temp controls &amp; automated adjustments</li><li>OR keep them <mark class="m">backstopped by human manual controls</mark></li></ul></div>
+<div style="background:#ffc9da"><span class="ic">🔑</span><h4>Access control</h4><ul class="n"><li>Fix access vulnerabilities</li><li>Pen test: Jack could control <b>access systems</b>, <b>industrial systems</b> &amp; reach <mark class="p">all sensitive recipes</mark></li></ul></div></div>
+<div class="tip pk"><span class="ti">😱</span><div><b>The "eye-opener":</b> Chad was shocked by how accessible his <u class="u">proprietary recipes</u> were ➜ he saw the impact on the <b>bottom line</b>. (This was <mark>penetration testing</mark>: an authorized simulated attack.)</div></div></div></section>
+
+<section id="s4" class="hid"><div class="head"><div class="num">4</div><h2>The Heated Debate: Digitalization vs Security</h2></div><div class="box">
+<figure class="banner"><img data-k="debate,meeting" data-n="46" alt=""><figcaption>🔥 Money vs safety</figcaption></figure>
+<div class="vs2"><div style="background:#ffe9b0"><h4>👔 Bruce Boyle</h4><ul class="n"><li>"The whole point of going digital was to <mark>save money</mark>."</li><li>"Going offline would <mark class="p">kill the bottom line</mark>."</li></ul></div>
+<div style="background:#ffd3de"><h4>🛡️ Frank Armen</h4><ul class="n"><li>Are we being asked to <mark class="p">"roll back the business 20 years, for a one in a million chance"</mark>?</li></ul></div>
+<div style="background:#c9f7ee"><h4>🕵️ Jack Parem</h4><ul class="n"><li>Not back to the "stone age" ➜ goal is to <mark class="m">"reduce digital pathways"</mark></li><li>Mitigate the <b>"most likely vectors"</b> of attack</li></ul></div></div>
+<h4 class="sub" style="font-size:1.1rem">☠️ The twist: "listeria does" scare him more</h4>
+<div class="tabs" data-t="a"><button class="tab on">💸 Ransomware</button><button class="tab">🦠 Listeria</button></div>
+<div data-p="a"><div class="pane on"><ul class="n"><li>Financial loss, disrupted operations, ransom paid</li><li>Serious, <u class="u">but recoverable</u></li></ul></div>
+<div class="pane"><ul class="n"><li>Compromised <b>industrial controls in food production</b> ➜ <mark class="p">product contamination</mark></li><li>Potential <b>loss of life</b> + catastrophic reputational damage</li><li><u class="u">Far outweighs</u> the financial impact of ransomware (citing recent health hazards caused by companies)</li></ul></div></div></div></section>
+
+<section id="s5" class="hid"><div class="head"><div class="num">5</div><h2>Ransomware &amp; Its Broader Impact</h2></div><div class="box">
+<figure class="banner"><img data-k="ransomware,hacker" data-n="47" alt=""><figcaption>💀 Lock · demand · pay?</figcaption></figure>
+<p style="font-weight:700">How a ransomware attack unfolds (click through):</p><div class="stp" id="stpRan"></div></div></section>
+
+<section id="s6" class="hid"><div class="head"><div class="num">6</div><h2>Hybrid (Manual + Digital) Approach: Pros &amp; Cons</h2></div><div class="box">
+<figure class="banner"><img data-k="scale,balance" data-n="48" alt=""><figcaption>⚖️ The in-between solution</figcaption></figure>
+<p><b>Question to the audience:</b> Should Chad implement the consultant's recommendations? Consensus: an <mark class="b">"in-between solution"</mark>: don't abandon digitalization, but <u class="u">strategically move critical assets offline or restrict access</u>. <b>Cast your vote:</b></p>
+<div class="vote" id="vote"><button><i></i><span>🔌 Go fully manual / offline</span></button><button><i></i><span>⚖️ Hybrid: critical assets offline, rest digital</span></button><button><i></i><span>🌐 Stay fully digital, add more security</span></button></div>
+<p style="font-size:13.5px">(Votes are just for you, nothing is saved.)</p>
+<div class="pc"><div class="pro"><h4>👍 Pros</h4><ul><li><b>Isolation &amp; prevention</b>: critical systems isolated ➜ less damage (<mark>theory of least privileges</mark>: limits attacker access to the entire system)</li><li><b>Production continuity</b>: manual backup/parallel system keeps production going</li><li><b>Sensitive data security</b>: offline data is safer from digital access</li><li><b>Reduced unauthorized access</b>: fewer digital pathways/access points</li></ul></div>
+<div class="con"><h4>👎 Cons</h4><ul><li><b>Sunk cost</b>: big investment in automation wasted if reverted</li><li><b>Reputation &amp; investor trust</b> may suffer</li><li><b>Increased operational cost</b>: hiring, training, skills</li><li><b>Initial operational hindrance</b>: setting up parallel manual systems</li><li><b>Human error</b> returns: the main reason for digitalizing</li></ul></div></div>
+<div class="tip"><span class="ti">💡</span><div>The big challenge: balancing <b>Industry 4.0 &amp; IoT benefits</b> with severe risks (financial loss and potential <u class="u">loss of life</u>) when industrial controls are hit.</div></div></div></section>
+
+<section id="take" class="hid"><div class="head"><div class="num">✅</div><h2>Key Takeaways (tick as you revise)</h2></div><div class="box"><b id="mt">0 / 8 mastered</b><div class="meter"><div id="mb"></div></div><ul class="take" id="tl2"></ul></div></section>
+
+<section class="hid"><div class="head"><div class="num">🏁</div><h2>Conclusion</h2></div><div class="box fin"><ul class="n" style="color:#fff">
+<li>Newhouse Cheese: <b>ransomware crisis ➜ strategic re-evaluation</b> of its digital footprint = a universal challenge.</li>
+<li>Efficiency &amp; cost savings from digitalization/IoT vs <mark>exposing critical operational technology</mark> to sophisticated threats.</li>
+<li>Broader struggle: harness <b>Industry 4.0</b> without sacrificing <u class="u" style="text-decoration-color:#7cc7ff">security &amp; safety</u>.</li>
+<li>Consultant's pragmatic middle ground: <mark>selectively reduce digital pathways</mark> + <b>human oversight</b> for highly critical processes.</li>
+<li>Not all digital integration suits all systems, especially those with <b>severe safety implications</b> (food production).</li>
+<li>Need: <b>proactive cyber-informed engineering</b>, continuous risk assessment, flexible strategy ➜ <mark>operational resilience &amp; public safety</mark>.</li></ul></div></section>
+<footer>💙 Week 6 · Lecture 3 · you've got this</footer></div><script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+addEventListener('scroll',()=>{const h=document.documentElement;$('#bar').style.width=h.scrollTop/(h.scrollHeight-h.clientHeight)*100+'%'},{passive:true});
+addEventListener('pointermove',e=>{const g=$('#glow');g.style.left=e.clientX+'px';g.style.top=e.clientY+'px'});
+const T='Risk Management: Part 03';let ti=0;(function t(){$('#typed').textContent=T.slice(0,ti++);if(ti<=T.length)setTimeout(t,50)})();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});$$('.hid').forEach(e=>io.observe(e));
+const links=$$('nav.pill a'),spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-40% 0px -55% 0px'});$$('section[id]').forEach(s=>spy.observe(s));
+const cv=$('#net'),cx=cv.getContext('2d');let W,H,P=[];function rs(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight}rs();addEventListener('resize',rs);
+for(let i=0;i<45;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.7,vy:(Math.random()-.5)*.7});
+(function d(){cx.clearRect(0,0,W,H);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;cx.fillStyle='rgba(255,255,255,.7)';cx.beginPath();cx.arc(p.x,p.y,2.5,0,7);cx.fill()});for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){const a=P[i],b=P[j],D=Math.hypot(a.x-b.x,a.y-b.y);if(D<120){cx.strokeStyle=`rgba(255,255,255,${.35-D/400})`;cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke()}}requestAnimationFrame(d)})();
+const C=[['Ransomware','fa-skull-crossbones','#ffe98a',"Malware that locks your files until you pay.","Malicious software that encrypts a victim's files or locks their system, demanding payment (often in cryptocurrency) for decryption or release.","Directly impacts business continuity and financial stability, as seen with Newhouse Cheese's payment of $49,999."],
+['Digitalization','fa-microchip','#a6f5e8',"Moving processes onto digital systems.","The process of converting information into a digital format and integrating digital technology into business processes.","While offering efficiency and cost savings, it introduces new attack surfaces and vulnerabilities, as highlighted by the company's investment in precision control monitors."],
+['Industrial Control Systems (ICS)','fa-industry','#ffc1d4',"The computers that run machines in factories and plants.","Computerized systems that monitor and control industrial processes, such as those found in manufacturing, energy, and food production.","Critical infrastructure components that, if compromised, can lead to severe operational disruptions, financial losses, and even public safety hazards like product contamination."],
+['Cyber-Informed Engineering (CIE)','fa-drafting-compass','#b9dcff',"Build security into the design from the start.","An approach that integrates cybersecurity considerations into the design and engineering of systems from the outset, rather than as an afterthought.","Emphasizes proactive risk mitigation by designing critical systems to be resilient against cyber threats, potentially by isolating them from digital connectivity."],
+['Social Engineering','fa-masks-theater','#ffe98a',"Tricking people instead of hacking computers.","Psychological manipulation of people into performing actions or divulging confidential information.","A common tactic used by cybercriminals to gain initial access to systems, bypassing technical security measures through human vulnerability."],
+['Sunk Cost','fa-piggy-bank','#a6f5e8',"Money already spent that you can't get back.","A cost that has already been incurred and cannot be recovered.","Represents the financial investment already made in digitalization, making it difficult for companies to justify reverting to manual systems despite security risks."],
+['Listeria','fa-bacteria','#ffc1d4',"Dangerous food bacteria that can make people seriously ill.","A type of bacteria that can cause serious foodborne illness, particularly dangerous for vulnerable populations.","Used as an example of a severe public health consequence that could arise from compromised industrial control systems in food production, far exceeding the impact of ransomware."],
+['Digital Pathways','fa-route','#b9dcff',"The routes data (and attackers) can travel through your network.","The various routes and connections through which digital data flows within an organization's network and to external systems.","Reducing these pathways, especially for critical systems, is a key strategy for minimizing the attack surface and potential vectors for cyberattacks."],
+['Penetration Testing','fa-user-ninja','#ffe98a',"A permitted fake attack to find weak spots first.","An authorized simulated cyberattack on a computer system, network, or web application to evaluate its security.","A crucial method for identifying vulnerabilities and weaknesses in a system before malicious actors can exploit them, as demonstrated by the consultant's findings."]];
+$('#fgrid').innerHTML=C.map(c=>`<div class="flip"><div class="fi"><div class="ff" style="background:${c[2]}"><i class="fa-solid ${c[1]}"></i><span style="font-size:1.15rem">${c[0]}</span><small>tap to flip</small></div><div class="fb"><div class="one">💡 ${c[3]}</div><b class="l">ORIGINAL DEFINITION</b>${c[4]}<b class="l">SIGNIFICANCE</b>${c[5]}</div></div></div>`).join('');
+$$('.flip').forEach(f=>f.onclick=()=>f.classList.toggle('on'));
+function stepper(id,S){const el=$('#'+id);let i=0;el.innerHTML='<div class="steps">'+S.map(()=>'<span></span>').join('')+'</div><div class="card"></div><div class="row"><button class="btn b1">◀ Back</button><button class="btn b2">Next ▶</button></div>';
+const draw=()=>{const c=$('.card',el);c.style.animation='none';c.offsetHeight;c.style.animation='';c.innerHTML=`<h3>${S[i][2]} ${S[i][0]}</h3><p>${S[i][1]}</p>`;$$('.steps span',el).forEach((x,k)=>x.classList.toggle('on',k<=i))};
+$('.b1',el).onclick=()=>{i=(i+S.length-1)%S.length;draw()};$('.b2',el).onclick=()=>{i=(i+1)%S.length;draw()};draw()}
+
+
+stepper('stpStory',[['1811: the founding','Newhouse Cheese Company is founded: <b>centuries of traditional cheese-making</b>.','🧀'],['Early 2000s: digitalization','5th-gen CEO <b>Chadwick Newhouse</b> invests heavily in <mark>precision control monitors &amp; devices</mark>.','⚙️'],['Efficiency up, exposure up','Savings &amp; efficiency ✅ but <mark class="p">sophisticated cyber threats</mark> now reach critical systems ❌','📈'],['Ransomware strikes','Hackers shut down a temperature control device and claim the recipe files ➜ <b>$49,999 paid</b>.','💀'],['Debate & consultant','Execs argue; consultant <b>Jack Parem</b> does a comprehensive risk assessment ➜ should digitalization be dialed back?','🕵️']]);
+stepper('stpPlan',[['Step 1: Identify Critical Information &amp; Processes','Visited <b>each process</b>, engaged stakeholders, understood how each works ➜ identified the <mark>most vital assets &amp; operations</mark>.','🎯'],['Step 2: Map the Digital Terrain','Analysis of <b>hardware, software, network structure, human interaction points, supply chain dependencies</b> ➜ the whole ecosystem where critical processes live.','🗺️'],['Step 3: Identify Critical Attack Points','Using steps 1 &amp; 2: most likely attack points based on <mark>asset criticality</mark> + <mark class="p">openness/accessibility of systems</mark>.','📍'],['Step 4: Generate Options for Attack Mitigation','Develop <b>options to mitigate attacks</b> based on those points &amp; their likelihood; also <u class="u">evaluate the criticality of potential attacks</u>.','🛡️']]);
+stepper('stpRan',[['1. Create or buy','Hackers <b>build ransomware</b> themselves or <mark>buy it from cybercriminals</mark>. <span class="bd p">Ransomware as a Service (RaaS)</span> = a growing business model.','🛒'],['2. Get in','Use <mark class="p">social engineering</mark> skills to gain access to systems.','🎭'],['3. Encrypt &amp; demand','Encrypt IT systems &amp; data, <b>demand ransom</b>, often in <u class="u">cryptocurrency</u>.','🔒'],['4. Consequences','Newhouse: payment ➜ release. But <b>NotPetya</b> showed that even after payment systems might <mark class="p">not be released, effectively "killing" them</mark>. High &amp; evolving threat, esp. to <b>industrial controls</b>.','⚠️']]);
+const CH=['<b>Chad:</b> angry; execs struggle to meet his gaze. He wired the ransom on legal advice.','<b>Frank Armen (CISO):</b> wants a <mark>bigger budget for intrusion monitoring</mark> + a review of <b>incident response protocols</b>. Notes <u class="u">$6M already spent</u> yet breaches are increasing.','<b>Sara (deputy to the CEO):</b> why are critical systems &amp; <b>family recipes</b> even online? Wants <mark>paper-based records</mark> for sensitive info. Cites a risk process: overly complicated software &amp; <b>"anywhere, anytime access"</b> make orgs more vulnerable ➜ <u class="u">reduce digitalization, reintroduce human oversight</u>.','<b>Bruce Boyle:</b> later argues <i>the whole point of going digital was to save money</i>; going offline would <mark class="p">kill the bottom line</mark>.','<b>Jenny Cruickshank (CFO):</b> present at the tense meeting (the notes give no specific statement).'];
+$$('#chars button').forEach((b,i)=>b.onclick=()=>{$$('#chars button').forEach(x=>x.classList.remove('on'));b.classList.add('on');$('#charTxt div').innerHTML=CH[i]});
+const V=[0,0,0];$$('#vote button').forEach((b,i)=>b.onclick=()=>{V[i]++;const t=V.reduce((a,c)=>a+c,0);$$('#vote button').forEach((x,k)=>{$('i',x).style.width=(V[k]/t*100)+'%'})});
+const K=["Digitalization, while offering efficiency, introduces significant cybersecurity vulnerabilities, especially in industrial control systems.","Ransomware attacks can cripple operations and demand substantial payments, but the potential for physical harm (e.g., food contamination) from compromised industrial controls can be far more severe.","A comprehensive risk assessment involves identifying critical assets, mapping the digital terrain, pinpointing attack vectors, and developing mitigation options.","Reducing digital pathways and isolating critical systems can significantly decrease an organization's attack surface.","A hybrid approach, combining strategic offline operations for critical assets with continued digitalization for non-critical functions, can offer a balanced solution.","The \"sunk cost\" of prior digital investments and potential impacts on reputation and operational costs are significant considerations when deciding to revert or modify digital systems.","Cyber-informed engineering, which integrates security from the design phase, is crucial for building resilient systems in an increasingly connected world.","Human factors, including social engineering and the potential for human error in manual processes, remain critical elements in overall cybersecurity risk."];
+$('#tl2').innerHTML=K.map(k=>`<li><span class="ck"><i class="fa-solid fa-check"></i></span><span>${k}</span></li>`).join('');
+$$('.tabs').forEach(tb=>{const ps=$$('.pane',$(`[data-p="${tb.dataset.t}"]`));$$('.tab',tb).forEach((b,i)=>b.onclick=()=>{$$('.tab',tb).forEach(x=>x.classList.remove('on'));b.classList.add('on');ps.forEach(p=>p.classList.remove('on'));ps[i].classList.add('on')})});
+$$('#tl2 li').forEach(li=>li.onclick=()=>{li.classList.toggle('d');const n=$$('#tl2 li.d').length;$('#mb').style.width=n/8*100+'%';$('#mt').textContent=n+' / 8 mastered';if(n==8){$('#mt').textContent='🎉 8 / 8, exam ready!';boom()}});
+function boom(){for(let i=0;i<70;i++){const c=document.createElement('i');c.className='conf';c.style.cssText=`left:${Math.random()*100}vw;top:-20px;background:${['#2563ff','#ffd94a','#5eead4','#ff8fb1','#7cc7ff'][i%5]};--x:${(Math.random()-.5)*200}px;animation-delay:${Math.random()*.5}s`;document.body.appendChild(c);setTimeout(()=>c.remove(),3000)}}
+(function(){const pools={tech:['1550751827-4bd374c3f58b','1563986768609-322da13575f3','1558494949-ef010cbdcc31','1518770660439-4636190af475','1526374965328-7f61d4dc18c5','1555949963-ff9fe0c870eb','1461749280684-dccba630e2f6','1451187580459-43490279c0fa'],ppl:['1504384308090-c894fdcc538d','1531482615713-2afd69097998','1522202176988-66273c2fd55f','1497366216548-37526070297c','1573164713714-d95e436ab8d6']};
+const cat=k=>/office|meeting|executives|cheese|dairy|team|planning|strategy|money|business|chess|finance|ecommerce|shopping/.test(k)?'ppl':'tech';
+const EM=[['cheese','🧀'],['factory','🏭'],['microscope','🔬'],['control','🎛️'],['executive','👔'],['hacker','🕵️'],['calculator','🧮'],['ecommerce','🛒'],['router','📡'],['chess','♟️'],['money','💰'],['monitor','📡'],['team','👥'],['planning','🗺️'],['shield','🛡️'],['server','🖥️'],['computer','💻'],['office','🏢']];
+const emo=k=>(EM.find(e=>k.includes(e[0]))||[0,'🎯'])[1];
+$$('img[data-k]').forEach(img=>{const k=img.dataset.k,n=+img.dataset.n,p=pools[cat(k)];const list=['https://images.unsplash.com/photo-'+p[n%p.length]+'?auto=format&fit=crop&w=800&q=70','https://images.unsplash.com/photo-'+p[(n+3)%p.length]+'?auto=format&fit=crop&w=800&q=70','https://loremflickr.com/800/500/'+k+'?lock='+n];let i=0;
+img.onerror=()=>{i++;if(i<list.length)img.src=list[i];else{const d=document.createElement('div');d.className='pnl';d.textContent=emo(k);img.replaceWith(d)}};img.src=list[0]})})();
+</script></body></html>

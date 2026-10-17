@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Week 5 L1 · Cyber Security Policy</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1f4d;--blue:#2563ff;--sky:#7cc7ff;--ice:#e8f3ff;--pale:#f4f9ff;--yel:#ffd94a;--mint:#5eead4;--pink:#ff8fb1;--w:#fff;--b:3px solid var(--ink);--sh:6px 6px 0 var(--ink)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--pale);line-height:1.7;font-size:17px;
+background-image:radial-gradient(#b9d8ff 1.6px,transparent 1.6px);background-size:26px 26px;animation:dots 12s linear infinite}
+@keyframes dots{to{background-position:26px 26px}}
+h1,h2,h3,h4,h5{font-family:'Bricolage Grotesque',sans-serif;line-height:1.15}
+#bar{position:fixed;top:0;left:0;height:8px;width:0;background:repeating-linear-gradient(45deg,var(--blue) 0 12px,var(--sky) 12px 24px);background-size:34px 34px;animation:stripe 1s linear infinite;z-index:99;border-bottom:2px solid var(--ink)}
+@keyframes stripe{to{background-position:34px 0}}
+#glow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(rgba(37,99,255,.18),transparent 65%);pointer-events:none;transform:translate(-50%,-50%);z-index:0}
+nav.pill{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:90;display:flex;gap:4px;background:var(--w);border:var(--b);border-radius:40px;padding:5px;box-shadow:4px 4px 0 var(--ink);max-width:96vw;overflow-x:auto}
+nav.pill a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:7px 14px;border-radius:30px;white-space:nowrap;transition:.3s}
+nav.pill a:hover{background:var(--ice)}nav.pill a.on{background:var(--blue);color:#fff;transform:scale(1.06)}
+.wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 18px 80px}
+
+/* hero */
+.hero{position:relative;margin-top:90px;border:var(--b);border-radius:34px;background:var(--blue);color:#fff;padding:60px 44px;box-shadow:10px 10px 0 var(--ink);overflow:hidden;animation:drop .9s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes drop{from{transform:translateY(-60px) rotate(-2deg);opacity:0}}
+#net{position:absolute;inset:0;width:100%;height:100%}
+.hero>*:not(canvas){position:relative}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;max-width:720px}
+.type::after{content:"|";animation:blink .8s steps(1) infinite}@keyframes blink{50%{opacity:0}}
+.hero p{margin-top:14px;max-width:560px;font-size:1.1rem}
+.sticker{position:absolute;font-size:46px;animation:wob 4s ease-in-out infinite;filter:drop-shadow(3px 3px 0 var(--ink));cursor:grab}
+@keyframes wob{50%{transform:translateY(-16px) rotate(12deg)}}
+.tag{display:inline-block;background:var(--yel);color:var(--ink);font-weight:700;border:var(--b);border-radius:30px;padding:3px 16px;margin-bottom:16px;transform:rotate(-3deg);animation:tilt 3s ease-in-out infinite}
+@keyframes tilt{50%{transform:rotate(3deg) scale(1.06)}}
+
+/* sections */
+section{margin:60px 0}
+.head{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.head .num{background:var(--yel);border:var(--b);box-shadow:4px 4px 0 var(--ink);width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:24px;font-family:'Bricolage Grotesque';font-weight:800;transition:.4s}
+.head:hover .num{transform:rotate(-12deg) scale(1.15)}
+.head h2{font-size:clamp(1.6rem,4vw,2.3rem)}
+.box{background:var(--w);border:var(--b);border-radius:24px;padding:26px;box-shadow:var(--sh);transition:.35s}
+.box+.box{margin-top:22px}
+.hid{opacity:0;transform:translateY(40px) scale(.97);transition:opacity .7s,transform .7s cubic-bezier(.2,1.3,.4,1)}.hid.in{opacity:1;transform:none}
+p{margin-bottom:13px}
+mark{background:linear-gradient(transparent 50%,var(--yel) 50%);padding:0 2px;color:inherit;background-size:0 100%;background-repeat:no-repeat;transition:background-size 1s .3s}
+.in mark,mark.in{background-size:100% 100%}
+mark.b{background-image:linear-gradient(transparent 50%,var(--sky) 50%)}mark.m{background-image:linear-gradient(transparent 50%,var(--mint) 50%)}
+mark.p{background-image:linear-gradient(transparent 50%,var(--pink) 50%)}
+.bd{display:inline-block;border:2px solid var(--ink);background:var(--sky);border-radius:30px;padding:0 12px;font-weight:700;font-size:.9em;box-shadow:2px 2px 0 var(--ink);animation:jig 3s ease-in-out infinite;white-space:nowrap}
+.bd.y{background:var(--yel)}.bd.m{background:var(--mint)}.bd.p{background:var(--pink)}.bd:nth-of-type(2n){animation-delay:-1.4s}
+@keyframes jig{0%,90%,100%{transform:none}93%{transform:rotate(-4deg) scale(1.08)}96%{transform:rotate(4deg) scale(1.08)}}
+
+.photo{float:right;width:260px;margin:0 0 14px 22px;border:var(--b);border-radius:18px;background:#fff;padding:8px 8px 4px;box-shadow:var(--sh);transform:rotate(3deg);transition:.5s;text-align:center;font-size:13px;font-weight:700}
+.photo:hover{transform:rotate(-2deg) scale(1.07)}.photo img{width:100%;height:170px;object-fit:cover;border-radius:10px;display:block;margin-bottom:4px}
+.photo.l{float:left;margin:0 22px 14px 0;transform:rotate(-3deg)}
+@media(max-width:640px){.photo,.photo.l{float:none;margin:0 auto 16px}.hero{padding:40px 22px}}
+.clear{clear:both}
+
+/* flip cards */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.flip{height:250px;perspective:900px;cursor:pointer}
+.fi{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.3,1.4,.5,1);transform-style:preserve-3d}
+.flip.on .fi{transform:rotateY(180deg)}.flip:hover .fi{translate:0 -6px}
+.ff,.fb{position:absolute;inset:0;backface-visibility:hidden;border:var(--b);border-radius:20px;box-shadow:5px 5px 0 var(--ink);padding:16px;overflow:auto}
+.ff{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;font-family:'Bricolage Grotesque';font-weight:800;font-size:1.45rem}
+.ff i{font-size:34px}.ff small{font-family:'DM Sans';font-weight:500;font-size:12px;opacity:.7}
+.fb{transform:rotateY(180deg);background:#fff;font-size:13.5px;line-height:1.45}.fb b{display:block;font-size:11.5px;color:var(--blue);margin-top:8px}
+.fb::-webkit-scrollbar{width:4px}
+
+/* tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab{font:700 15px 'DM Sans';border:var(--b);background:#fff;border-radius:30px;padding:8px 18px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:.2s}
+.tab:hover{transform:translate(-2px,-2px)}.tab.on{background:var(--blue);color:#fff;box-shadow:none;transform:translate(3px,3px)}
+.pane{display:none;animation:swap .5s cubic-bezier(.2,1.3,.4,1)}.pane.on{display:block}
+@keyframes swap{from{opacity:0;transform:translateX(30px) scale(.96)}}
+.pane .big{font-size:48px;float:left;margin:0 16px 0 0;animation:wob 3s infinite}
+
+/* accordion */
+.acc{border:var(--b);border-radius:18px;background:#fff;margin-bottom:12px;box-shadow:4px 4px 0 var(--ink);overflow:hidden}
+.acc button{width:100%;text-align:left;font:700 1.05rem 'Bricolage Grotesque';background:none;border:0;padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;color:var(--ink)}
+.acc button i.k{width:36px;height:36px;border-radius:10px;border:2px solid var(--ink);display:grid;place-items:center;background:var(--sky)}
+.acc button i.ch{margin-left:auto;transition:.4s}.acc.on .ch{transform:rotate(180deg)}
+.acc .in2{max-height:0;overflow:hidden;transition:max-height .5s ease;padding:0 18px}.acc.on .in2{padding-bottom:14px}
+.acc:hover{background:var(--ice)}
+
+/* pyramid */
+.pyr{display:flex;flex-direction:column;align-items:center;gap:7px;margin:12px 0}
+.pyr button{font:700 1rem 'Bricolage Grotesque';color:var(--ink);border:var(--b);border-radius:14px;padding:12px;cursor:pointer;transition:.35s;box-shadow:3px 3px 0 var(--ink)}
+.pyr button:nth-child(1){width:42%;background:var(--yel)}.pyr button:nth-child(2){width:58%;background:var(--mint)}.pyr button:nth-child(3){width:74%;background:var(--sky)}.pyr button:nth-child(4){width:90%;background:var(--pink)}
+.pyr button:hover{transform:scale(1.07) rotate(-1deg)}.pyr button.on{outline:4px dashed var(--blue);outline-offset:3px}
+#pdesc{min-height:80px;text-align:center;background:var(--ice);border:2px dashed var(--blue);border-radius:16px;padding:14px;margin-top:6px}
+@media(max-width:600px){.pyr button{width:100%!important}}
+
+/* SETA */
+.seta{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px}
+.seta div{border:var(--b);border-radius:20px;padding:20px;text-align:center;box-shadow:var(--sh);transition:.4s}
+.seta div:hover{transform:translateY(-10px) rotate(-2deg)}.seta i{font-size:34px;display:block;margin-bottom:8px;animation:wob 3.5s infinite}
+.seta div:nth-child(1){background:#ffe98a}.seta div:nth-child(2){background:#a6f5e8}.seta div:nth-child(3){background:#ffc1d4}
+
+/* crown jewel diagram */
+.svgbox{background:var(--ink);border-radius:20px;padding:10px;border:var(--b);position:relative}
+.svgbox svg{width:100%;height:auto;display:block}
+.path{stroke:#ff6b8b;stroke-width:3;stroke-dasharray:10 8;fill:none;animation:march 1s linear infinite;transition:opacity .6s}
+@keyframes march{to{stroke-dashoffset:-36}}
+.cut .path{opacity:0}.cut .pk{display:none}.cut .safe{opacity:1}
+.safe{opacity:0;transition:opacity .8s}
+.jewel{animation:pulse 1.6s ease-in-out infinite;transform-origin:500px 150px}@keyframes pulse{50%{transform:scale(1.15)}}
+.btn{font:700 16px 'DM Sans';border:var(--b);background:var(--yel);border-radius:30px;padding:10px 22px;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:.2s;color:var(--ink)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:18px 0}
+.stat{background:var(--blue);color:#fff;border:var(--b);border-radius:20px;padding:18px;text-align:center;box-shadow:var(--sh)}
+.stat b{display:block;font:800 2.6rem 'Bricolage Grotesque';color:var(--yel)}
+
+/* stepper */
+.steps{display:flex;gap:8px;margin:12px 0}
+.steps span{flex:1;height:14px;border:2px solid var(--ink);border-radius:10px;background:#fff;transition:.5s}.steps span.on{background:var(--blue)}
+#stepCard{border:var(--b);border-radius:20px;padding:22px;background:var(--ice);min-height:130px;animation:swap .5s}
+
+/* takeaways */
+.take{list-style:none;display:grid;gap:12px;margin-top:14px}
+.take li{display:flex;gap:14px;border:var(--b);border-radius:16px;padding:12px 16px;cursor:pointer;background:#fff;box-shadow:4px 4px 0 var(--ink);transition:.3s;user-select:none}
+.take li:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--ink)}
+.take .ck{flex:none;width:30px;height:30px;border:var(--b);border-radius:9px;display:grid;place-items:center;color:transparent;transition:.4s}
+.take li.d{background:var(--ice);text-decoration:line-through;text-decoration-color:var(--blue)}.take li.d .ck{background:var(--blue);color:#fff;transform:rotate(360deg)}
+.meter{height:20px;border:var(--b);border-radius:20px;overflow:hidden;background:#fff;margin:8px 0}.meter div{height:100%;width:0;background:repeating-linear-gradient(45deg,var(--blue) 0 12px,var(--sky) 12px 24px);transition:width .6s cubic-bezier(.2,1.5,.4,1)}
+.conf{position:fixed;width:10px;height:14px;z-index:120;pointer-events:none;animation:fall 2.2s ease-in forwards}
+@keyframes fall{to{transform:translate(var(--x),105vh) rotate(720deg);opacity:.8}}
+.fin{background:var(--blue);color:#fff}.fin mark{color:var(--ink)}
+footer{text-align:center;font-weight:700;padding:30px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.hid{opacity:1;transform:none}}
+
+.slid{display:grid;grid-template-columns:150px 1fr 70px;gap:10px;align-items:center;margin:8px 0;font-weight:700}
+input[type=range]{width:100%;accent-color:var(--blue);height:8px}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.res{background:var(--ink);color:#fff;border-radius:20px;padding:18px;border:var(--b)}
+.res .row{display:flex;justify-content:space-between;border-bottom:1px dashed #4b64a0;padding:5px 0}.res b{color:var(--yel)}
+.res .final{font:800 2.6rem 'Bricolage Grotesque';color:var(--mint);text-align:center;transition:.3s}
+.res .final.pop{transform:scale(1.25)}
+.fm{background:var(--ice);border:2px dashed var(--blue);border-radius:14px;padding:10px 14px;font-family:monospace;font-size:14px;margin:10px 0;overflow-x:auto}
+.phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;counter-reset:ph}
+.ph{border:var(--b);border-radius:22px;padding:22px 18px 16px;box-shadow:var(--sh);position:relative;transition:.4s;background:#fff}
+.ph::before{counter-increment:ph;content:counter(ph);position:absolute;top:-18px;left:16px;width:38px;height:38px;border-radius:50%;background:var(--yel);border:var(--b);display:grid;place-items:center;font:800 1.1rem 'Bricolage Grotesque'}
+.ph:not(:last-child)::after{content:"\f061";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;right:-20px;top:45%;font-size:20px;color:var(--blue);animation:nud 1.2s infinite;z-index:2}
+@keyframes nud{50%{transform:translateX(6px)}}.ph:hover{transform:translateY(-8px) rotate(-1.5deg)}
+.ph:nth-child(1){background:#ffe98a}.ph:nth-child(2){background:#a6f5e8}.ph:nth-child(3){background:#ffc1d4}
+@media(max-width:700px){.ph::after{display:none!important}}
+.mx{display:grid;grid-template-columns:110px repeat(4,1fr);gap:6px;font-size:13px;font-weight:700;min-width:560px}
+.mx div{padding:10px 6px;text-align:center;border:2px solid var(--ink);border-radius:10px;background:#fff}
+.mx .h{background:var(--blue);color:#fff}.mx .c{cursor:pointer;transition:.3s;font-size:20px}.mx .c:hover{transform:scale(1.18) rotate(-4deg)}
+.mx .c[data-l="1"]{background:#c9f7ee}.mx .c[data-l="2"]{background:#ffe98a}.mx .c[data-l="3"]{background:#ffb3b3}
+.tl{position:relative;margin:10px 0 0 18px;border-left:5px dotted var(--blue);padding-left:26px}
+.tl .ev{position:relative;margin-bottom:20px;background:#fff;border:var(--b);border-radius:16px;padding:12px 16px;box-shadow:4px 4px 0 var(--ink);transition:.3s}
+.tl .ev:hover{transform:translateX(10px)}.tl .ev::before{content:attr(data-e);position:absolute;left:-52px;top:8px;width:40px;height:40px;border-radius:50%;background:var(--yel);border:var(--b);display:grid;place-items:center;font-size:18px;animation:jig 3s infinite}
+.pc{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.pc>div{border:var(--b);border-radius:20px;padding:18px;box-shadow:var(--sh)}.pc ul{list-style:none}.pc li{padding:7px 0 7px 30px;position:relative}
+.pc .pro{background:#c9f7ee}.pc .con{background:#ffd3de}.pc .pro li::before{content:"✅";position:absolute;left:0}.pc .con li::before{content:"⚠️";position:absolute;left:0}
+.pc li{transition:.3s}.pc li:hover{transform:translateX(8px)}
+.path3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.path3 .card{border:var(--b);border-radius:18px;padding:16px;background:#fff;box-shadow:4px 4px 0 var(--ink);text-align:center;transition:.4s}.path3 .card:hover{transform:translateY(-8px) rotate(2deg)}.path3 i{font-size:30px;display:block;margin-bottom:6px;color:var(--blue)}
+.scroll-x{overflow-x:auto;padding-bottom:6px}
+
+mark{background-size:100% 100%!important}
+.u{text-decoration:underline wavy var(--blue);text-decoration-thickness:2px;text-underline-offset:5px;font-weight:700}
+.u2{border-bottom:4px solid var(--pink);font-weight:700}
+.k{font-weight:800;color:var(--blue)}
+ul.n{list-style:none;margin:8px 0}
+ul.n>li{position:relative;padding:7px 10px 7px 38px;margin:5px 0;border-radius:12px;transition:.3s}
+ul.n>li::before{content:"\f058";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;left:10px;top:7px;color:var(--blue)}
+ul.n>li:hover{background:var(--ice);transform:translateX(6px)}
+ul.n ul{list-style:none;margin:4px 0 0}ul.n ul li{padding:3px 0 3px 22px;position:relative}ul.n ul li::before{content:"➜";position:absolute;left:0;color:var(--pink);font-weight:800}
+.tip{display:flex;gap:14px;background:var(--yel);border:var(--b);border-radius:18px;padding:14px 18px;box-shadow:4px 4px 0 var(--ink);margin:16px 0;font-weight:500}
+.tip .ti{font-size:30px;animation:wob 3s infinite}
+.tip.bl{background:#c8e1ff}.tip.pk{background:#ffc9da}.tip.mt{background:#b5f5e8}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:16px 0}
+.three>div{border:var(--b);border-radius:22px;padding:18px;box-shadow:var(--sh);transition:.4s;background:#fff}
+.three>div:hover{transform:translateY(-8px) rotate(-1.5deg)}
+.three .ic{font-size:40px;display:block;margin-bottom:4px;animation:wob 3.5s infinite}
+.three h4{font-size:1.3rem;margin-bottom:6px}.three small{display:block;margin-top:8px;font-weight:700}
+.en{height:12px;border:2px solid var(--ink);border-radius:10px;background:#fff;margin-top:4px;overflow:hidden}.en i{display:block;height:100%;background:var(--blue);width:0;transition:width 1.4s .4s}
+.in .en i{width:var(--w)}
+.gl{width:100%;border-collapse:separate;border-spacing:0 8px;min-width:620px;font-size:15px}
+.gl th{background:var(--ink);color:#fff;padding:10px 12px;text-align:left;font-family:'Bricolage Grotesque'}
+.gl th:first-child{border-radius:12px 0 0 12px}.gl th:last-child{border-radius:0 12px 12px 0}
+.gl td{padding:11px 12px;background:#fff;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);vertical-align:top;transition:.3s}
+.gl td:first-child{border-left:2px solid var(--ink);border-radius:12px 0 0 12px;font-weight:800;width:150px}.gl td:last-child{border-right:2px solid var(--ink);border-radius:0 12px 12px 0}
+.gl tr:hover td{background:var(--ice)}.gl tr:hover{transform:scale(1.01)}
+.gl td:first-child span{display:inline-block;padding:3px 12px;border-radius:30px;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.gl tr:nth-child(1) td:first-child span{background:#ffe98a}.gl tr:nth-child(2) td:first-child span{background:#a6f5e8}.gl tr:nth-child(3) td:first-child span{background:#ffc1d4}.gl tr:nth-child(4) td:first-child span{background:#b9dcff}.gl tr:nth-child(5) td:first-child span{background:#ffe98a}.gl tr:nth-child(6) td:first-child span{background:#a6f5e8}.gl tr:nth-child(7) td:first-child span{background:#ffc1d4}
+.scale{background:var(--ice);border:var(--b);border-radius:22px;padding:14px;text-align:center}
+.scale svg{width:100%;max-width:520px;height:auto}
+#beam{transition:transform .5s cubic-bezier(.3,1.6,.5,1);transform-origin:260px 90px}
+.lv{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.lv>div{border:var(--b);border-radius:20px;overflow:hidden;box-shadow:var(--sh);background:#fff;transition:.4s}.lv>div:hover{transform:translateY(-8px) rotate(1.5deg)}
+.lv img{width:100%;height:130px;object-fit:cover;display:block}.lv div div{padding:12px}.lv .ph0{height:130px;display:grid;place-items:center;font-size:54px;background:var(--sky)}
+.photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.photos figure{border:var(--b);border-radius:16px;background:#fff;padding:6px 6px 2px;box-shadow:4px 4px 0 var(--ink);text-align:center;font-size:12.5px;font-weight:700;transition:.4s}
+.photos figure:nth-child(odd){transform:rotate(-2deg)}.photos figure:nth-child(even){transform:rotate(2deg)}.photos figure:hover{transform:scale(1.08) rotate(0)}
+.photos img{width:100%;height:105px;object-fit:cover;border-radius:10px;display:block}
+.mm{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}
+.mm span{border:var(--b);border-radius:30px;padding:6px 16px;font-weight:700;background:#fff;box-shadow:3px 3px 0 var(--ink);transition:.3s}.mm span:hover{transform:translateY(-5px) rotate(-3deg);background:var(--yel)}
+
+.flip{height:360px}.fb{font-size:13.5px}.fb .one{background:var(--yel);border:2px solid var(--ink);border-radius:12px;padding:8px 10px;font-weight:700;font-size:14px;margin-bottom:6px}
+.fb b.l{display:block;font-size:11px;color:var(--blue);margin-top:8px;letter-spacing:.5px}
+.mm span{cursor:pointer}.mm span.on{background:var(--blue);color:#fff;transform:scale(1.08)}
+.stp .steps{margin:8px 0}.stp .card{border:var(--b);border-radius:20px;padding:20px;background:var(--ice);min-height:110px;animation:swap .5s}
+.stp .card h3{margin-bottom:6px}.stp .row{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+
+.banner{position:relative;height:210px;border:var(--b);border-radius:24px;overflow:hidden;box-shadow:var(--sh);margin:0 0 20px;transition:.5s}
+.banner:hover{transform:rotate(-1deg) scale(1.02)}.banner img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1s}.banner:hover img{transform:scale(1.1)}
+.banner figcaption{position:absolute;left:14px;bottom:14px;background:var(--yel);border:var(--b);border-radius:30px;padding:3px 16px;font-weight:800;box-shadow:3px 3px 0 var(--ink);transform:rotate(-2deg)}
+.pnl{width:100%;height:100%;min-height:110px;display:grid;place-items:center;font-size:58px;background:linear-gradient(135deg,var(--sky),var(--blue));animation:wob 4s ease-in-out infinite}
+.photos img,.photos .pnl{height:150px!important;border-radius:10px}.photos figure{padding-bottom:4px}
+.photo img,.photo .pnl{height:190px!important;border-radius:10px}
+.lv img,.lv .pnl{height:150px!important;border-radius:0}
+</style></head><body>
+<div id="bar"></div><div id="glow"></div>
+<nav class="pill"><a href="#intro">Intro</a><a href="#core">Terms</a><a href="#s1">Planning</a><a href="#s2">3 Words</a><a href="#s3">Impact</a><a href="#s5">Principles</a><a href="#take">Recap</a></nav>
+<div class="wrap">
+<header class="hero"><canvas id="net"></canvas>
+<span class="sticker" style="right:70px;top:40px">📜</span><span class="sticker" style="right:190px;bottom:36px;animation-delay:-1s">⚖️</span><span class="sticker" style="right:30px;bottom:100px;animation-delay:-2s">🏛️</span>
+<span class="tag"><i class="fa-solid fa-bolt"></i> Week 5 · Lecture 1</span>
+<h1><span class="type" id="typed"></span></h1>
+<p>Quick-scan revision notes: short bullets, highlighted key ideas, pictures, and memory tricks. 👆 Tap things!</p></header>
+
+<section id="intro" class="hid"><div class="head"><div class="num">📖</div><h2>Introduction: the big picture</h2></div><div class="box">
+<div class="photos"><figure><img data-k="office,meeting" data-n="71" alt="">Management matters</figure><figure><img data-k="binary,code" data-n="72" alt="">Digital world</figure><figure><img data-k="lock,security" data-n="73" alt="">Protecting assets</figure></div>
+<ul class="n">
+<li>Cybersecurity is <mark>not just technical</mark>: it's a <mark class="b">management &amp; governance</mark> issue for orgs of <u class="u">all sizes</u>.</li>
+<li>No <b>management approach + planning</b> ➜ risks from <mark class="p">operational disruption</mark> to <mark class="p">financial ruin</mark> (some firms went <span class="u2">bankrupt</span>).</li>
+<li>Environment is <b>fluid, changing, threatening</b>, especially with many cyber assets ➜ <span class="k">strategic planning</span> is essential.</li>
+<li>Planning needs a <mark class="m">foundational reference point</mark> to: <ul><li>prioritize investments</li><li>allocate resources</li><li>ensure organizational commitment</li></ul></li>
+<li>That reference = <span class="bd y">POLICY</span> (esp. <span class="bd">cybersecurity policy</span>): states the org's <u class="u">stance, objectives, guidelines</u>, so security is <b>not an afterthought</b>.</li>
+<li>No clear policy ➜ <mark class="p">no direction or commitment</mark> (e.g., investments not approved: "low priority").</li>
+<li>Leaders need <b>informed understanding</b>, not arbitrary decisions ➜ use a <mark>structured, policy-driven approach</mark>.</li>
+<li>This lecture: policy vs <b>rules / regulations / norms</b>; impact on <u class="u">progress, behavior, legal compliance</u>.</li></ul>
+<div class="tip"><span class="ti">💡</span><div><b>One-line summary:</b> Policy = the written "why &amp; how" that makes cybersecurity a <u class="u">planned priority</u> instead of an afterthought.</div></div></div></section>
+
+<section id="core" class="hid"><div class="head"><div class="num">🃏</div><h2>Core Concepts</h2></div><figure class="banner"><img data-k="office,team" data-n="5" alt=""><figcaption>📚 Know your terms</figcaption></figure>
+<p style="font-weight:700">Tap a card to flip it: back shows a quick one-liner, then the original definition and significance.</p><div class="fgrid" id="fgrid"></div></section>
+
+<section id="s1" class="hid"><div class="head"><div class="num">1</div><h2>Why Planning &amp; Policy Matter</h2></div><figure class="banner"><img data-k="planning,boardroom" data-n="6" alt=""><figcaption>🗺️ Planning is the roadmap</figcaption></figure><div class="box">
+<div class="photos"><figure><img data-k="roadmap,planning" data-n="74" alt="">Planning = roadmap</figure><figure><img data-k="boardroom,executives" data-n="75" alt="">Top management buy-in</figure></div>
+<ul class="n">
+<li>Cybersecurity = <b>management &amp; governance issue</b> ➜ needs <mark>meticulous planning</mark>.</li>
+<li>No structured approach ➜ <mark class="p">severe disruptions, financial losses, even bankruptcy</mark>.</li>
+<li>Planning = <u class="u">roadmap for managing cyber risks</u> in a dynamic, threatening environment with <b>many cyber assets</b>.</li>
+<li><span class="k">Key challenge:</span> prioritizing cybersecurity + securing <mark class="b">commitment &amp; resources</mark>.</li>
+<li><span class="bd p">Case: IVK</span> ➜ investment in security tech was <b>denied</b> (perceived low priority) ➜ top mgmt must <u class="u">recognize &amp; value</u> cybersecurity.</li></ul>
+<h4 class="sub" style="font-size:1.1rem;margin:16px 0 6px">📜 Policy as a reference document</h4>
+<ul class="n"><li>Formalizes the org's <b>stance</b> ➜ decisions are <mark class="m">informed &amp; consistent, not arbitrary</mark>.</li>
+<li>Policies are <span class="u2">binding documents</span> built for <mark>collective objectives</mark>, <b>fairness &amp; equity</b>.</li>
+<li>Example: <i>course policy on plagiarism</i> ➜ fairness among students (like an org policy: reach goals, respect individual rights, prevent imbalance).</li>
+<li><mark class="m">Well-formed policy</mark> ➜ org attains objectives ✅ &nbsp; <mark class="p">Poorly formed</mark> ➜ hinders progress or even <b>disables</b> it ❌</li></ul></div></section>
+
+<section id="s2" class="hid"><div class="head"><div class="num">2</div><h2>Policy vs Regulation vs Norms</h2></div><div class="box">
+<div class="three">
+<div style="background:#ffe9a3"><span class="ic">🤝</span><h4>Norms</h4><ul class="n"><li>Social expectations / <mark class="p">unwritten rules</mark></li><li>Eg: dressing appropriately for class</li><li>No legal repercussions if violated</li><li>Societies largely run on shared norms</li></ul><small>Enforced by: society</small><div class="en"><i style="--w:30%"></i></div></div>
+<div style="background:#b5f5e8"><span class="ic">⚖️</span><h4>Regulation</h4><ul class="n"><li><mark class="b">Legally enforceable</mark> rules</li><li>Violation ➜ <b>legal action</b></li><li>= policies <u class="u">codified into law</u></li><li>Binding + legal consequences</li></ul><small>Enforced by: law / authority</small><div class="en"><i style="--w:100%"></i></div></div>
+<div style="background:#c8e1ff"><span class="ic">📜</span><h4>Policy</h4><ul class="n"><li>Can be <i>part of</i> a regulation, but mainly an <b>internal document</b></li><li>States org's position &amp; guidelines</li><li>Binding for <u class="u">people inside the org</u></li><li>Not always legally enforceable like a regulation, but sets <mark>internal standard</mark></li><li>Eg: institute's student conduct policy</li></ul><small>Enforced by: the organization</small><div class="en"><i style="--w:65%"></i></div></div></div>
+<div class="tip bl"><span class="ti">🧠</span><div><b>Memory trick:</b> <u class="u">N</u>orms = <u class="u">N</u>ot written · <u class="u">R</u>egulation = <u class="u">R</u>ule of law · <u class="u">P</u>olicy = <u class="u">P</u>rivate to the org</div></div></div></section>
+
+<section id="s3" class="hid"><div class="head"><div class="num">3</div><h2>Objectives &amp; Impact of Policy</h2></div><div class="box">
+<p>Policies are powerful: they can <mark class="m">enable</mark> <b>or</b> <mark class="p">disable</mark> an org's progress.</p>
+<div class="lv">
+<div><img data-k="india,technology" data-n="76" alt=""><div><h4>🌍 Country level</h4><ul class="n"><li>Policies drive <b>national progress</b></li><li><mark class="b">India's IT industry</mark>: software technology parks + economic liberalization</li><li>Attracted <u class="u">foreign investment &amp; IT exports</u></li></ul></div></div>
+<div><img data-k="office,workers" data-n="77" alt=""><div><h4>🏢 Organization</h4><ul class="n"><li>Cyber policies dictate <b>how employees use digital resources</b></li><li>Overly restrictive (e.g., <mark class="p">no internet access</mark>) ➜ hurts efficiency + causes violations</li></ul></div></div>
+<div><img data-k="employee,laptop" data-n="78" alt=""><div><h4>🧑 Individual</h4><ul class="n"><li>Compliance depends on <b>many factors</b></li><li>Ill-framed policy ➜ <mark class="p">fear, not genuine adherence</mark></li><li>Fear-driven compliance costs <u class="u">output &amp; efficiency</u></li></ul></div></div></div></div>
+
+<div class="box" id="s4"><h4 class="sub" style="margin-top:0"><span class="n">4</span>Balancing Protection &amp; Progress ⚖️</h4>
+<ul class="n"><li>Critical trade-off: <b>protection vs progress/efficiency</b>.</li><li>Stringent measures (highly active <b>IDS</b>, extensive <b>logging</b>) ➜ safer but <mark class="p">less efficient</mark>.</li>
+<li><span class="bd y">India example</span>: govt directive to Justice Sri Krishna Commission → <mark>"protect the privacy of people without inhibiting the potential of digital technologies."</mark></li>
+<li>Regulations <u class="u">mediate</u> such conflicts so innovation flourishes <b>without</b> compromising rights like <mark class="b">privacy</mark>.</li><li>Well-framed policy ➜ motivates good behavior ✅ · poorly framed ➜ violations ❌</li></ul>
+<div class="scale"><b>🎚️ Drag to tip the scale:</b>
+<svg viewBox="0 0 520 250"><rect x="248" y="90" width="24" height="130" rx="6" fill="#0a1f4d"/><rect x="190" y="215" width="140" height="18" rx="9" fill="#0a1f4d"/>
+<g id="beam"><rect x="60" y="82" width="400" height="16" rx="8" fill="#2563ff" stroke="#0a1f4d" stroke-width="3"/>
+<g id="lp"><line x1="80" y1="98" x2="40" y2="150" stroke="#0a1f4d" stroke-width="3"/><line x1="80" y1="98" x2="120" y2="150" stroke="#0a1f4d" stroke-width="3"/><rect x="25" y="150" width="110" height="26" rx="13" fill="#5eead4" stroke="#0a1f4d" stroke-width="3"/><text x="80" y="143" text-anchor="middle" font-size="26">🔒</text><text x="80" y="195" text-anchor="middle" font-weight="700" font-size="14">Security</text></g>
+<g id="rp"><line x1="440" y1="98" x2="400" y2="150" stroke="#0a1f4d" stroke-width="3"/><line x1="440" y1="98" x2="480" y2="150" stroke="#0a1f4d" stroke-width="3"/><rect x="385" y="150" width="110" height="26" rx="13" fill="#ffd94a" stroke="#0a1f4d" stroke-width="3"/><text x="440" y="143" text-anchor="middle" font-size="26">🚀</text><text x="440" y="195" text-anchor="middle" font-weight="700" font-size="14">Efficiency</text></g></g></svg>
+<input type="range" id="bal" min="-20" max="20" value="0"><div id="balTxt" style="font-weight:700;margin-top:6px">⚖️ Balanced: protect assets without hindering productivity</div></div></div></section>
+
+<section id="s5" class="hid"><div class="head"><div class="num">5</div><h2>Principles of Cyber Security Policy Formation</h2></div>
+<div class="mm" id="mm"><span>⚖️ 5.1 Law</span><span>🛡️ 5.2 Due diligence</span><span>🔧 5.3 Support</span><span>👥 5.4 End-users</span></div><div class="tip bl" id="mmTxt"><span class="ti">👆</span><div>Tap a principle for its one-line summary.</div></div>
+<div class="box"><h4 class="sub" style="margin-top:0">⚖️ 5.1 Compliance with the Law</h4>
+<ul class="n"><li>A policy must <mark class="p">never conflict with the law of the land</mark>.</li><li>Even internally binding policies must align with <b>external legal &amp; regulatory frameworks</b>.</li>
+<li>Eg: <b>banking</b>: RBI mandates cyber policies defining structures &amp; processes, all within national law.</li></ul>
+<h4 class="sub" style="font-size:1.1rem">🗂️ Case: Enron &amp; Arthur Anderson <span class="bd p">warning!</span></h4>
+<div class="photos" style="max-width:420px"><figure><img data-k="paper,shredder" data-n="79" alt="">Shredded evidence</figure><figure><img data-k="court,gavel" data-n="80" alt="">Legal scrutiny</figure></div>
+<p style="font-weight:700;margin-top:8px">👆 Click through the story:</p><div class="stp" id="stpEn"></div>
+<div class="tip pk"><span class="ti">⚠️</span><div><b>Takeaway:</b> A policy must <u class="u">stand up in court</u>. Be measurable, not subjective.</div></div></div>
+<div class="box"><h4 class="sub" style="margin-top:0">🛡️ 5.2 Organizational Responsibility &amp; Due Diligence</h4>
+<p>Orgs are responsible for how their cyber resources are used <b>lawfully</b>. Example: <b>illegal content (child pornography)</b></p>
+<div class="stp" id="stpDD"></div>
+<ul class="n"><li>Even if new illegal sites pop up daily, a <mark class="m">clear policy + demonstrable effort</mark> strengthens the org's position.</li><li>Puts the <span class="u2">onus on the individual</span> for the violation.</li></ul></div>
+<div class="box"><div class="three" style="margin:0"><div style="background:#ffe9a3"><span class="ic">🔧</span><h4>5.3 Support &amp; Administration</h4><ul class="n"><li>Policies aren't just theory ➜ need <mark>practical support</mark></li><li><b>Technical controls</b> (e.g., firewalls blocking prohibited sites)</li><li>Should <u class="u">encourage success</u>, not hinder it</li><li>Goal: tap digital potential <b>and</b> stay secure ➜ <i>continuous effort &amp; adaptation</i></li></ul></div>
+<div style="background:#b5f5e8"><span class="ic">👥</span><h4>5.4 Involve End-Users</h4><ul class="n"><li>Involve <b>users of information systems</b> in formulation</li><li>Makes policies <mark class="m">practical, effective, accepted</mark></li><li>Realistic + meets user needs ➜ <u class="u">more likely to be complied with</u></li></ul></div></div></div></section>
+
+<section id="s6" class="hid"><div class="head"><div class="num">6</div><h2>Policy as a Binding Document</h2></div><figure class="banner"><img data-k="law,constitution" data-n="7" alt=""><figcaption>📜 The constitution of the org</figcaption></figure><div class="box">
+<ul class="n"><li>Cyber policy = <mark>essential foundation</mark> for effective cybersecurity programs.</li><li>A <b>binding document</b> and reference point during <mark class="p">doubts or crises</mark>, like a <u class="u">constitution</u> for a nation/institution.</li><li>Without it: <b>no clear guidance</b> on what to achieve or prevent.</li><li>Influences <u class="u">all cyber-asset activities</u>: network configs, individual system usage, specific applications ➜ <mark class="m">consistent &amp; secure operations</mark>.</li></ul></div></section>
+
+<section id="take" class="hid"><div class="head"><div class="num">✅</div><h2>Key Takeaways (tick as you revise)</h2></div><figure class="banner"><img data-k="students,studying" data-n="8" alt=""><figcaption>🎯 Revise &amp; remember</figcaption></figure><div class="box"><b id="mt">0 / 9 mastered</b><div class="meter"><div id="mb"></div></div><ul class="take" id="tl2"></ul></div></section>
+
+<section class="hid"><div class="head"><div class="num">🏁</div><h2>Conclusion</h2></div><div class="box fin"><ul class="n" style="color:#fff">
+<li>Cybersecurity = <mark>strategic imperative</mark>, not just technical; needs <b>robust policy frameworks</b>.</li>
+<li>Like a nation's <b>constitution</b>, policies guide orgs through the digital world: <u class="u" style="text-decoration-color:#7cc7ff">protection + progress</u>.</li>
+<li>Policies = "<mark>invisible architects</mark>" of success: from growing <b>entire industries</b> to shaping <b>employee behavior</b>.</li>
+<li>Balance <b>safeguarding assets</b> vs <b>fostering innovation</b> (privacy without inhibiting digital tech).</li>
+<li>A policy is a <mark>living document</mark>: continually <b>reviewed, updated, enforced</b>.</li>
+<li>Marks of maturity: <u class="u" style="text-decoration-color:#7cc7ff">stands up in court</u>, aligned with law, <b>motivates</b> (not merely mandates) compliance.</li>
+<li>Sound policy formation ➜ secure foundation that protects against evolving threats <b>and</b> unlocks the digital age's potential.</li></ul></div></section>
+<footer>💙 Week 5 · Lecture 1 · you've got this</footer></div><script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+addEventListener('scroll',()=>{const h=document.documentElement;$('#bar').style.width=h.scrollTop/(h.scrollHeight-h.clientHeight)*100+'%'},{passive:true});
+addEventListener('pointermove',e=>{const g=$('#glow');g.style.left=e.clientX+'px';g.style.top=e.clientY+'px'});
+const T='Cyber Security Policy: Part 01';let ti=0;(function t(){$('#typed').textContent=T.slice(0,ti++);if(ti<=T.length)setTimeout(t,50)})();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});$$('.hid').forEach(e=>io.observe(e));
+const links=$$('nav.pill a'),spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-40% 0px -55% 0px'});$$('section[id]').forEach(s=>spy.observe(s));
+const cv=$('#net'),cx=cv.getContext('2d');let W,H,P=[];function rs(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight}rs();addEventListener('resize',rs);
+for(let i=0;i<45;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.7,vy:(Math.random()-.5)*.7});
+(function d(){cx.clearRect(0,0,W,H);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;cx.fillStyle='rgba(255,255,255,.7)';cx.beginPath();cx.arc(p.x,p.y,2.5,0,7);cx.fill()});for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){const a=P[i],b=P[j],D=Math.hypot(a.x-b.x,a.y-b.y);if(D<120){cx.strokeStyle=`rgba(255,255,255,${.35-D/400})`;cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke()}}requestAnimationFrame(d)})();
+$('#bal').oninput=function(){const v=+this.value;$('#beam').style.transform=`rotate(${v}deg)`;const t=$('#balTxt');
+t.textContent=v<-8?'🔒 Too much security: efficiency suffers, users break the rules':v>8?'🚀 Too much efficiency: assets left exposed':'⚖️ Balanced: protect assets without hindering productivity'};
+
+// flip cards
+const C=[['Policy','fa-file-contract','#ffe98a',"The organization's official rulebook saying what it wants and how people should act.","A formal document developed by an organization to articulate its position, objectives, and guidelines on specific issues, serving as a binding reference for all members.","Provides a foundational framework for decision-making, resource allocation, and behavior, ensuring collective interest and objective attainment."],
+['Regulation','fa-gavel','#a6f5e8',"A rule from an authority that the law can enforce.","A rule or directive made and maintained by an authority, often legally enforceable, with penalties for non-compliance.","Establishes legally binding standards and requirements, ensuring adherence to broader societal or governmental mandates."],
+['Norm','fa-people-group','#ffc1d4',"An unwritten \"this is how we all behave\" rule.","An unwritten rule or standard of behavior that is accepted and expected within a particular group or society.","Influences behavior through social expectations and acceptance, often without formal enforcement mechanisms."],
+['Cyber Security Policy','fa-shield-halved','#b9dcff',"The organization's written plan for keeping its digital assets safe.","A specific type of policy focused on defining an organization's approach to protecting its information assets from cyber threats.","Essential for guiding cybersecurity programs, ensuring consistency, compliance, and effective risk management across the organization."],
+['Shredding Policy','fa-file-circle-xmark','#ffe98a',"The rule for when documents may be destroyed and when they must be kept.","A policy dictating the retention and destruction schedule for documents and data, often specifying frequency and conditions.","Critical for managing information lifecycle, ensuring compliance with data retention laws, and preventing destruction of evidence."],
+['Compliance','fa-clipboard-check','#a6f5e8',"Actually following the rules, regulations, and policies.","The act of adhering to rules, regulations, policies, or standards.","Indicates an organization's commitment to its stated policies and external legal requirements, crucial for avoiding penalties and maintaining trust."],
+['Balance (Security vs. Efficiency)','fa-scale-balanced','#ffc1d4',"Staying safe without making work painfully slow.","The ongoing trade-off between implementing robust security measures and maintaining operational efficiency or user convenience.","A core challenge in cybersecurity policy, requiring careful design to protect assets without unduly hindering productivity or innovation."]];
+$('#fgrid').innerHTML=C.map(c=>`<div class="flip"><div class="fi"><div class="ff" style="background:${c[2]}"><i class="fa-solid ${c[1]}"></i><span style="font-size:1.2rem">${c[0]}</span><small>tap to flip</small></div><div class="fb"><div class="one">💡 ${c[3]}</div><b class="l">ORIGINAL DEFINITION</b>${c[4]}<b class="l">SIGNIFICANCE</b>${c[5]}</div></div></div>`).join('');
+$$('.flip').forEach(f=>f.onclick=()=>f.classList.toggle('on'));
+// generic steppers
+function stepper(id,S){const el=$('#'+id);let i=0;el.innerHTML='<div class="steps">'+S.map(()=>'<span></span>').join('')+'</div><div class="card"></div><div class="row"><button class="btn b1">◀ Back</button><button class="btn b2">Next ▶</button></div>';
+const draw=()=>{const c=$('.card',el);c.style.animation='none';c.offsetHeight;c.style.animation='';c.innerHTML=`<h3>${S[i][2]} Step ${i+1}: ${S[i][0]}</h3><p>${S[i][1]}</p>`;$$('.steps span',el).forEach((x,k)=>x.classList.toggle('on',k<=i))};
+$('.b1',el).onclick=()=>{i=(i+S.length-1)%S.length;draw()};$('.b2',el).onclick=()=>{i=(i+1)%S.length;draw()};draw()}
+stepper('stpDD',[['Individual','An employee who accesses illegal content is <mark>personally responsible</mark>, but the org has responsibility too.','👤'],['Clear policy','If the org provides internet, the policy says access is <b>for work purposes only</b> and <mark class="p">prohibits accessing illegal content</mark>.','📋'],['Due diligence','Demonstrate you <u class="u">implement</u> the policy, e.g., deploy <b>firewalls</b> that block known illegal sites.','🔥']]);
+stepper('stpEn',[['Enron is investigated','<b>Arthur Anderson</b> was Enron\'s auditor.','🏢'],['Documents destroyed','Anderson <mark class="p">destroyed audit-related documents</mark> during the investigation.','🗑️'],['"Shredding policy" framed','A policy letting docs be destroyed once deemed <i>"not relevant"</i>: <b>qualitative and subjective</b>.','📝'],['Seen as destroying evidence','It conflicted with legal requirements ➜ <u class="u">destruction of evidence</u>.','🚫'],['Global fallout','Stricter regulations worldwide: <mark class="m">mandatory reporting</mark> + <mark class="b">specific, measurable data retention standards</mark>. A policy must stand up in court.','📏']]);
+// principle chips
+const MM=['A policy must never conflict with the law of the land, so it can stand up in court.','Provide a clear policy AND show you enforce it (e.g., firewalls) to prove due diligence.','Policies need technical and admin backing, and should help the org succeed, not hinder it.','Involve the people who use the systems so the policy is practical and gets followed.'];
+$$('#mm span').forEach((sp,i)=>sp.onclick=()=>{$$('#mm span').forEach(x=>x.classList.remove('on'));sp.classList.add('on');$('#mmTxt div').innerHTML='<b>'+sp.textContent+':</b> '+MM[i]});
+const K=["Cybersecurity is a critical management and governance issue requiring strategic planning, not just technical solutions.","Policy serves as a foundational reference document that guides organizational cybersecurity efforts and ensures commitment.","Policies differ from regulations (legally enforceable) and norms (social expectations), but must align with legal frameworks.","Well-framed policies enable organizational progress and motivate desired behavior, while ill-framed ones can hinder efficiency and lead to violations.","A crucial challenge in policy formulation is balancing robust security measures with operational efficiency and innovation.","Cybersecurity policies must never conflict with the law and should be able to withstand legal scrutiny, as demonstrated by the Enron scandal.","Organizations have a responsibility to ensure employees use cyber resources lawfully and must implement policies with due diligence.","Effective policies require proper administrative and technical support and should involve end-users in their formulation for practicality and acceptance.","A cybersecurity policy is a binding document that provides essential guidance for all cyber asset activities within an organization."];
+$('#tl2').innerHTML=K.map(k=>`<li><span class="ck"><i class="fa-solid fa-check"></i></span><span>${k}</span></li>`).join('');
+function boom(){for(let i=0;i<70;i++){const c=document.createElement('i');c.className='conf';c.style.cssText=`left:${Math.random()*100}vw;top:-20px;background:${['#2563ff','#ffd94a','#5eead4','#ff8fb1','#7cc7ff'][i%5]};--x:${(Math.random()-.5)*200}px;animation-delay:${Math.random()*.5}s`;document.body.appendChild(c);setTimeout(()=>c.remove(),3000)}}
+$$('#tl2 li').forEach(li=>li.onclick=()=>{li.classList.toggle('d');const n=$$('#tl2 li.d').length;$('#mb').style.width=n/9*100+'%';$('#mt').textContent=n+' / 9 mastered';if(n==9){$('#mt').textContent='🎉 9 / 9, exam ready!';boom()}});
+
+(function(){
+const pools={tech:['1550751827-4bd374c3f58b','1563986768609-322da13575f3','1558494949-ef010cbdcc31','1518770660439-4636190af475','1526374965328-7f61d4dc18c5','1555949963-ff9fe0c870eb','1461749280684-dccba630e2f6','1451187580459-43490279c0fa'],
+ppl:['1504384308090-c894fdcc538d','1531482615713-2afd69097998','1522202176988-66273c2fd55f','1497366216548-37526070297c','1573164713714-d95e436ab8d6'],
+law:['1589829545856-d10d557cf95f','1505664194779-8beaceb93744','1450101499163-c8848c66ca85']};
+const cat=k=>/law|court|gavel|paper|shred|constitution/.test(k)?'law':/office|meeting|class|train|work|employee|board|team|lecture|planning|executive|india|student|building/.test(k)?'ppl':'tech';
+const EM=[['lock','🔒'],['wall','🧱'],['alarm','🚨'],['class','🎓'],['student','🎓'],['train','🧑‍🏫'],['office','🏢'],['building','🏢'],['team','👥'],['law','⚖️'],['court','⚖️'],['paper','📄'],['code','💻'],['blueprint','📐'],['warning','⚠️'],['india','🇮🇳'],['plan','🗺️'],['board','👔'],['server','🖥️'],['computer','💻']];
+const emo=k=>(EM.find(e=>k.includes(e[0]))||[0,'🛡️'])[1];
+document.querySelectorAll('img[data-k]').forEach(img=>{const k=img.dataset.k,n=+img.dataset.n,p=pools[cat(k)];
+const list=['https://images.unsplash.com/photo-'+p[n%p.length]+'?auto=format&fit=crop&w=800&q=70','https://images.unsplash.com/photo-'+p[(n+3)%p.length]+'?auto=format&fit=crop&w=800&q=70','https://loremflickr.com/800/500/'+k+'?lock='+n];let i=0;
+img.onerror=()=>{i++;if(i<list.length)img.src=list[i];else{const d=document.createElement('div');d.className='pnl';d.textContent=emo(k);img.replaceWith(d)}};img.src=list[0]})})();
+</script></body></html>
